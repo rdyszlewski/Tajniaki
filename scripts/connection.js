@@ -3,20 +3,12 @@ var net = require("net");
 const HOST = "192.168.0.31";
 const PORT = 7777;
 
-class Connection {
-    
-    connect(ip, port, on_connected){
-        var client = net.createConnection({host: ip, port:port}, on_connected);
-        return client;
-    }
-
-}
 
 var connectButton;
 var infoText;
 var messageInput;
 var sendButton;
-var socket;
+var client;
 
 window.onload = function(e){
    initElements();
@@ -37,16 +29,15 @@ function initListeners(){
 
     this.sendButton.onclick = function(){
         var message = messageInput.value;
-        socket.write("PRINT:"+message+"\r\n");
+        client.write("PRINT:"+message)
         messageInput.value = "";
     }
 }
 
 function connectToServer(ip, port){
     showConnectingState();
-    var connection = new Connection();
-    socket = connection.connect(ip, port, showConnectedState);
-    
+    client = new Client();
+    client.connect(ip, port, showConnectedState);
 }
 
 function showConnectingState() {
