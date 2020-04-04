@@ -1,6 +1,6 @@
 var net = require("net");
 
-const HOST = "192.168.0.31";
+const HOST = "localhost";
 const PORT = 7777;
 
 
@@ -8,6 +8,7 @@ var connectButton;
 var infoText;
 var messageInput;
 var sendButton;
+var gameButton;
 var client;
 
 window.onload = function(e){
@@ -20,6 +21,7 @@ function initElements(){
     this.infoText = document.getElementById("info_text");
     this.messageInput = document.getElementById("message_input");
     this.sendButton = document.getElementById("send_button");
+    this.gameButton = document.getElementById("game_button");
 }
 
 function initListeners(){
@@ -31,6 +33,10 @@ function initListeners(){
         var message = messageInput.value;
         client.write("PRINT:"+message)
         messageInput.value = "";
+    }
+
+    this.gameButton.onclick = function(){
+        window.location.replace("gra.html");
     }
 }
 
