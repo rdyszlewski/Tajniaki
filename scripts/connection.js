@@ -8,6 +8,7 @@ var connectButton;
 var infoText;
 var messageInput;
 var sendButton;
+var gameButton;
 var client;
 window.onload = function (e) {
     initElements();
