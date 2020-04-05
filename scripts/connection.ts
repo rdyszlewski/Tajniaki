@@ -9,6 +9,7 @@ var connectButton;
 var infoText;
 var messageInput;
 var sendButton;
+var gameButton;
 var client;
 
 window.onload = function(e){
@@ -21,6 +22,7 @@ function initElements(){
     infoText = document.getElementById("info_text");
     messageInput = document.getElementById("message_input");
     sendButton = document.getElementById("send_button");
+    gameButton = document.getElementById("game_button");
 }
 
 function initListeners(){
@@ -33,6 +35,10 @@ function initListeners(){
         var message = messageInput.value;
         client.write("PRINT:"+message)
         messageInput.value = "";
+    }
+
+    gameButton.onclick = function(){
+        window.location.replace("gra.html");
     }
 }
 
