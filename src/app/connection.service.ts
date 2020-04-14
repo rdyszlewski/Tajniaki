@@ -6,12 +6,14 @@ import { Client } from '../utils/client';
 })
 export class ConnectionService {
 
-  constructor(private _connection: Client) { 
+  private static _connection:Client;
 
-  }
-
-  connect(host, port, on_connected_event){
+  public static connect(host, port, on_connected_event){
     this._connection = new Client();
     this._connection.connect(host, port, on_connected_event); // TODO: sprawdzić, czy to tak powinno wyglądać
+  }
+
+  public static send(message, path){
+    this._connection.write(message, path);
   }
 }
