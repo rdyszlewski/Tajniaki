@@ -34,7 +34,8 @@ export class MainMenuComponent implements OnInit {
         ConnectionService.send("RoMan", "/app/game/connect");
       });
     
-      this.router.navigate(['board']);
+      // this.router.navigate(['board']);
+      this.router.navigate(["lobby"]);
     }
     this.connectButton.onclick = function(){
       console.log("łczenie");

@@ -1,1 +1,43 @@
-<p>lobby works!</p>
+<button (click)="joinRedTeam()">Czerwieni</button>
+<button (click)="joinBlueTeam()">Zieleni</button>
+
+<div id="tables">
+
+    <table id="red_table" class="players_table"> 
+        <tr>
+            <th>Czerwieni ({{countRed()}})</th>
+        </tr>
+        <tr *ngFor="let player of players">
+            <td *ngIf="isRed(player)">{{player.nickname}}
+                <span *ngIf="player.ready">V</span>
+            </td>
+        </tr>
+    </table>
+
+    
+
+    <table id="blue_table" class="players_table">
+        <tr>
+            <th>Zieleni ({{countBlue()}})</th>
+        </tr>
+        <tr *ngFor="let player of players">
+            <td *ngIf="isBlue(player)">{{player.nickname}}
+                <span *ngIf="player.ready">V</span>
+            </td>
+        </tr>
+    </table>
+  
+  
+    <table id="observer_table" class="players_table">
+        <tr>
+            <th>Nieprzydzieleni ({{countObserver()}})</th>
+        </tr>
+        <tr *ngFor="let player of players">
+            <td *ngIf="isObserver(player)">{{player.nickname}}
+                <span *ngIf="player.ready">V</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<button (click)="ready()">Gotowy</button>
+
