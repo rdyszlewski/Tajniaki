@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Player } from './lobby_player';
 import {Team} from './team';
 import { ConnectionService } from '../connection.service';
+import { PlayerService } from '../playerService';
 
 @Component({
   selector: 'app-lobby',
@@ -12,27 +13,60 @@ export class LobbyComponent implements OnInit {
   // TODO: należy pozmieniać tak, żeby zmiana druzyny i gotowość obejmowała klienta
   players = [];
 
+  private clientPlayer;
+
   constructor() { }
 
   ngOnInit(): void {
-    // TODO: metoda do testowania, należy później usunąć
-    this.addPlayers();
-
+    // TODO: później to usunąć, ustawianie zrobić w menu
+    PlayerService.setNickname("RoMan");
+    this.connect();
   }
 
-  private addPlayers(){
-    let player1 = new Player("Robert", Team.BLUE, false);
-    let player2 = new Player("Maciek", Team.OBSERVER, false);
-    let player3 = new Player("Kaszanke", Team.BLUE, true);
-
-    this.players.push(player1);
-    this.players.push(player2);
-    this.players.push(player3);
+  private connect(){
+    let that = this;
+    ConnectionService.connect("localhost", 8080, function(){
+      // TODO: pomyśleć, jak to powinno zostać prawidłowo zrobione
+      ConnectionService.subscribe("/topic/lobby/players", (players)=>{
+        console.log(players);
+        that.setPlayers(players);
+      });
+      ConnectionService.send(PlayerService.getNickname(), "/app/lobby/connect");
+    });
   }
 
+  private setPlayers(message):void{
+      var body = message.body;
+      var json = JSON.parse(body);
+      json.forEach(element => {
+        // TODO: dodać informacje, czy gracz jest gotowy
+        var player = new Player(element["nickName"], this.getTeam(element["team"]), false);
+        this.players.push(player);
+        console.log(element["nickName"]);
+        if (this.isClientPlayer(player))
+          this.clientPlayer = player;
+      });
+  }
+
+  private isClientPlayer(player:Player):boolean{
+    // TODO: zastanwoić się, co zrobić w sytuacji, w której więcej graczy ustawi sobie ten sam nick
+    return player.nickname == PlayerService.getNickname();
+  }
+
+  // TODO: przenieść tę metodę w odpowiedniejsze miejsce
+  private getTeam(teamText){
+    switch(teamText){
+      case "RED":
+        return Team.RED;
+      case "BLUE":
+        return Team.BLUE;
+      case "OBSERVER":
+        return Team.OBSERVER;
+    }
+  }
+  
   ready(){
-    var player = this.players[0];
-    player.ready = !player.ready;
+    this.clientPlayer.ready = !this.clientPlayer.ready;
   }
 
   isBlue(player){
@@ -48,13 +82,11 @@ export class LobbyComponent implements OnInit {
   }
 
   joinRedTeam(){
-    var player = this.players[0];
-    player.team = Team.RED;
+    this.clientPlayer.team = Team.RED;
   }
 
   joinBlueTeam(){
-    var player = this.players[0];
-    player.team = Team.BLUE;
+    this.clientPlayer.team = Team.BLUE;
   }
 
   countBlue(){

@@ -30,11 +30,6 @@ export class MainMenuComponent implements OnInit {
     this.textField = document.getElementById("input_text");
     this.gameButton = document.getElementById("game_button");
     this.gameButton.onclick = () => {
-      ConnectionService.connect("localhost", 8080, function(){
-        ConnectionService.send("RoMan", "/app/game/connect");
-      });
-    
-      // this.router.navigate(['board']);
       this.router.navigate(["lobby"]);
     }
     this.connectButton.onclick = function(){

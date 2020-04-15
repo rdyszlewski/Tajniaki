@@ -16,4 +16,8 @@ export class ConnectionService {
   public static send(message, path){
     this._connection.write(message, path);
   }
+
+  public static subscribe(path, method){
+    this._connection.getSocket().subscribe(path, method);
+  }
 }
