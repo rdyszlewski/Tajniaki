@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConnectionService } from '../connection.service';
+import { PlayerService } from '../playerService';
 
 (window as any).global = window;
 
@@ -46,6 +47,11 @@ export class MainMenuComponent implements OnInit {
 
   sendMessage(){
     console.log("Wysyłanie");
-    
   }
+
+  changeNickname(){
+    var element = ((document.getElementById("nick_text") as HTMLInputElement));
+    PlayerService.setNickname(element.value);
+  }
+  
 }
