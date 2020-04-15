@@ -32,10 +32,7 @@ export class LobbyComponent implements OnInit {
         console.log(players);
         that.setPlayers(players);
       });
-      // ConnectionService.subscribe("/user/lobby/team", message=>{
-      //   console.log("zmiana drużyny");
-      //   that.clientPlayer.team = that.getTeam(message.body);
-      // });
+
       ConnectionService.subscribe("/user/queue/connect", message => {
         // TODO: wyświetlić informacje o podłączeniu gracza
         console.log("Gracz " + message.body + " się podłączył");
@@ -43,17 +40,28 @@ export class LobbyComponent implements OnInit {
         that.players.push(newPlayer);
       });
       ConnectionService.subscribe("/topic/lobby/team", message => {
-          console.log(message);
           var json = JSON.parse(message.body);
           let nickname = json['nickname'];
-          let team = that.getTeam(json['team']);
-          console.log(that.players);
           var player = that.getPlayerByNick(nickname);
+          let team = that.getTeam(json['team']);          
           player.team = team;
 
       });
+      ConnectionService.subscribe("/topic/lobby/ready", message =>{
+        console.log(message);
+        var json = JSON.parse(message.body);
+        let nickname = json['nickname'];
+        var player = that.getPlayerByNick(nickname);
+        let ready = json['ready'];
+        player.ready = ready;
+      });
+      ConnectionService.subscribe("/queue/lobby/start", message=>{
+        // TODO: uruchamianie kolejnego ekranu
+        console.log("Rozpoczynamy grę");
+      })
       ConnectionService.send(PlayerService.getNickname(), "/app/lobby/connect");
     });
+
   }
 
   private setPlayers(message):void{
@@ -88,7 +96,7 @@ export class LobbyComponent implements OnInit {
   }
 
   ready(){
-    this.clientPlayer.ready = !this.clientPlayer.ready;
+    ConnectionService.send(!this.clientPlayer.ready, "/app/lobby/ready");
   }
 
   isBlue(player){
@@ -133,8 +141,6 @@ export class LobbyComponent implements OnInit {
         return player;
       }
     }
-    // var filteredPlayers = this.players.filter(x=> x.nickName == nick);
-    // return filteredPlayers[0];
   }
   
 }
