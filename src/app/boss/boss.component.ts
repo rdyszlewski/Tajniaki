@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectionService } from '../connection.service';
 import { VotingPlayer } from './voting_player';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-boss',
@@ -11,13 +12,17 @@ export class BossComponent implements OnInit {
 
   players: VotingPlayer[] = [];
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
       var that = this;
       ConnectionService.subscribe("/user/boss/start", message=>{
           that.updateList(message);
       });
+      ConnectionService.subscribe("/user/boss/end",  message=>{
+        console.log("Koniec głosowania");
+        this.router.navigate(['game']);
+      })
       ConnectionService.send("Siema", "/app/boss/start");
   }
 

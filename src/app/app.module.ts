@@ -10,6 +10,7 @@ import { CONST_ROUTING } from 'src/app.routing';
 import { ConnectionService } from './connection.service';
 import { Router } from '@angular/router';
 import { BossComponent } from './boss/boss.component';
+import { GameComponent } from './game/game.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { BossComponent } from './boss/boss.component';
     MainMenuComponent,
     BoardComponent,
     LobbyComponent,
-    BossComponent
+    BossComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
