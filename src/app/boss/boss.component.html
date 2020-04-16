@@ -1,0 +1,4 @@
+<div *ngFor="let player of players">
+    <input (click)="vote(player)" type="submit" value='{{player.nickname}}'/>
+    <span>{{player.votes}}</span>
+</div>

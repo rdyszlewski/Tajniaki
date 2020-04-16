@@ -9,13 +9,15 @@ import { LobbyComponent } from './lobby/lobby.component';
 import { CONST_ROUTING } from 'src/app.routing';
 import { ConnectionService } from './connection.service';
 import { Router } from '@angular/router';
+import { BossComponent } from './boss/boss.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainMenuComponent,
     BoardComponent,
-    LobbyComponent
+    LobbyComponent,
+    BossComponent
   ],
   imports: [
     BrowserModule,

@@ -26,23 +26,29 @@ export class MainMenuComponent implements OnInit {
   ngAfterViewInit(){
 
 
-    this.connectButton = document.getElementById("connect_button");
+    // this.connectButton = document.getElementById("connect_button");
     this.sendButton = document.getElementById("send_button");
     this.textField = document.getElementById("input_text");
     this.gameButton = document.getElementById("game_button");
     this.gameButton.onclick = () => {
       this.router.navigate(["lobby"]);
     }
-    this.connectButton.onclick = function(){
-      console.log("łczenie");
+    // this.connectButton.onclick = function(){
+    //   console.log("łczenie");
       
-    }
+    // }
 
     this.sendButton.onclick = () => {
       var message = this.textField.value;
       ConnectionService.send(message, '/app/send/message');
       this.textField.value = "";
     }
+  }
+
+  connect(){
+    ConnectionService.connect("localhost", 8080, function(){
+        console.log("Połączono");
+    });
   }
 
   sendMessage(){
@@ -52,6 +58,10 @@ export class MainMenuComponent implements OnInit {
   changeNickname(){
     var element = ((document.getElementById("nick_text") as HTMLInputElement));
     PlayerService.setNickname(element.value);
+  }
+
+  boss(){
+    this.router.navigate(["boss"]);
   }
   
 }
