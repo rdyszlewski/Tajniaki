@@ -1,1 +1,8 @@
-<p>game works!</p>
+<div class="grid">
+  <!-- <div *ngFor="let word of words" class="card">
+    {{word}}
+  </div> -->
+  <input type="submit" *ngFor='let word of words' value={{word.word}} class="card {{word.color}}" id={{word.word}}/>
+</div>
+
+  

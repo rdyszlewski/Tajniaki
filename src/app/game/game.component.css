@@ -1,0 +1,34 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+  }
+
+.card {
+  border: 1px solid black;
+  border-radius: 1em;
+  height: 5em;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.RED {
+  /* color: red; */
+  background-color: red;
+}
+
+.BLUE {
+  /* color:blue; */
+  background-color:blue;
+}
+
+.KILLER {
+  /* color: gray; */
+  background-color: slategrey;
+}
+
+.NEUTRAL {
+  /* color: gold; */
+  background-color: yellow;
+}

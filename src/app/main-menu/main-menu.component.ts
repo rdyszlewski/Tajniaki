@@ -31,7 +31,8 @@ export class MainMenuComponent implements OnInit {
     this.textField = document.getElementById("input_text");
     this.gameButton = document.getElementById("game_button");
     this.gameButton.onclick = () => {
-      this.router.navigate(["lobby"]);
+      // this.router.navigate(["lobby"]);
+      this.router.navigate(["game"]);
     }
     // this.connectButton.onclick = function(){
     //   console.log("łczenie");
