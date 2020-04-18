@@ -1,8 +1,15 @@
+<div>{{currentTeam}} - {{currentPlayer}}</div>
+<div>Czerwieni pozostało: {{remainingRed}}</div>
+<div>Zieleni pozostało: {{remainingBlue}} </div>
+<div>Aktualne hasło: {{currentWord}}</div>
+<div>Pozostałe słowa do odgadnięcia {{remainingAnswers}}</div>
+
+<input (click)="sendBossMessage()" type="submit" value="Wyślij hasło"/>
 <div class="grid">
   <!-- <div *ngFor="let word of words" class="card">
     {{word}}
   </div> -->
-  <input type="submit" *ngFor='let word of words' value={{word.word}} class="card {{word.color}}" id={{word.word}}/>
+  <input type="submit" *ngFor='let word of words' value={{word.word}} class="card {{word.color}}" id={{word.word}} (click)="click(word.word)"/>
 </div>
 
   
