@@ -18,6 +18,7 @@ export class ConnectionService {
   }
 
   public static subscribe(path, method){
+    console.log(path);
     this._connection.getSocket().subscribe(path, method);
   }
 }

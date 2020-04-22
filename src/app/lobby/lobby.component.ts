@@ -47,7 +47,7 @@ export class LobbyComponent implements OnInit {
           player.team = team;
 
       });
-      ConnectionService.subscribe("/topic/lobby/ready", message =>{
+      ConnectionService.subscribe("/user/lobby/ready", message =>{
         console.log(message);
         var json = JSON.parse(message.body);
         let nickname = json['nickname'];

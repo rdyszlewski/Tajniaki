@@ -1,15 +1,23 @@
-<div>{{currentTeam}} - {{currentPlayer}}</div>
-<div>Czerwieni pozostało: {{remainingRed}}</div>
-<div>Zieleni pozostało: {{remainingBlue}} </div>
-<div>Aktualne hasło: {{currentWord}}</div>
-<div>Pozostałe słowa do odgadnięcia {{remainingAnswers}}</div>
+<div>{{model.currentTeam}} - {{model.currentStage}}</div>
+<div>Czerwieni pozostało: {{model.remainingRed}}</div>
+<div>Zieleni pozostało: {{model.remainingBlue}} </div>
+<div>Aktualne hasło: {{model.currentWord}}</div>
+<div>Pozostałe słowa do odgadnięcia {{model.remainingAnswers}}</div>
 
 <input (click)="sendBossMessage()" type="submit" value="Wyślij hasło"/>
 <div class="grid">
   <!-- <div *ngFor="let word of words" class="card">
     {{word}}
   </div> -->
-  <input type="submit" *ngFor='let word of words' value={{word.word}} class="card {{word.color}}" id={{word.word}} (click)="click(word.word)"/>
+  <div *ngFor='let card of model.cards' class="card {{card.color}}" >
+    <input type="submit"  
+    value={{card.word}} 
+    id={{card.word}} 
+    (click)="click(card.word)"/>
+    <span>{{card.answers.length}}</span>
+  </div>
+  
+  
 </div>
 
   

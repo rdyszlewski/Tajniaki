@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectionService } from '../connection.service';
-import { WordCard } from './word_card';
 import { Team } from '../lobby/team';
 import { Role } from './role';
 import { PlayerService } from '../playerService';
 import { BossMessage } from './bossMessage';
+import { GameState } from './models/gameState';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
+import { Card, CardCreator } from './models/card';
 
 @Component({
   selector: 'app-game',
@@ -13,48 +15,64 @@ import { BossMessage } from './bossMessage';
 })
 export class GameComponent implements OnInit {
 
-  words: WordCard[]=[];
-  remainingAnswers = 0;
-  currentTeam: Team;
-  currentPlayer: Role;
-  remainingBlue = 0;
-  remainingRed = 0;
-  currentWord:string;
+  model: GameState = new GameState();
   constructor() { }
 
   ngOnInit(): void {
     var that = this;
     ConnectionService.subscribe("/user/queue/game/start", message=>{
       var data = JSON.parse(message.body);
-      var words = data['words'];
-      var colors = data['colors'];
-      
-      that.words = that.getWordCards(words, colors);
       PlayerService.setRole(this.getRole(data["playerRole"]));
-      that.currentTeam = this.getTeam(data["firstTeam"]);
-      that.currentPlayer = Role.BOSS;
+      that.setGameState(data["gameState"]);
+      that.model.cards = that.createCards(data["cards"]);  
     });
     ConnectionService.subscribe("/user/queue/game/answer", message=>{
       var data = JSON.parse(message.body);
-      var word = data["word"];
-      var color = data["correctColor"];
-      var correct = data["correct"];
-      var remainingAnswers = data["remainingAnswers"];
-      var currentTeam = data['currentTeam'];
-      var currentRole = data['currentRole'];
-      that.remainingAnswers = remainingAnswers;
-      let card = that.getCard(word);
-      card.color = color;
-      that.currentTeam = that.getTeam(currentTeam);
-      that.currentPlayer = that.getRole(currentRole);
+      var correct = data["correct"]; // TODO: można coś z tym zrobić
+      let card = that.getCard(data["word"]);
+      card.color = data["correctColor"];
+      card.checked = true;
+      that.setGameState(data["gameState"]);
+    });
+    ConnectionService.subscribe("/user/queue/game/click", message=>{
+      console.log(message);
+      var data = JSON.parse(message.body);
+      let editedCards = data['editedCards'];
+      let cards = this.createCards(editedCards);
+      this.updateCards(cards);
+      // TODO: przetestować to
     });
     ConnectionService.subscribe("/user/queue/game/question", message=>{
-      console.log(message);
       let data = JSON.parse(message.body);
-      that.currentWord = data['word'];
-      that.remainingAnswers = data['number'];
+      that.setGameState(data["gameState"]);
     });
     ConnectionService.send("START", "/app/game/start");
+  }
+
+  private updateCards(cards){
+    cards.forEach(card => {
+      console.log(card);
+      this.model.replaceCard(card.word, card);
+    });
+  }
+
+  private createCards(cardsTextList){
+    let cards= []
+    cardsTextList.forEach(element => {
+      cards.push(CardCreator.createCard(element));
+    });
+    cards.sort((x1,x2)=>x1.id-x2.id);
+    return cards
+  }
+
+  private setGameState(dataJson){
+    console.log("Ustawianie stanu gry");
+    this.model.currentTeam = this.getTeam(dataJson["currentTeam"]);
+    this.model.currentStage = this.getRole(dataJson["currentStage"]);
+    this.model.remainingBlue = dataJson["remainingBlue"];
+    this.model.remainingRed = dataJson["remainingRed"];
+    this.model.currentWord = dataJson["currentWord"];
+    this.model.remainingAnswers = dataJson["remainingAnswers"];
   }
 
   // TODO: przenieść to do innej metody
@@ -77,13 +95,14 @@ export class GameComponent implements OnInit {
   }
 
   private getCard(word:string){
-    for(let i=0; i<this.words.length; i++){
-      if(this.words[i].word==word){
-        return this.words[i];
+    for(let i=0; i<this.model.cards.length; i++){
+      if(this.model.cards[i].word==word){
+        return this.model.cards[i];
       }
     }
   }
 
+  // TODO: do wywalenia 
   private getWordCards(words:string[], colors:string[]){
     let cards = [];
     for(let i =0;  i < words.length; i++){
@@ -93,12 +112,13 @@ export class GameComponent implements OnInit {
       } else {
         var color = "LACK";
       }
-      var card = new WordCard(word, color);
+      var card = new Card(i, word, color, false);
       cards.push(card);
     }
     return cards;
   }
 
+  // TODO: prawdopodobnie należy to przenieść w inne miejsce
   private getColor(wordColor){
     switch(wordColor){
       case "RED":
@@ -122,11 +142,6 @@ export class GameComponent implements OnInit {
       console.log(element);
       element.setAttribute("class", "red");
     }
-  }
-
-  private setupWords(wordsList){
-    // TODO: dokończyć
-    // this.words = ["jeden", "dwa", "trzy", "cztery", "pięć", "sześć", "siedem", "osiem", "dziewięć"]
   }
 
 }
