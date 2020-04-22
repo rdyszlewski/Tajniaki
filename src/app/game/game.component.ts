@@ -47,6 +47,8 @@ export class GameComponent implements OnInit {
       that.setGameState(data["gameState"]);
     });
     ConnectionService.send("START", "/app/game/start");
+
+    document.addEventListener('contextmenu', event=>event.preventDefault());
   }
 
   private updateCards(cards){
@@ -144,4 +146,8 @@ export class GameComponent implements OnInit {
     }
   }
 
+  setFlag(word){
+    console.log(word);
+    ConnectionService.send(word, '/app/game/flag');
+  }
 }

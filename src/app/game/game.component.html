@@ -10,14 +10,15 @@
     {{word}}
   </div> -->
   <div *ngFor='let card of model.cards' class="card {{card.color}}" >
+    <!-- <span>{{card.answers.length}}</span> -->
+    <span>{{card.answers}}</span>
     <input type="submit"  
     value={{card.word}} 
     id={{card.word}} 
-    (click)="click(card.word)"/>
-    <span>{{card.answers.length}}</span>
+    (click)="click(card.word)" (contextmenu)="setFlag(card.word)"/>
+    <!-- <span>{{card.flags.length}}</span> -->
+    <span>{{card.flags}}</span>
   </div>
-  
-  
 </div>
 
   
