@@ -1,5 +1,5 @@
-<button (click)="joinRedTeam()">Czerwieni</button>
-<button (click)="joinBlueTeam()">Zieleni</button>
+<button (click)="eventsManager.sendJoinRed()">Czerwieni</button>
+<button (click)="eventsManager.sendJoinBlue()">Zieleni</button>
 
 <div id="tables">
 
@@ -7,8 +7,8 @@
         <tr>
             <th>Czerwieni ({{countRed()}})</th>
         </tr>
-        <tr *ngFor="let player of players">
-            <td *ngIf="isRed(player)">{{player.nickname}}
+        <tr *ngFor="let player of model.getPlayers(teams.RED)">
+            <td>{{player.nickname}}
                 <span *ngIf="player.ready">V</span>
             </td>
         </tr>
@@ -18,8 +18,8 @@
         <tr>
             <th>Zieleni ({{countBlue()}})</th>
         </tr>
-        <tr *ngFor="let player of players">
-            <td *ngIf="isBlue(player)">{{player.nickname}}
+        <tr *ngFor="let player of model.getPlayers(teams.BLUE)">
+            <td>{{player.nickname}}
                 <span *ngIf="player.ready">V</span>
             </td>
         </tr>
@@ -30,12 +30,12 @@
         <tr>
             <th>Nieprzydzieleni ({{countObserver()}})</th>
         </tr>
-        <tr *ngFor="let player of players">
-            <td *ngIf="isObserver(player)">{{player.nickname}}
+        <tr *ngFor="let player of model.getPlayers(teams.OBSERVER)">
+            <td>{{player.nickname}}
                 <span *ngIf="player.ready">V</span>
             </td>
         </tr>
     </table>
 </div>
-<button (click)="ready()">Gotowy</button>
+<button (click)="eventsManager.sendReady()">Gotowy</button>
 

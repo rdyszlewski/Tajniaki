@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Player } from './lobby_player';
 import {Team} from './team';
-import { ConnectionService } from '../connection.service';
-import { PlayerService } from '../playerService';
+import { LobbyModel } from './lobbyModel';
+import { LobbyEventsManager } from './lobbyEventManager';
 
 @Component({
   selector: 'app-lobby',
@@ -10,94 +9,21 @@ import { PlayerService } from '../playerService';
   styleUrls: ['./lobby.component.css']
 })
 export class LobbyComponent implements OnInit {
-  nick;
 
-  players = [];
+  private readonly HOST = "localhost";
+  private readonly PORT = 8080;
 
-  private clientPlayer;
+  teams = Team;
+  model: LobbyModel = new LobbyModel();
+  eventsManager: LobbyEventsManager = new LobbyEventsManager();
 
   constructor() { }
 
   ngOnInit(): void {
-    // TODO: później to usunąć, ustawianie zrobić w menu
-    this.connect();
+    this.eventsManager.init(this.model);
+    this.eventsManager.connect(this.HOST, this.PORT);
   }
 
-  private connect(){
-    // TODO: zrobić tutaj porządek
-    let that = this;
-    ConnectionService.connect("localhost", 8080, function(){
-      // TODO: pomyśleć, jak to powinno zostać prawidłowo zrobione
-      ConnectionService.subscribe("/user/lobby/players", (players)=>{
-        console.log(players);
-        that.setPlayers(players);
-      });
-
-      ConnectionService.subscribe("/user/queue/connect", message => {
-        // TODO: wyświetlić informacje o podłączeniu gracza
-        console.log("Gracz " + message.body + " się podłączył");
-        var newPlayer = new Player(message.body, Team.OBSERVER, false);
-        that.players.push(newPlayer);
-      });
-      ConnectionService.subscribe("/topic/lobby/team", message => {
-          var json = JSON.parse(message.body);
-          let nickname = json['nickname'];
-          var player = that.getPlayerByNick(nickname);
-          let team = that.getTeam(json['team']);          
-          player.team = team;
-
-      });
-      ConnectionService.subscribe("/user/lobby/ready", message =>{
-        console.log(message);
-        var json = JSON.parse(message.body);
-        let nickname = json['nickname'];
-        var player = that.getPlayerByNick(nickname);
-        let ready = json['ready'];
-        player.ready = ready;
-      });
-      ConnectionService.subscribe("/queue/lobby/start", message=>{
-        // TODO: uruchamianie kolejnego ekranu
-        console.log("Rozpoczynamy grę");
-      })
-      ConnectionService.send(PlayerService.getNickname(), "/app/lobby/connect");
-    });
-
-  }
-
-  private setPlayers(message):void{
-      var body = message.body;
-      var json = JSON.parse(body);
-      json.forEach(element => {
-        // TODO: dodać informacje, czy gracz jest gotowy
-        var player = new Player(element["nickName"], this.getTeam(element["team"]), element["ready"]);
-        this.players.push(player);
-        if (this.isClientPlayer(player))
-          console.log("ja gracz " + player.nickname);
-          this.clientPlayer = player;
-      });
-  }
-
-  private isClientPlayer(player:Player):boolean{
-    // TODO: zastanwoić się, co zrobić w sytuacji, w której więcej graczy ustawi sobie ten sam nick
-    return player.nickname == PlayerService.getNickname();
-  }
-
-  // TODO: przenieść tę metodę w odpowiedniejsze miejsce
-  private getTeam(teamText:string):Team{
-    console.log("getTeam");
-    switch(teamText){
-      case "RED":
-        return Team.RED;
-      case "BLUE":
-        return Team.BLUE;
-      case "OBSERVER":
-        return Team.OBSERVER;
-    }
-  }
-
-  ready(){
-    ConnectionService.send(!this.clientPlayer.ready, "/app/lobby/ready");
-  }
 
   isBlue(player){
     return player.team==Team.BLUE;
@@ -111,36 +37,16 @@ export class LobbyComponent implements OnInit {
     return player.team == Team.OBSERVER;
   }
 
-  joinRedTeam(){
-    ConnectionService.send(Team.RED, "/app/lobby/team");
-  }
-
-  joinBlueTeam(){
-    ConnectionService.send(Team.BLUE, "/app/lobby/team");
-  }
-
   countBlue(){
-    return this.players.filter(x=>x.team == Team.BLUE).length;
+    return this.model.getPlayers(Team.BLUE).length; 
   }
 
   countRed(){
-    return this.players.filter(x=>x.team == Team.RED).length;
+    return this.model.getPlayers(Team.RED).length;
   }
 
   countObserver(){
-    return this.players.filter(x=>x.team == Team.OBSERVER).length;
+    return this.model.getPlayers(Team.OBSERVER).length;
   }
 
-  private getPlayerByNick(nick:string):Player{
-    console.log(this.players);
-    console.log(nick);
-    for(let i=0; i<this.players.length; i++){
-      var player = this.players[i];
-      if(player.nickname==nick){
-        console.log("Znaleziono " + player);
-        return player;
-      }
-    }
-  }
-  
 }

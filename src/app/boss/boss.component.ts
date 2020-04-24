@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConnectionService } from '../connection.service';
 import { VotingPlayer } from './voting_player';
 import { Router } from '@angular/router';
+import { ConnectionPath } from '../shared/connectionPath';
 
 @Component({
   selector: 'app-boss',
@@ -16,14 +17,14 @@ export class BossComponent implements OnInit {
 
   ngOnInit(): void {
       var that = this;
-      ConnectionService.subscribe("/user/boss/start", message=>{
+      ConnectionService.subscribe(ConnectionPath.START_VOTING_RESPONSE, message=>{
           that.updateList(message);
       });
-      ConnectionService.subscribe("/user/boss/end",  message=>{
+      ConnectionService.subscribe(ConnectionPath.END_VOTING_RESPONSE,  message=>{
         console.log("Koniec głosowania");
         this.router.navigate(['game']);
       })
-      ConnectionService.send("Siema", "/app/boss/start");
+      ConnectionService.send("Siema", ConnectionPath.START_VOTING);
   }
 
   private updateList(message){
@@ -38,7 +39,7 @@ export class BossComponent implements OnInit {
   }
 
   vote(player:VotingPlayer):void {
-    ConnectionService.send(player.id, "/app/boss/vote");
+    ConnectionService.send(player.id, ConnectionPath.VOTE);
   }
 
 }
