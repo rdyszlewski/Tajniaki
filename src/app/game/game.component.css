@@ -36,3 +36,11 @@
 .LACK {
   background-color: aliceblue;
 }
+
+.my_answer{
+  border: 3px solid gold;
+}
+
+.my_flag{
+  border: 3px solid blue;
+}

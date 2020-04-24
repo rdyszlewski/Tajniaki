@@ -5,7 +5,8 @@ import { Role } from './role';
 import { PlayerService } from '../playerService';
 import { BossMessage } from './bossMessage';
 import { GameState } from './models/gameState';
-import { Card, CardCreator } from './models/card';
+import { CardCreator, Card } from './models/card';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-game',
@@ -18,7 +19,6 @@ export class GameComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // var that = this;
     this.subscribeStartEvent();
     this.subscribeAnswerEvent();
     this.subscriveClickEvent();
@@ -73,6 +73,7 @@ export class GameComponent implements OnInit {
   private subscribeStartEvent() {
     ConnectionService.subscribe("/user/queue/game/start", message => {
       var data = JSON.parse(message.body);
+      PlayerService.setNickname(data['nickname']);
       PlayerService.setRole(this.getRole(data["playerRole"]));
       PlayerService.setTeam(this.getTeam(data['playerTeam']));
       this.setGameState(data["gameState"]);
@@ -119,35 +120,12 @@ export class GameComponent implements OnInit {
 
   // TODO: wymyślić fajniejszą nazwę
   sendBossMessage(){
-    let wordInput = document.getElementById("wordInput") as HTMLInputElement;
-    let numberInput = document.getElementById("numberInput") as HTMLInputElement;
-    // TODO: dodać sprawdzenie poprawności
-    let message =new BossMessage(wordInput.value, Number(numberInput.value));
+    let wordInput = $("#wordInput");
+    let numberInput = $("#numberInput");
+    let message = new BossMessage(wordInput.val() as string, numberInput.val() as number);
     ConnectionService.send(JSON.stringify(message),"/app/game/question");
-  }
-
-  private getCard(word:string){
-    for(let i=0; i<this.model.cards.length; i++){
-      if(this.model.cards[i].word==word){
-        return this.model.cards[i];
-      }
-    }
-  }
-
-  // TODO: do wywalenia 
-  private getWordCards(words:string[], colors:string[]){
-    let cards = [];
-    for(let i =0;  i < words.length; i++){
-      let word = words[i];
-      if(colors != null){
-        var color = colors[i];
-      } else {
-        var color = "LACK";
-      }
-      var card = new Card(i, word, color, false);
-      cards.push(card);
-    }
-    return cards;
+    wordInput.val("");
+    numberInput.val(1);
   }
 
   // TODO: prawdopodobnie należy to przenieść w inne miejsce
@@ -163,16 +141,6 @@ export class GameComponent implements OnInit {
         return "yellow";
       default:
         return "yellow";
-    }
-  }
-
-  private colorWords(words, colors){
-    for(let i =0; i < words.lenght; i++){
-      let word = words[i];
-      let color = colors[i];
-      let element = document.getElementById(word);
-      console.log(element);
-      element.setAttribute("class", "red");
     }
   }
 
@@ -195,11 +163,19 @@ export class GameComponent implements OnInit {
     return PlayerService.getRole();
   }
 
-  preventSpace()
-{
-  // TODO: napisć to trochę lepiej
-    var str=document.getElementById("wordInput") as HTMLInputElement;
-    var regex=/[^a-z]/gi;
-    str.value=str.value.replace(regex ,"");
-}
+  preventWhispace(event)
+  {
+    if (event.keyCode === 32){
+      console.log("Naciśnięto spację");
+      event.preventDefault();
+    }
+  }
+
+  isAnswerByClient(card:Card){
+    return card.answers.includes(PlayerService.getNickname());
+  }
+
+  isFlagByClient(card: Card){
+    return card.flags.includes(PlayerService.getNickname())
+  }
 }

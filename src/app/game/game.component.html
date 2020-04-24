@@ -7,23 +7,27 @@
 <div>Pozostałe słowa do odgadnięcia {{model.remainingAnswers}}</div>
 
 <div *ngIf="isBoss()">
-  <input id="wordInput" (keyup)="preventSpace()" (keydown)="preventSpace()"/>
+  <input id="wordInput" (keydown)="preventWhispace($event)"/>
   <input id="numberInput" type="number" value=1 min=1 max=9/>
   <input (click)="sendBossMessage()" type="submit" value="Wyślij hasło"/>
 </div>
 <div class="grid">
-  <!-- <div *ngFor="let word of words" class="card">
-    {{word}}
-  </div> -->
-  <div *ngFor='let card of model.cards' class="card {{card.color}}" >
-    <!-- <span>{{card.answers.length}}</span> -->
-    <span>{{card.answers}}</span>
+  <div *ngFor='let card of model.cards' 
+  [ngClass]="{
+    'my_answer': isAnswerByClient(card),
+    'my_flag':isFlagByClient(card),
+    'BLUE': card.color.toString()=='BLUE',
+    'RED': card.color.toString()=='RED',
+    'NEUTRAL': card.color.toString()=='NEUTRAL',
+    'KILLER':card.color.toString()=='KILLER',
+    'LACK': card.color.toString()=='LACK',
+    'card ' :true}">
+    <span *ngIf="card.answers.length > 0">{{card.answers.length}}</span>
     <input type="submit"  
     value={{card.word}} 
     id={{card.word}} 
-    (click)="click(card.word)" (contextmenu)="setFlag(card.word)"/>
-    <!-- <span>{{card.flags.length}}</span> -->
-    <span>{{card.flags}}</span>
+    (click)="click(card.word)" (contextmenu)="setFlag(card.word)" />
+    <span *ngIf="card.flags.length > 0">{{card.flags.length}}</span>
   </div>
 </div>
 

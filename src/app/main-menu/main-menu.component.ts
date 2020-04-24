@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConnectionService } from '../connection.service';
 import { PlayerService } from '../playerService';
+import * as $ from 'jquery';
 
 (window as any).global = window;
 
@@ -12,10 +13,8 @@ import { PlayerService } from '../playerService';
 })
 export class MainMenuComponent implements OnInit {
 
-  private connectButton;
   private sendButton;
   private textField;
-  private gameButton;
 
   constructor(private router: Router) {
   }
@@ -26,18 +25,11 @@ export class MainMenuComponent implements OnInit {
   ngAfterViewInit(){
 
 
-    // this.connectButton = document.getElementById("connect_button");
-    this.sendButton = document.getElementById("send_button");
-    this.textField = document.getElementById("input_text");
-    this.gameButton = document.getElementById("game_button");
-    this.gameButton.onclick = () => {
-      // this.router.navigate(["lobby"]);
-      this.router.navigate(["game"]);
-    }
-    // this.connectButton.onclick = function(){
-    //   console.log("łczenie");
-      
-    // }
+    this.sendButton = $("#send_button");
+    this.textField = $("#input_text");
+
+    $("#game_button").click(x=>this.router.navigate(["game"]));
+    
 
     this.sendButton.onclick = () => {
       var message = this.textField.value;
@@ -57,8 +49,8 @@ export class MainMenuComponent implements OnInit {
   }
 
   changeNickname(){
-    var element = ((document.getElementById("nick_text") as HTMLInputElement));
-    PlayerService.setNickname(element.value);
+    var element = $("#nick_text");
+    PlayerService.setNickname(element.val() as string);
   }
 
   boss(){
