@@ -13,27 +13,27 @@
   vertical-align: middle;
 }
 
-.RED {
+.red {
   /* color: red; */
   background-color: red;
 }
 
-.BLUE {
+.blue {
   /* color:blue; */
   background-color:blue;
 }
 
-.KILLER {
+.killer {
   /* color: gray; */
   background-color: slategrey;
 }
 
-.NEUTRAL {
+.neutral {
   /* color: gold; */
   background-color: yellow;
 }
 
-.LACK {
+.lack {
   background-color: aliceblue;
 }
 

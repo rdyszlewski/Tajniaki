@@ -11,6 +11,8 @@ import { ConnectionService } from './connection.service';
 import { Router } from '@angular/router';
 import { BossComponent } from './boss/boss.component';
 import { GameComponent } from './game/game.component';
+import { TooltipModule } from 'ng2-tooltip-directive';
+import { TooltipCreator } from './game/tooltip_creator';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,7 @@ import { GameComponent } from './game/game.component';
     BrowserModule,
     AppRoutingModule,
     CONST_ROUTING,
-
+    TooltipModule,
   ],
   providers: [ConnectionService],
   bootstrap: [AppComponent]

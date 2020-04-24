@@ -7,6 +7,7 @@ import { BossMessage } from './bossMessage';
 import { GameState } from './models/gameState';
 import { CardCreator, Card } from './models/card';
 import * as $ from 'jquery';
+import { TooltipCreator } from './tooltip_creator';
 
 @Component({
   selector: 'app-game',
@@ -16,6 +17,7 @@ import * as $ from 'jquery';
 export class GameComponent implements OnInit {
 
   model: GameState = new GameState();
+  tooltip: TooltipCreator = new TooltipCreator();
   constructor() { }
 
   ngOnInit(): void {
