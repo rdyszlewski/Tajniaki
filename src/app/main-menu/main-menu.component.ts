@@ -13,48 +13,54 @@ import * as $ from 'jquery';
 })
 export class MainMenuComponent implements OnInit {
 
-  private sendButton;
-  private textField;
+  nickname_editing:boolean;
 
   constructor(private router: Router) {
+    this.connect();
   }
+
 
   ngOnInit(): void {
+    
+    // throw new Error("Method not implemented.");
   }
 
-  ngAfterViewInit(){
-
-
-    this.sendButton = $("#send_button");
-    this.textField = $("#input_text");
-
-    $("#game_button").click(x=>this.router.navigate(["game"]));
-    
-
-    this.sendButton.onclick = () => {
-      var message = this.textField.value;
-      ConnectionService.send(message, '/app/send/message');
-      this.textField.value = "";
-    }
+  start(){
+    console.log("start");
+    this.router.navigate(['lobby']);
   }
 
   connect(){
-    ConnectionService.connect("localhost", 8080, function(){
-        console.log("Połączono");
-    });
+    ConnectionService.connect('localhost', 8080, ()=>{});
   }
 
-  sendMessage(){
-    console.log("Wysyłanie");
+  isConnected():boolean{
+    return ConnectionService.isConnected();
+    return false;
   }
 
-  changeNickname(){
-    var element = $("#nick_text");
-    PlayerService.setNickname(element.val() as string);
+  exit(){
+
   }
 
-  boss(){
-    this.router.navigate(["boss"]);
+  setChangeNicknameState(){
+    this.nickname_editing = true;
+    $("#nickname_input").val(PlayerService.getNickname());
   }
-  
+
+  confirmNickname(){
+    let nickname = $("#nickname_input").val();
+    PlayerService.setNickname(nickname as string);
+    this.nickname_editing = false;
+  }
+
+  getNickname(){
+    console.log(PlayerService.getNickname());
+    return PlayerService.getNickname();
+  }
+
+  startGame(){
+    this.router.navigate(["game"]);
+  }
+
 }

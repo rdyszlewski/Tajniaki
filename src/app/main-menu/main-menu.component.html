@@ -1,4 +1,4 @@
-<input (click)="connect()" type="submit" value="Połącz" />
+<!-- <input (click)="connect()" type="submit" value="Połącz" />
 <p id="info_text"></p>
 <div>
     <input id="nick_text">
@@ -11,4 +11,37 @@
 
 <div>
     <input type="submit" (click)="boss()" value="Głosowanie"/>
+</div> -->
+<div id="connection_status">
+    <div>Status połączenia</div>
+    <div> 
+        {{isConnected()?"Połączono":"Nie połączono"}}
+    </div>
+</div>
+<div id="menu">
+        <img src="../../assets/cat.jpg" alt="Italian Trulli" id="logo">
+        <div class="form_row">
+            <div [hidden]="nickname_editing">
+                <span class="value_column">{{getNickname()}}</span> 
+                <input class="button_column" type="submit" value="Zmień" (click)="setChangeNicknameState()" />
+            </div>
+            <div [hidden]="!nickname_editing">
+                <input id="nickname_input" class="value_column"/> 
+                <input class="button_column" type="submit" value="Zmień" (click)="confirmNickname()">
+            </div>
+        </div>
+
+        <div id="menu_entries">
+            <input type="submit" value="Rozpocznij" (click)="start()" class="menu-item"/>
+            <input type="submit" value="Połącz" (click) ="connect()" *ngIf="!isConnected()" class="menu-item"/>
+            <input type="submit" value="Wyjście" (click)="exit()" class="menu-item" />
+        </div>  
+    
+        <input type="submit" value="Gra" (click)="startGame()" class="menu-item"/>
+
+    
+   
+    <!-- TODO: dodać przycisk połącz, jeżeli nie jest aktualnie połączony -->
+    <!-- TODO: tutaj będą się znajdowały inne przyciski, która będą słuzyły do testowania poszczególnych ekranów -->
+    
 </div>

@@ -7,6 +7,7 @@ import { Card } from './models/card';
 import { TooltipCreator } from './tooltip_creator';
 import { GameEventsManager } from './gameEventsManager';
 import { ConnectionPath } from '../shared/connectionPath';
+import { Team } from '../lobby/team';
 
 @Component({
   selector: 'app-game',
@@ -15,6 +16,8 @@ import { ConnectionPath } from '../shared/connectionPath';
 })
 export class GameComponent implements OnInit {
 
+  team = Team;
+  role = Role;
   model: GameState = new GameState();
   tooltip: TooltipCreator = new TooltipCreator();
   eventsManager: GameEventsManager = new GameEventsManager();
@@ -73,5 +76,9 @@ export class GameComponent implements OnInit {
 
   isWordHidden(card: Card){
     return card.checked && PlayerService.getRole() == Role.BOSS;
+  }
+
+  getNickname(){
+    return PlayerService.getNickname();
   }
 }

@@ -6,9 +6,10 @@ import { CardCreator } from './models/card';
 import { PlayerService } from '../playerService';
 import { ConnectionPath } from '../shared/connectionPath';
 import { BossMessage } from './bossMessage';
+import * as $ from 'jquery';
 
 export class GameEventsManager{
-
+  
     private model:GameState;
     private playerRole:Role;
 
@@ -24,9 +25,10 @@ export class GameEventsManager{
         this.subscribeEndEvent();
         this.subscribeQuestionEvent();
         this.subscribeAnswerEvent();
+        this.subscribeClickEvent();
 
         if(this.playerRole==Role.PLAYER){
-            this.subscriveClickEvent();
+            this.subscribeClickEvent();
         }
     }
 
@@ -47,17 +49,19 @@ export class GameEventsManager{
       }
     
     private updateStateAfterReceiveQuestion(message: any) {
+        console.log(message);
         let data = JSON.parse(message.body);
         this.updateGameState(data["gameState"]);
     }
 
-      private subscriveClickEvent() {
+      private subscribeClickEvent() {
         ConnectionService.subscribe(ConnectionPath.CLICK_RESPONSE, message => {
           this.updateStateAfterClick(message);
         });
       }
     
     private updateStateAfterClick(message: any) {
+      console.log(message);
         var data = JSON.parse(message.body);
         let editedCards = data['editedCards'];
         let cards = this.createCards(editedCards);

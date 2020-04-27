@@ -5,16 +5,38 @@ export class Client{
 
     private serverUrl = 'http://localhost:8080/tajniaki'
 
+    private connected;
     private socket;
+    private onConnectedEvent;
+    private onCloseEvent;
 
     constructor(){
     }
 
     connect(host, port, on_connected){
-        var socket = new SockJS(this.serverUrl);
+        // TODO: zbudodać połączenie
+        var path = 'http://'+host+':'+port+'/tajniaki';
+        var socket = new SockJS(path);
         this.socket = Stomp.over(socket);
-        this.socket.connect({}, on_connected);
+        this.socket.connect({}, ()=>{
+            this.connected = true;
+            if(this.onConnectedEvent != null){
+                this.onConnectedEvent();
+            }
+        }, ()=>{
+            this.connected = false;
+            if(this.onCloseEvent != null){
+                this.onCloseEvent();
+            }
+        });
+    }
 
+    public setOnConnectedEvent(event){
+        this.onConnectedEvent = event;
+    }
+
+    public setOnCloseEvent(event){
+        this.onCloseEvent = event;
     }
 
 
@@ -24,5 +46,9 @@ export class Client{
 
     public getSocket(){
         return this.socket;
+    }
+
+    public isConnected(){
+        return this.connected;
     }
 }

@@ -20,7 +20,7 @@ export class LobbyEventsManager{
     }
 
     public connect(localhost, port){
-        ConnectionService.connect("localhost", 8080, function(){
+        ConnectionService.connect(localhost, port, function(){
             ConnectionService.send(PlayerService.getNickname(), ConnectionPath.CONNECT);
           });
     }
@@ -33,9 +33,7 @@ export class LobbyEventsManager{
     }
 
     private subscribeReady() {
-        ConnectionService.subscribe(ConnectionPath.READY_RESPONSE, message => {
-            this.setPlayerReady(message);
-        });
+        ConnectionService.subscribe(ConnectionPath.READY_RESPONSE, message => this.setPlayerReady(message));
     }
 
     private setPlayerReady(message: any) {
@@ -46,9 +44,7 @@ export class LobbyEventsManager{
     }
 
     private subscribeChangeTeamd() {
-        ConnectionService.subscribe(ConnectionPath.CHANGE_TEAM_REPONSE, message => {
-            this.setPlayerTeam(message);
-        });
+        ConnectionService.subscribe(ConnectionPath.CHANGE_TEAM_REPONSE, message => this.setPlayerTeam(message));
     }
 
     private setPlayerTeam(message: any) {
@@ -67,10 +63,7 @@ export class LobbyEventsManager{
     }
 
     private subscribeJoinToLobbyResponse() {
-        ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (players) => {
-            console.log(players);
-            this.setPlayers(players);
-        });
+        ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (players) => this.setPlayers(players));
     }
 
     private getTeam(teamText:string):Team{

@@ -7,7 +7,7 @@ import { Role } from './game/role';
   })
   export class PlayerService {
   
-    private static nickname: string;
+    private static nickname: string = "Player";
     private static role: Role;
     private static team: Team;
   
