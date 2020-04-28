@@ -15,7 +15,7 @@ export class ConnectionPath{
     //      lobby
     public static readonly PLAYERS_RESPONSE = "/user/lobby/players";
     public static readonly CONNECT_RESPONSE = "/user/queue/connect";
-    public static readonly CHANGE_TEAM_REPONSE = "/topic/lobby/team";
+    public static readonly CHANGE_TEAM_REPONSE = "/user/lobby/team";
     public static readonly READY_RESPONSE = "/user/lobby/ready";
     public static readonly LOBBY_END_RESPONSE = "/queue/lobby/start";
 
@@ -34,4 +34,5 @@ export class ConnectionPath{
     public static readonly CONNECT = "/app/lobby/connect";
     public static readonly READY = "/app/lobby/ready";
     public static readonly CHANGE_TEAM =  "/app/lobby/team";
+    public static readonly AUTO_TEAM = "/app/lobby/auto_team";
 }

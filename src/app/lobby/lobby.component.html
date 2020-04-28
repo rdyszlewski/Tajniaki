@@ -1,19 +1,6 @@
-<button (click)="eventsManager.sendJoinRed()">Czerwieni</button>
-<button (click)="eventsManager.sendJoinBlue()">Zieleni</button>
 
-<div id="tables">
 
-    <table id="red_table" class="players_table"> 
-        <tr>
-            <th>Czerwieni ({{countRed()}})</th>
-        </tr>
-        <tr *ngFor="let player of model.getPlayers(teams.RED)">
-            <td>{{player.nickname}}
-                <span *ngIf="player.ready">V</span>
-            </td>
-        </tr>
-    </table>
-
+<div id="lobby">
     <table id="blue_table" class="players_table">
         <tr>
             <th>Zieleni ({{countBlue()}})</th>
@@ -24,8 +11,18 @@
             </td>
         </tr>
     </table>
-  
-  
+    
+    <table id="red_table" class="players_table"> 
+        <tr>
+            <th>Czerwieni ({{countRed()}})</th>
+        </tr>
+        <tr *ngFor="let player of model.getPlayers(teams.RED)">
+            <td>{{player.nickname}}
+                <span *ngIf="player.ready">V</span>
+            </td>
+        </tr>
+    </table>
+   
     <table id="observer_table" class="players_table">
         <tr>
             <th>Nieprzydzieleni ({{countObserver()}})</th>
@@ -36,6 +33,14 @@
             </td>
         </tr>
     </table>
+
+  
+</div>
+<div class="buttons">
+    <button (click)="eventsManager.sendJoinBlue()" class="card button-item">Zieleni</button>
+    <button (click)="eventsManager.sendJoinRed()" class="card button-item">Czerwieni</button>
+    <button (click)="autoJoinToTeam()" class="card button-item">Automatycznie</button>
+    <button (click)="eventsManager.sendReady()" id="ready-button" class="card button-item">Gotowy</button>
 </div>
 <button (click)="eventsManager.sendReady()">Gotowy</button>
 

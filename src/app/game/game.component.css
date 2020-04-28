@@ -1,27 +1,9 @@
+@import '../../styles.css';
+
 .grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 5px;
-}
-
-
-
-.card {
-  border: 1px solid black;
-  border-radius: 20px;
-  /* border:solid 4px black; */
-  /* border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; */
-  /* border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%; */
-  border-width: 3px 2px 1px 3px;
-  /* border-radius:95% 4% 92% 5%/4% 95% 6% 95%; */
-  height: 4em;
-  text-align: center;
-  display: flex;
-  vertical-align: middle;
-  justify-content: center;
-  align-items: center;
-  transition: 0.25s ease-in-out;
-
 }
 
 .card:hover{

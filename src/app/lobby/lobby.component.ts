@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Team} from './team';
 import { LobbyModel } from './lobbyModel';
 import { LobbyEventsManager } from './lobbyEventManager';
+import { ConnectionService } from '../connection.service';
+import { ConnectionPath } from '../shared/connectionPath';
 
 @Component({
   selector: 'app-lobby',
@@ -9,9 +11,6 @@ import { LobbyEventsManager } from './lobbyEventManager';
   styleUrls: ['./lobby.component.css']
 })
 export class LobbyComponent implements OnInit {
-
-  private readonly HOST = "localhost";
-  private readonly PORT = 8080;
 
   teams = Team;
   model: LobbyModel = new LobbyModel();
@@ -21,7 +20,7 @@ export class LobbyComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventsManager.init(this.model);
-    this.eventsManager.connect(this.HOST, this.PORT);
+    this.eventsManager.sendJoinToLobby();
   }
 
 
@@ -46,7 +45,14 @@ export class LobbyComponent implements OnInit {
   }
 
   countObserver(){
+    console.log(this.model.getPlayers(Team.OBSERVER));
     return this.model.getPlayers(Team.OBSERVER).length;
+  }
+
+  autoJoinToTeam(){
+    // TODO: zrobić automatyczne przyłączanie do grupy
+    // TODO: wysłać zgłoszenie na serwer
+    ConnectionService.send("AUTO", ConnectionPath.AUTO_TEAM);
   }
 
 }

@@ -14,15 +14,9 @@ export class LobbyEventsManager{
         
         this.subscribeJoinToLobbyResponse();
         this.subscribePlayerConnect();
-        this.subscribeChangeTeamd();
+        this.subscribeChangeTeam();
         this.subscribeReady();
         this.subscribeEndLobby();
-    }
-
-    public connect(localhost, port){
-        ConnectionService.connect(localhost, port, function(){
-            ConnectionService.send(PlayerService.getNickname(), ConnectionPath.CONNECT);
-          });
     }
 
     private subscribeEndLobby() {
@@ -38,26 +32,25 @@ export class LobbyEventsManager{
 
     private setPlayerReady(message: any) {
         var json = JSON.parse(message.body);
-        let nickname = json['nickname'];
-        var player = this.model.getPlayerByNick(nickname);
+        let player = this.model.getPlayerById(json['id']);
         player.ready = json['ready'];
     }
 
-    private subscribeChangeTeamd() {
+    private subscribeChangeTeam() {
         ConnectionService.subscribe(ConnectionPath.CHANGE_TEAM_REPONSE, message => this.setPlayerTeam(message));
     }
 
     private setPlayerTeam(message: any) {
         var json = JSON.parse(message.body);
-        let nickname = json['nickname'];
-        var player = this.model.getPlayerByNick(nickname);
+        console.log(json);
+        var player = this.model.getPlayerById(json['id']);
         player.team = this.getTeam(json['team']);
     }
 
     private subscribePlayerConnect() {
         ConnectionService.subscribe(ConnectionPath.CONNECT_RESPONSE, message => {
             console.log("Gracz " + message.body + " się podłączył");
-            var newPlayer = new Player(message.body, Team.OBSERVER, false);
+            let newPlayer = this.createPlayer(message.body);
             this.model.addPlayer(newPlayer);
         });
     }
@@ -67,7 +60,6 @@ export class LobbyEventsManager{
     }
 
     private getTeam(teamText:string):Team{
-        console.log("getTeam");
         switch(teamText){
           case "RED":
             return Team.RED;
@@ -83,15 +75,26 @@ export class LobbyEventsManager{
         var json = JSON.parse(body);
         json.forEach(element => {
             // TODO: dodać informacje, czy gracz jest gotowy
-            var player = new Player(element["nickName"], this.getTeam(element["team"]), element["ready"]);
+            var player = this.createPlayer(element);
             this.model.addPlayer(player);
-            if (this.isClientPlayer(player))
-            this.model.setClientPlayer(player);
+            if (this.isClientPlayer(player)){
+                this.model.setClientPlayer(player);
+            };
         });
     }
 
+    private createPlayer(message){
+        let id = message['id'];
+        let nickname = message['nickname'];
+        let team = this.getTeam(message['team']);
+        let ready = message['ready'];
+        return new Player(id, nickname, team, ready);
+    }
+
+
     private isClientPlayer(player:Player):boolean{
         // TODO: zastanwoić się, co zrobić w sytuacji, w której więcej graczy ustawi sobie ten sam nick
+        // TODO: zrobić to za pomocą 
         return player.nickname == PlayerService.getNickname();
     }
 
@@ -105,5 +108,9 @@ export class LobbyEventsManager{
 
     public sendJoinRed(){
         ConnectionService.send(Team.RED, ConnectionPath.CHANGE_TEAM);
+    }
+
+    public sendJoinToLobby(){
+        ConnectionService.send(PlayerService.getNickname(), ConnectionPath.CONNECT);
     }
 }

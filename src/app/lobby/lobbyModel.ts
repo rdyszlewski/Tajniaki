@@ -9,8 +9,17 @@ export class LobbyModel{
     private players: Player[] = [];
 
 
-    public addPlayer(player){
-        this.players.push(player);
+    public addPlayer(player:Player){
+        if(!this.existsPlayer(player)){
+            console.log("Dodano");
+            this.players.push(player);
+        }
+    }
+
+    private existsPlayer(player:Player){
+        let p =  this.players.find(p => p.id == player.id);
+        console.log("Znaleziono takie coś: " + p);
+        return p;
     }
     
     public removePlayer(player){
@@ -18,12 +27,11 @@ export class LobbyModel{
     }
 
     public getPlayerByNick(nick){
-        this.players.forEach(x=>{
-            if(x.nickname==nick){
-                x;
-            }
-        })
-        return null;
+        return this.players.find(player=>player.nickname===nick);
+    }
+
+    public getPlayerById(id:number):Player{
+        return this.players.find(player=>player.id === id);
     }
 
     public getPlayers(team:Team):Player[]{
@@ -37,4 +45,5 @@ export class LobbyModel{
     public getClientPlayer(){
         return this.clientPlayer;
     }
+
 }
