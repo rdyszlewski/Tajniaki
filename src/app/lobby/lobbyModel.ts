@@ -17,9 +17,12 @@ export class LobbyModel{
     }
 
     private existsPlayer(player:Player){
-        let p =  this.players.find(p => p.id == player.id);
-        console.log("Znaleziono takie coś: " + p);
-        return p;
+        // console.log(player.id + player.nickname);
+        // let p =  this.players.find(p => p.id == player.id);
+        // console.log("Znaleziono takie coś: " + p.id + p.nickname);
+        // return p != null;
+        console.log(player.id);
+        return this.players.some(p=>p.id==player.id);
     }
     
     public removePlayer(player){

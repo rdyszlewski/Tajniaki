@@ -31,9 +31,12 @@ export class LobbyEventsManager{
     }
 
     private setPlayerReady(message: any) {
-        var json = JSON.parse(message.body);
-        let player = this.model.getPlayerById(json['id']);
-        player.ready = json['ready'];
+        // var json = JSON.parse(message.body);
+        console.log(message.body);
+        let player = this.model.getPlayerById(Number(message.body));
+        console.log(player);
+        player.ready = !player.ready;
+        // TODO: zmienić sposób robienia tego na serwerze
     }
 
     private subscribeChangeTeam() {
@@ -49,8 +52,8 @@ export class LobbyEventsManager{
 
     private subscribePlayerConnect() {
         ConnectionService.subscribe(ConnectionPath.CONNECT_RESPONSE, message => {
-            console.log("Gracz " + message.body + " się podłączył");
-            let newPlayer = this.createPlayer(message.body);
+            let data = JSON.parse(message.body);
+            let newPlayer = this.createPlayer(data);
             this.model.addPlayer(newPlayer);
         });
     }
@@ -84,7 +87,9 @@ export class LobbyEventsManager{
     }
 
     private createPlayer(message){
+        console.log(message);
         let id = message['id'];
+        console.log(id);
         let nickname = message['nickname'];
         let team = this.getTeam(message['team']);
         let ready = message['ready'];

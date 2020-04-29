@@ -40,7 +40,12 @@
     <button (click)="eventsManager.sendJoinBlue()" class="card button-item">Zieleni</button>
     <button (click)="eventsManager.sendJoinRed()" class="card button-item">Czerwieni</button>
     <button (click)="autoJoinToTeam()" class="card button-item">Automatycznie</button>
-    <button (click)="eventsManager.sendReady()" id="ready-button" class="card button-item">Gotowy</button>
+    <button (click)="eventsManager.sendReady()" id="ready-button" class="card button-item"
+    [ngClass]="{
+        'ready': !isPlayerReady(),
+        'unready': isPlayerReady()
+    }">
+        {{isPlayerReady()?"Nie gotowy": "Gotowy"}}
+    </button>
 </div>
-<button (click)="eventsManager.sendReady()">Gotowy</button>
 

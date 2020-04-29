@@ -4,6 +4,7 @@ import { LobbyModel } from './lobbyModel';
 import { LobbyEventsManager } from './lobbyEventManager';
 import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
+import { PlayerService } from '../playerService';
 
 @Component({
   selector: 'app-lobby',
@@ -53,6 +54,10 @@ export class LobbyComponent implements OnInit {
     // TODO: zrobić automatyczne przyłączanie do grupy
     // TODO: wysłać zgłoszenie na serwer
     ConnectionService.send("AUTO", ConnectionPath.AUTO_TEAM);
+  }
+
+  isPlayerReady(){
+    return this.model.getClientPlayer().ready;
   }
 
 }

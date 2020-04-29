@@ -32,7 +32,7 @@
         </div>
 
         <div id="menu_entries">
-            <input type="submit" value="Rozpocznij" (click)="start()" class="menu-item"/>
+            <input type="submit" value="Rozpocznij" (click)="start()" *ngIf="isConnected()" class="menu-item"/>
             <input type="submit" value="Połącz" (click) ="connect()" *ngIf="!isConnected()" class="menu-item"/>
             <input type="submit" value="Wyjście" (click)="exit()" class="menu-item" />
         </div>  
