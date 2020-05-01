@@ -1,7 +1,5 @@
-import { PlayerService } from '../playerService';
 import { Player } from './lobby_player';
 import { Team } from './team';
-import { AssertNotNull } from '@angular/compiler';
 
 export class LobbyModel{
 
@@ -11,17 +9,11 @@ export class LobbyModel{
 
     public addPlayer(player:Player){
         if(!this.existsPlayer(player)){
-            console.log("Dodano");
             this.players.push(player);
         }
     }
 
     private existsPlayer(player:Player){
-        // console.log(player.id + player.nickname);
-        // let p =  this.players.find(p => p.id == player.id);
-        // console.log("Znaleziono takie coś: " + p.id + p.nickname);
-        // return p != null;
-        console.log(player.id);
         return this.players.some(p=>p.id==player.id);
     }
     
@@ -49,4 +41,7 @@ export class LobbyModel{
         return this.clientPlayer;
     }
 
+    public isClientPlayer(player:Player):boolean{
+        return player.id == this.clientPlayer.id;
+    }
 }

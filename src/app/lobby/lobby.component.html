@@ -6,8 +6,11 @@
             <th>Zieleni ({{countBlue()}})</th>
         </tr>
         <tr *ngFor="let player of model.getPlayers(teams.BLUE)">
-            <td>{{player.nickname}}
-                <span *ngIf="player.ready">V</span>
+            <td [ngClass]="{
+                'current_player': model.isClientPlayer(player)
+            }">
+                {{player.nickname}}
+                <span *ngIf="player.ready" >V</span>
             </td>
         </tr>
     </table>
@@ -17,7 +20,10 @@
             <th>Czerwieni ({{countRed()}})</th>
         </tr>
         <tr *ngFor="let player of model.getPlayers(teams.RED)">
-            <td>{{player.nickname}}
+            <td [ngClass]="{
+                'current_player': model.isClientPlayer(player)
+            }">
+                {{player.nickname}}
                 <span *ngIf="player.ready">V</span>
             </td>
         </tr>
@@ -28,7 +34,10 @@
             <th>Nieprzydzieleni ({{countObserver()}})</th>
         </tr>
         <tr *ngFor="let player of model.getPlayers(teams.OBSERVER)">
-            <td>{{player.nickname}}
+            <td [ngClass]="{
+                'current_player': model.isClientPlayer(player)
+            }">
+                {{player.nickname}}
                 <span *ngIf="player.ready">V</span>
             </td>
         </tr>
@@ -37,14 +46,15 @@
   
 </div>
 <div class="buttons">
-    <button (click)="eventsManager.sendJoinBlue()" class="card button-item">Zieleni</button>
-    <button (click)="eventsManager.sendJoinRed()" class="card button-item">Czerwieni</button>
-    <button (click)="autoJoinToTeam()" class="card button-item">Automatycznie</button>
+    <button (click)="eventsManager.sendJoinBlue()" class="card button-item" [disabled]="!canJoinToBlue()">Zieleni</button>
+    <button (click)="eventsManager.sendJoinRed()" class="card button-item" [disabled]="!canJoinToRed()">Czerwieni</button>
+    <button (click)="autoJoinToTeam()" class="card button-item" [disabled]="!canJoinToBlue() && !canJoinToRed()">Automatycznie</button>
     <button (click)="eventsManager.sendReady()" id="ready-button" class="card button-item"
     [ngClass]="{
         'ready': !isPlayerReady(),
         'unready': isPlayerReady()
-    }">
+    }"
+    [disabled]="!canSetReady()">
         {{isPlayerReady()?"Nie gotowy": "Gotowy"}}
     </button>
 </div>

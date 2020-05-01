@@ -52,3 +52,7 @@
     background-color:green;
     font-size:1.3em;
 }
+
+.current_player{
+    font-weight: bold;
+}

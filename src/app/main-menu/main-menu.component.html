@@ -1,17 +1,3 @@
-<!-- <input (click)="connect()" type="submit" value="Połącz" />
-<p id="info_text"></p>
-<div>
-    <input id="nick_text">
-    <input (click)="changeNickname()" type="submit" value="Zmień">
-</div>
-
-<input id="input_text" />
-<input id="send_button" type="submit" value="Wyślij"/>
-<input id="game_button" type="submit" value="Gra"/>
-
-<div>
-    <input type="submit" (click)="boss()" value="Głosowanie"/>
-</div> -->
 <div id="connection_status">
     <div>Status połączenia</div>
     <div> 
@@ -32,16 +18,11 @@
         </div>
 
         <div id="menu_entries">
-            <input type="submit" value="Rozpocznij" (click)="start()" *ngIf="isConnected()" class="menu-item"/>
-            <input type="submit" value="Połącz" (click) ="connect()" *ngIf="!isConnected()" class="menu-item"/>
-            <input type="submit" value="Wyjście" (click)="exit()" class="menu-item" />
+            <input type="submit" value="Rozpocznij" (click)="start()" *ngIf="isConnected()" class="button-item card"/>
+            <input type="submit" value="Połącz" (click) ="connect()" *ngIf="!isConnected()" class="button-item card"/>
+            <input type="submit" value="Wyjście" (click)="exit()" class="button-item card" />
         </div>  
     
-        <input type="submit" value="Gra" (click)="startGame()" class="menu-item"/>
+        <input type="submit" value="Gra" (click)="startGame()" class="button-item card"/>
 
-    
-   
-    <!-- TODO: dodać przycisk połącz, jeżeli nie jest aktualnie połączony -->
-    <!-- TODO: tutaj będą się znajdowały inne przyciski, która będą słuzyły do testowania poszczególnych ekranów -->
-    
 </div>

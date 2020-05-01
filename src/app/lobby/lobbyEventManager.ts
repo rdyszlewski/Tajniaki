@@ -4,6 +4,7 @@ import { PlayerService } from '../playerService';
 import { ConnectionPath } from '../shared/connectionPath';
 import { Player } from './lobby_player';
 import { Team } from './team';
+import { GameService } from '../gameService';
 
 export class LobbyEventsManager{
     
@@ -31,12 +32,9 @@ export class LobbyEventsManager{
     }
 
     private setPlayerReady(message: any) {
-        // var json = JSON.parse(message.body);
-        console.log(message.body);
-        let player = this.model.getPlayerById(Number(message.body));
-        console.log(player);
-        player.ready = !player.ready;
-        // TODO: zmienić sposób robienia tego na serwerze
+        var data = JSON.parse(message.body);
+        let player = this.model.getPlayerById(data["playerId"]);
+        player.ready = data['ready'];
     }
 
     private subscribeChangeTeam() {
@@ -59,7 +57,11 @@ export class LobbyEventsManager{
     }
 
     private subscribeJoinToLobbyResponse() {
-        ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (players) => this.setPlayers(players));
+        ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (message) => {
+            var data = JSON.parse(message.body);
+            this.setSettings(data['settings']);
+            this.setPlayers(data['players']);
+        });
     }
 
     private getTeam(teamText:string):Team{
@@ -73,12 +75,15 @@ export class LobbyEventsManager{
         }
       }
 
-    private setPlayers(message):void{
-        var body = message.body;
-        var json = JSON.parse(body);
-        json.forEach(element => {
+    private setSettings(settings): void {
+        let maxTeamSize = settings['maxTeamSize'];
+        GameService.setMaxTeamSize(maxTeamSize);
+    }
+
+    private setPlayers(players):void{
+        players.forEach(playerElement => {
             // TODO: dodać informacje, czy gracz jest gotowy
-            var player = this.createPlayer(element);
+            var player = this.createPlayer(playerElement);
             this.model.addPlayer(player);
             if (this.isClientPlayer(player)){
                 this.model.setClientPlayer(player);
@@ -89,7 +94,6 @@ export class LobbyEventsManager{
     private createPlayer(message){
         console.log(message);
         let id = message['id'];
-        console.log(id);
         let nickname = message['nickname'];
         let team = this.getTeam(message['team']);
         let ready = message['ready'];

@@ -4,7 +4,7 @@ import { LobbyModel } from './lobbyModel';
 import { LobbyEventsManager } from './lobbyEventManager';
 import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
-import { PlayerService } from '../playerService';
+import { GameService } from '../gameService';
 
 @Component({
   selector: 'app-lobby',
@@ -51,13 +51,23 @@ export class LobbyComponent implements OnInit {
   }
 
   autoJoinToTeam(){
-    // TODO: zrobić automatyczne przyłączanie do grupy
-    // TODO: wysłać zgłoszenie na serwer
     ConnectionService.send("AUTO", ConnectionPath.AUTO_TEAM);
   }
 
   isPlayerReady(){
     return this.model.getClientPlayer().ready;
+  }
+
+  canJoinToBlue(){
+    return this.countBlue() < GameService.getMaxTeamSize();
+  }
+
+  canJoinToRed(){
+    return this.countRed() < GameService.getMaxTeamSize();
+  }
+
+  canSetReady(){
+    return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
   }
 
 }
