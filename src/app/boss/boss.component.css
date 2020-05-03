@@ -1,7 +1,6 @@
 @import "../../styles.css";
 
 .voting{
-    background-color: aqua;
     align-items: center;
     display: block;
     flex-flow: column nowrap;
@@ -33,4 +32,8 @@
     margin-right:auto;
     position: sticky;
     width: 50%;
+}
+
+.selected{
+    box-shadow: 0 0 10px green;
 }
