@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 .card{
-    border: 1px solid black;
+  border: 1px solid black;
   border-radius: 12px;
   /* border:solid 4px black; */
   /* border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; */
@@ -15,6 +15,13 @@
   justify-content: center;
   align-items: center;
   transition: 0.25s ease-in-out;
+  box-shadow: 0 0 5px black;
+}
+
+.card:hover{
+    transform: rotate(-2deg) scale(1.3);
+    border-width: 1px 2px 2px 1px;
+    box-shadow: 0 0 10px black;
 }
 
 .blue{
@@ -37,8 +44,3 @@
 .button-item:hover{
     background-color: darkgray;    
 }
-
-.card:hover{
-    transform: rotate(-2deg) scale(1.3);
-    border-width: 1px 2px 2px 1px;
-  }

@@ -1,4 +1,7 @@
-<div *ngFor="let player of players">
-    <input (click)="vote(player)" type="submit" value='{{player.nickname}}'/>
-    <span>{{player.votes}}</span>
+<div class="voting">
+    <div *ngFor="let player of players" class="candidate">
+        <input (click)="vote(player)" type="submit" value='{{player.nickname}}' class="button-item card inline"/>
+        <span class="votes">{{player.votes}}</span>
+    </div>
 </div>
+

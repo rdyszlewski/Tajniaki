@@ -1,0 +1,36 @@
+@import "../../styles.css";
+
+.voting{
+    background-color: aqua;
+    align-items: center;
+    display: block;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+.votes{
+    display: inline-block;
+    position: relative;
+    margin-left: 10%;
+    transition: all 0.3s ease-out;
+}
+
+.inline:hover ~ .votes{
+    margin-left: 30%;
+    font-size: 1.6em;
+    font-weight: bold;
+}
+
+
+.inline{
+    display: inline-block;
+    margin-left: auto;
+    margin-right:auto;
+    position: sticky;
+    width: 50%;
+}

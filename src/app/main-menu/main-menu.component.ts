@@ -63,4 +63,8 @@ export class MainMenuComponent implements OnInit {
     this.router.navigate(["game"]);
   }
 
+  startVoting(){
+    this.router.navigate(['boss']);
+  }
+
 }
