@@ -8,7 +8,7 @@
   /* border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%; */
   border-width: 1px 1.5px 2px 1px;
   /* border-radius:95% 4% 92% 5%/4% 95% 6% 95%; */
-  height: 4em;
+  height: 5em;
   text-align: center;
   display: flex;
   vertical-align: middle;
@@ -24,12 +24,24 @@
     box-shadow: 0 0 10px black;
 }
 
-.blue{
-    background-color: blue;
+.red {
+    background-color: red;
 }
 
-.red{
-    background-color: red;
+.blue {
+    background-color:blue;
+}
+
+.killer {
+    background-color: slategrey;
+}
+
+.neutral {
+    background-color: yellow;
+}
+
+.lack {
+    background-color: aliceblue;
 }
 
 .button-item{

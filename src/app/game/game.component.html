@@ -1,80 +1,86 @@
 <div id="table">
   
-  <div class="word_container">
-    <span id="word" class="word_element">{{model.currentWord}} </span>
-    <span id="number" class="word_element">{{model.remainingAnswers}}</span>
-  </div>
-  <div class="current_state">
-    <span id="current_team" class="state_element">
-      {{model.currentTeam==team.BLUE?"Zieleni":"Czerwieni"}}
-    </span>
-    <span id="current_stage" class="state_element">
-      {{model.currentStage==role.BOSS?"Szeff":"Zgadywacz"}}
-    </span>
-  </div>
-
-
-  <div class="game_container">
-    <span id="first_team">
-      <div [ngClass]="{
-        'current_team':  model.currentTeam == getClientTeam(),
-        'blue_team': getClientTeam()==team.BLUE,
-        'red_team':getClientTeam()==team.RED
-        }">{{getClientTeam()==team.BLUE ?'Zieleni' : 'Czerwieni'}}</div>
-      <div class="points">
-          {{getClientTeam()==team.BLUE ? model.remainingBlue: model.remainingRed}}
-      </div>
-      <div id="player_info">
-        <div>{{getNickname()}}</div>
-        <div>{{getClientTeam()==team.BLUE?"Zieleni":"Czerwieni"}}</div>
-        <div>{{getClientRole()==role.BOSS?"Szeff":"Zgadywacz"}}</div>
-      </div>
-    </span>
-
-    <span class="board grid">
-      <div *ngFor='let card of model.cards' 
-      [ngClass]="{
-        'my_answer': isAnswerByClient(card),
-        'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
-        'blue': card.color.toString()=='BLUE',
-        'red': card.color.toString()=='RED',
-        'neutral': card.color.toString()=='NEUTRAL',
-        'killer':card.color.toString()=='KILLER',
-        'lack': card.color.toString()=='LACK',
-        'card ' :true}" 
-        (click)="eventsManager.sendClick(card.word)" (contextmenu)="eventsManager.sendFlag(card.word)">
-        <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'" 
-          class="click_amount" id="answers"
-          tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
-        </span>
-        <span [hidden]="isWordHidden(card)" class="word"> {{card.word}} </span>
-        <!-- <input type="submit"  
-        value={{card.word}} 
-        id={{card.word}} 
-        (click)="eventsManager.sendClick(card.word)" (contextmenu)="eventsManager.sendFlag(card.word)" [hidden]="isWordHidden(card)" />  -->
-        <span [style.visibility]="card.flags.length == 0 ? 'hidden':'visible'" 
-          class="click_amount" id="flags"
-          tooltip={{tooltip.getTooltipText(card.flags)}} [options]="tooltip.getTooltipOptions(card.flags)">{{card.flags.length}}
-        </span>
-      </div>
-    </span>
-
-    <span id="second_team">
-      <div [ngClass]="{
-        'current_team':  model.currentTeam == getClientTeam(),
-        'blue_team': getClientTeam()==team.BLUE,
-        'red_team':getClientTeam()==team.RED
-        }">{{getClientTeam()==team.BLUE ? 'Czerwieni' : 'Zieleni'}}</div>
-      <div class="points">
-        {{getClientTeam()==team.BLUE ? model.remainingRed: model.remainingBlue}}
-      </div>
-    </span>
-  </div>
+  <div class="table-container">
+    <div class="word_container">
+      <span id="word" class="word_element">{{model.currentWord}} </span>
+      <span id="number" class="word_element">{{model.remainingAnswers}}</span>
+    </div>
+    <div class="current_state">
+      <span id="current_team" class="state_element">
+        {{model.currentTeam==team.BLUE?"Zieleni":"Czerwieni"}}
+      </span>
+      <span id="current_stage" class="state_element">
+        {{model.currentStage==role.BOSS?"Szeff":"Zgadywacz"}}
+      </span>
+    </div>
   
-
-  <div *ngIf="isBoss()">
-    <input id="wordInput" (keydown)="preventWhispace($event)"/>
-    <input id="numberInput" type="number" value=1 min=1 max=9/>
-    <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło"/>
+  
+    <div class="game_container">
+      <span id="first_team">
+        <div [ngClass]="{
+          'current_team':  model.currentTeam == getClientTeam(),
+          'blue_team': getClientTeam()==team.BLUE,
+          'red_team':getClientTeam()==team.RED
+          }">{{getClientTeam()==team.BLUE ?'Zieleni' : 'Czerwieni'}}</div>
+        <div class="points">
+            {{getClientTeam()==team.BLUE ? model.remainingBlue: model.remainingRed}}
+        </div>
+        <div id="player_info">
+          <div>{{getNickname()}}</div>
+          <div>{{getClientTeam()==team.BLUE?"Zieleni":"Czerwieni"}}</div>
+          <div>{{getClientRole()==role.BOSS?"Szeff":"Zgadywacz"}}</div>
+        </div>
+      </span>
+  
+      <div class="board grid">
+     
+          <div *ngFor='let card of model.cards' 
+          [ngClass]="{
+            'my_answer': isAnswerByClient(card),
+            'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
+            'blue': card.color.toString()=='BLUE',
+            'red': card.color.toString()=='RED',
+            'neutral': card.color.toString()=='NEUTRAL',
+            'killer':card.color.toString()=='KILLER',
+            'lack': card.color.toString()=='LACK',
+            'card ' :true}" 
+            (click)="eventsManager.sendClick(card.word)" (contextmenu)="eventsManager.sendFlag(card.word)">
+            <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'" 
+              class="click_amount" id="answers"
+              tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
+            </span>
+            <span [hidden]="isWordHidden(card)" class="word"> {{card.word}} </span>
+    
+            <span [style.visibility]="card.flags.length == 0 ? 'hidden':'visible'" 
+              class="click_amount" id="flags"
+              tooltip={{tooltip.getTooltipText(card.flags)}} [options]="tooltip.getTooltipOptions(card.flags)">{{card.flags.length}}
+            </span>
+          </div>
+        
+      </div>
+     
+  
+      <span id="second_team">
+        <div [ngClass]="{
+          'current_team':  model.currentTeam == getClientTeam(),
+          'blue_team': getClientTeam()==team.BLUE,
+          'red_team':getClientTeam()==team.RED
+          }">{{getClientTeam()==team.BLUE ? 'Czerwieni' : 'Zieleni'}}</div>
+        <div class="points">
+          {{getClientTeam()==team.BLUE ? model.remainingRed: model.remainingBlue}}
+        </div>
+      </span>
+    </div>
+    
+  
+    <div *ngIf="isBoss()">
+      <input id="wordInput" (keydown)="preventWhispace($event)"/>
+      <input id="numberInput" type="number" value=1 min=1 max=9/>
+      <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło"/>
+    </div>
   </div>
+
+  
+  
 </div>
+ 
