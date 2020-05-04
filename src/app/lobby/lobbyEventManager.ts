@@ -5,10 +5,15 @@ import { ConnectionPath } from '../shared/connectionPath';
 import { Player } from './lobby_player';
 import { Team } from './team';
 import { GameService } from '../gameService';
+import { Router } from '@angular/router';
 
 export class LobbyEventsManager{
     
     private model: LobbyModel;
+
+    public constructor(private router:Router){
+
+    }
 
     public init(model:LobbyModel){
         this.model = model;
@@ -18,6 +23,23 @@ export class LobbyEventsManager{
         this.subscribeChangeTeam();
         this.subscribeReady();
         this.subscribeEndLobby();
+        this.subscribeDisconnect();
+        this.subscribeOnCloseEvent();
+    }
+
+    private subscribeOnCloseEvent(){
+        ConnectionService.setOnCloseEvent(()=>{
+            alert("Nastąpiło rozłączenie ze serwerem");
+            this.router.navigate(['mainmenu']); 
+        });
+    }
+
+    private subscribeDisconnect(){
+        ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
+            let data = JSON.parse(message.body);
+            let player = this.createPlayer(data);
+            this.model.removePlayer(this.model.getPlayerById(player.id));
+        });
     }
 
     private subscribeEndLobby() {
@@ -92,7 +114,6 @@ export class LobbyEventsManager{
     }
 
     private createPlayer(message){
-        console.log(message);
         let id = message['id'];
         let nickname = message['nickname'];
         let team = this.getTeam(message['team']);

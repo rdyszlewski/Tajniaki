@@ -19,6 +19,10 @@ export class ConnectionPath{
     public static readonly CHANGE_TEAM_REPONSE = "/user/lobby/team";
     public static readonly READY_RESPONSE = "/user/lobby/ready";
     public static readonly LOBBY_END_RESPONSE = "/queue/lobby/start";
+    
+
+    //      common
+    public static readonly DISCONNECT_RESPONSE = "/user/common/disconnect";
 
     // SENDING
     //      game
@@ -36,4 +40,7 @@ export class ConnectionPath{
     public static readonly READY = "/app/lobby/ready";
     public static readonly CHANGE_TEAM =  "/app/lobby/team";
     public static readonly AUTO_TEAM = "/app/lobby/auto_team";
+
+    //      common
+    public static readonly DISCONNECT = '/app/common/disconnect';
 }

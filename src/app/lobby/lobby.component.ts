@@ -5,6 +5,7 @@ import { LobbyEventsManager } from './lobbyEventManager';
 import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
 import { GameService } from '../gameService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lobby',
@@ -15,9 +16,11 @@ export class LobbyComponent implements OnInit {
 
   teams = Team;
   model: LobbyModel = new LobbyModel();
-  eventsManager: LobbyEventsManager = new LobbyEventsManager();
+  eventsManager: LobbyEventsManager;
 
-  constructor() { }
+  constructor(private router:Router) { 
+    this.eventsManager = new LobbyEventsManager(router);
+  }
 
   ngOnInit(): void {
     this.eventsManager.init(this.model);
