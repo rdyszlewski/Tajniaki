@@ -42,5 +42,30 @@
 }
 
 .button-item:hover{
-    background-color: darkgray;    
+    background-color: darkgray;
+}
+
+.background{
+  /*position:relative;*/
+  width:100%;
+  height:auto;
+  min-height:35rem;
+  padding:5rem 0;
+  /*background:linear-gradient(to bottom, rgb(255, 212, 72) 0, rgba(255, 81, 0, 0.7) 50%, #7700ff 100%);*/
+  background: url(backgroung.jpg);
+  background-position:center;
+  background-repeat:no-repeat;
+  background-attachment:scroll;
+  background-size:cover
+}
+
+.bg-dark{
+  /*background-color: #4d00af !important;*/
+  background:linear-gradient(to bottom, #4d00af 0, #39008d 70%, #17003b 100%);
+}
+a.bg-dark:focus,
+a.bg-dark:hover,
+button.bg-dark:focus,
+button.bg-dark:hover{
+  background-color:#1d2124!important
 }

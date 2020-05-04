@@ -23,7 +23,6 @@
     "@types/socket.io-client": "^1.4.32",
     "rxjs": "~6.5.4",
     "socket.io-client": "^2.3.0",
-    "sockjs-client": "^1.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },
@@ -48,6 +47,7 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "ng2-tooltip-directive": "^2.9.20",
     "protractor": "~5.4.3",
+    "sockjs-client": "^1.4.0",
     "stompjs": "^2.3.3",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
@@ -60,5 +60,16 @@
     "net": false,
     "stream": false,
     "tls": false
-  }
+  },
+  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.0.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Parabbits/Tajniaki.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Parabbits/Tajniaki/issues"
+  },
+  "homepage": "https://github.com/Parabbits/Tajniaki#readme"
 }
