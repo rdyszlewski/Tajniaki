@@ -1,6 +1,6 @@
 <div class="voting">
-    <div *ngFor="let player of players" class="candidate">
-        <input (click)="vote(player)" type="submit" value='{{player.nickname}}' 
+    <div *ngFor="let player of model.getPlayers()" class="candidate">
+        <input (click)="eventManager.sendVote(player)" type="submit" value='{{player.nickname}}' 
         [ngClass]="{
             'selected': isSelected(player),
             'button-item card inline': true
