@@ -1,41 +1,38 @@
 @import '../../styles.css';
 
+.table-container{
+  transform-style: preserve-3d;
+  transform: rotateX(35deg);
+}
+
+#table{
+  align-items: center;
+  text-align: center;
+  margin-left: 10%;
+  margin-right:10%;
+  perspective: 800px;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 5px;
+    transform-style: preserve-3d;
 }
 
-.red {
-  /* color: red; */
-  background-color: red;
-}
-
-.blue {
-  /* color:blue; */
-  background-color:blue;
-}
-
-.killer {
-  /* color: gray; */
-  background-color: slategrey;
-}
-
-.neutral {
-  /* color: gold; */
-  background-color: yellow;
-}
-
-.lack {
-  background-color: aliceblue;
+.card:hover{
+  transition:.6s;
+  transform: translateZ(25px) rotateX(-35deg);
+  box-shadow: 0 0 20px black;
+  cursor: pointer;
 }
 
 .my_answer{
-  border: 3px solid gold;
+  border: 3px inset gold;
 }
 
 .my_flag{
-  border: 3px solid blue;
+  border: 3px inset blue;
 }
 
 .click_amount{
@@ -68,42 +65,34 @@
 .board{
   margin-left: auto;
   margin-right: auto;
-  /* display: table-cell; */
 }
+
 
 #first_team{
   width:18%;
   margin-top:3em;
-  /* display: inline-block; */
-
   align-items: stretch;
 }
 
 #second_team{
   width:18%;
   margin-top: 3em;
-  /* display: inline-block; */
-
   align-items: stretch;
 }
 
-#table{
-  align-items: center;
-  text-align: center;
-}
 
 .game_container{
   display: flex;
   margin-top: 5vw;
   margin-bottom: 5vw;
-
+  transform-style: preserve-3d;
 }
 
 .points{
-  width: 10vw;
-  height: 10vw;
+  width: 5vw;
+  height: 5vw;
   border: black 1px solid;
-  margin-top: 5vw;
+  margin-top: 2vw;
   margin-left: auto;
   margin-right: auto;
   vertical-align: middle;
@@ -115,4 +104,34 @@
 
 .word_container{
   font-size: 4em;
+}
+
+.players{
+  display: flex;
+}
+
+.player-role{
+  width: 15px;
+  height: 15px;
+  display: inline;
+  float: left;
+}
+
+.player-name{
+  display: inline;
+  text-align: left;
+  margin-left: 10px;
+  width: 100% ;
+}
+
+.player-answer{
+  width: 15px;
+  height: 15px;
+  display: inline;
+  float: right;
+}
+
+.current-player{
+  text-shadow: 0 0 10px green;
+  border: 1px solid green;
 }

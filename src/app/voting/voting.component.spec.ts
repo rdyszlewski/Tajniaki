@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BossComponent } from './boss.component';
+import { BossComponent } from './voting.component';
 
 describe('BossComponent', () => {
   let component: BossComponent;

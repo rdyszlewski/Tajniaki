@@ -39,7 +39,6 @@ export class Client{
         this.onCloseEvent = event;
     }
 
-
     write(message, path){
         this.socket.send(path, {}, message);
     }

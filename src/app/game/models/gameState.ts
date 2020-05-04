@@ -1,6 +1,7 @@
 import { Team } from '../../lobby/team';
 import { Role } from '../role';
 import { Card } from './card';
+import { GamePlayer } from './gamePlayer';
 
 export class GameState{
 
@@ -11,6 +12,9 @@ export class GameState{
     public remainingRed: number;
     public currentWord:string;
     public remainingAnswers: number;
+
+    public bluePlayers: GamePlayer[] = []
+    public redPlayers: GamePlayer[] = []
 
     public getCard(word: string):Card{
         let index = this.getCardIndex(word);
@@ -34,4 +38,13 @@ export class GameState{
             this.cards[index] = card;
         }
     }
+
+    public addPlayer(player:GamePlayer){
+        if(player.team == Team.RED){
+            this.redPlayers.push(player);
+        } else if (player.team == Team.BLUE){
+            this.bluePlayers.push(player);
+        }
+    }
+    
 }

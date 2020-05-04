@@ -5,10 +5,16 @@ import { ConnectionPath } from '../shared/connectionPath';
 import { Player } from './lobby_player';
 import { Team } from './team';
 import { GameService } from '../gameService';
+import { Router } from '@angular/router';
+import { PlayerAdapter } from '../shared/adapters/playerAdapter';
 
 export class LobbyEventsManager{
     
     private model: LobbyModel;
+
+    public constructor(private router:Router){
+
+    }
 
     public init(model:LobbyModel){
         this.model = model;
@@ -18,6 +24,23 @@ export class LobbyEventsManager{
         this.subscribeChangeTeam();
         this.subscribeReady();
         this.subscribeEndLobby();
+        this.subscribeDisconnect();
+        this.subscribeOnCloseEvent();
+    }
+
+    private subscribeOnCloseEvent(){
+        ConnectionService.setOnCloseEvent(()=>{
+            alert("Nastąpiło rozłączenie ze serwerem");
+            this.router.navigate(['mainmenu']); 
+        });
+    }
+
+    private subscribeDisconnect(){
+        ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
+            let data = JSON.parse(message.body);
+            let player = PlayerAdapter.createPlayer(data);
+            this.model.removePlayer(this.model.getPlayerById(player.id));
+        });
     }
 
     private subscribeEndLobby() {
@@ -51,7 +74,7 @@ export class LobbyEventsManager{
     private subscribePlayerConnect() {
         ConnectionService.subscribe(ConnectionPath.CONNECT_RESPONSE, message => {
             let data = JSON.parse(message.body);
-            let newPlayer = this.createPlayer(data);
+            let newPlayer = PlayerAdapter.createPlayer(data);
             this.model.addPlayer(newPlayer);
         });
     }
@@ -73,7 +96,7 @@ export class LobbyEventsManager{
           case "OBSERVER":
             return Team.OBSERVER;
         }
-      }
+    }
 
     private setSettings(settings): void {
         let maxTeamSize = settings['maxTeamSize'];
@@ -82,22 +105,12 @@ export class LobbyEventsManager{
 
     private setPlayers(players):void{
         players.forEach(playerElement => {
-            // TODO: dodać informacje, czy gracz jest gotowy
-            var player = this.createPlayer(playerElement);
+            var player = PlayerAdapter.createPlayer(playerElement);
             this.model.addPlayer(player);
             if (this.isClientPlayer(player)){
                 this.model.setClientPlayer(player);
             };
         });
-    }
-
-    private createPlayer(message){
-        console.log(message);
-        let id = message['id'];
-        let nickname = message['nickname'];
-        let team = this.getTeam(message['team']);
-        let ready = message['ready'];
-        return new Player(id, nickname, team, ready);
     }
 
 

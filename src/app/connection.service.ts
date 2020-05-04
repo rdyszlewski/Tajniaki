@@ -35,4 +35,8 @@ export class ConnectionService {
     }
     return false;
   }
+
+  public static setOnCloseEvent(event){
+    this._connection.setOnCloseEvent(event);
+  }
 }

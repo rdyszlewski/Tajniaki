@@ -11,6 +11,7 @@ export class ConnectionPath{
     //      boss voting
     public static readonly START_VOTING_RESPONSE = "/user/boss/start";
     public static readonly END_VOTING_RESPONSE = "/user/boss/end";
+    public static readonly VOTE_RESPONSE = "/user/boss/vote";
 
     //      lobby
     public static readonly PLAYERS_RESPONSE = "/user/lobby/players";
@@ -18,6 +19,10 @@ export class ConnectionPath{
     public static readonly CHANGE_TEAM_REPONSE = "/user/lobby/team";
     public static readonly READY_RESPONSE = "/user/lobby/ready";
     public static readonly LOBBY_END_RESPONSE = "/queue/lobby/start";
+    
+
+    //      common
+    public static readonly DISCONNECT_RESPONSE = "/user/common/disconnect";
 
     // SENDING
     //      game
@@ -35,4 +40,7 @@ export class ConnectionPath{
     public static readonly READY = "/app/lobby/ready";
     public static readonly CHANGE_TEAM =  "/app/lobby/team";
     public static readonly AUTO_TEAM = "/app/lobby/auto_team";
+
+    //      common
+    public static readonly DISCONNECT = '/app/common/disconnect';
 }
