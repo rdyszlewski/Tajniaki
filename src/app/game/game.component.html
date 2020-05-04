@@ -25,10 +25,20 @@
         <div class="points">
             {{getClientTeam()==team.BLUE ? model.remainingBlue: model.remainingRed}}
         </div>
-        <div id="player_info">
-          <div>{{getNickname()}}</div>
-          <div>{{getClientTeam()==team.BLUE?"Zieleni":"Czerwieni"}}</div>
-          <div>{{getClientRole()==role.BOSS?"Szeff":"Zgadywacz"}}</div>
+       
+        <div class="first-team-players">
+            Gracze
+            <div *ngFor="let player of this.getFirstTeamPlayers()" class="players" 
+              [ngClass] = "{
+                'current-player': isCurrentPlayer(player),
+                'players': true
+              }"
+            >
+              <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
+              <div class="player-name">{{player.nickname}}</div>
+              <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
+              <span></span>
+            </div>
         </div>
       </span>
   
@@ -69,6 +79,20 @@
         <div class="points">
           {{getClientTeam()==team.BLUE ? model.remainingRed: model.remainingBlue}}
         </div>
+
+        <div class="team-players">
+          Gracze
+          <div *ngFor="let player of this.getSecondTeamPlayers()" class="players" 
+            [ngClass] = "{
+              'current-player': isCurrentPlayer(player),
+              'players': true
+            }"
+          >
+            <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
+            <div class="player-name">{{player.nickname}}</div>
+            <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
+          </div>
+      </div>
       </span>
     </div>
     
@@ -77,6 +101,11 @@
       <input id="wordInput" (keydown)="preventWhispace($event)"/>
       <input id="numberInput" type="number" value=1 min=1 max=9/>
       <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło"/>
+    </div>
+    <div id="player_info">
+      <span> {{getNickname()}} </span>
+      <span> {{getClientTeam()==team.BLUE?"Zieleni":"Czerwieni"}} </span>
+      <span> {{getClientRole()==role.BOSS?"Szeff":"Zgadywacz"}} </span>
     </div>
   </div>
 

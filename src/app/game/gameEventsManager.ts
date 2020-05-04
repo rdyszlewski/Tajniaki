@@ -7,8 +7,11 @@ import { PlayerService } from '../playerService';
 import { ConnectionPath } from '../shared/connectionPath';
 import { BossMessage } from './bossMessage';
 import * as $ from 'jquery';
+import { GamePlayer } from './models/gamePlayer';
 
 export class GameEventsManager{
+
+    // TODO: przenieść wszystkie tworzneia obiektów do adapterów
   
     private model:GameState;
     private playerRole:Role;
@@ -89,12 +92,30 @@ export class GameEventsManager{
       }
 
     private startGame(message: any) {
+        console.log(message.body);
         var data = JSON.parse(message.body);
         PlayerService.setNickname(data['nickname']);
         PlayerService.setRole(this.getRole(data["playerRole"]));
         PlayerService.setTeam(this.getTeam(data['playerTeam']));
         this.updateGameState(data["gameState"]);
         this.model.cards = this.createCards(data["cards"]);
+        let playersList = this.getPlayersList(data['players']);
+        playersList.forEach(x=>this.model.addPlayer(x));
+    }
+
+    private getPlayersList(playersList){
+        let playersResult = [];
+        playersList.forEach(x=>{
+          let player = new GamePlayer();
+          player.id = x['id'];
+          player.nickname = x['nickname'];
+          player.role = this.getRole(x['role']);
+          player.team = this.getTeam(x['team']);
+          playersResult.push(player);
+        });
+        console.log("Wynik tworzenia listy graczy");
+        console.log(playersResult);
+        return playersResult;
     }
 
     private updateGameState(data){

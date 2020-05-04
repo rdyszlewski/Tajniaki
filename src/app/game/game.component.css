@@ -28,11 +28,11 @@
 }
 
 .my_answer{
-  border: 3px solid gold;
+  border: 3px inset gold;
 }
 
 .my_flag{
-  border: 3px solid blue;
+  border: 3px inset blue;
 }
 
 .click_amount{
@@ -104,4 +104,34 @@
 
 .word_container{
   font-size: 4em;
+}
+
+.players{
+  display: flex;
+}
+
+.player-role{
+  width: 15px;
+  height: 15px;
+  display: inline;
+  float: left;
+}
+
+.player-name{
+  display: inline;
+  text-align: left;
+  margin-left: 10px;
+  width: 100% ;
+}
+
+.player-answer{
+  width: 15px;
+  height: 15px;
+  display: inline;
+  float: right;
+}
+
+.current-player{
+  text-shadow: 0 0 10px green;
+  border: 1px solid green;
 }

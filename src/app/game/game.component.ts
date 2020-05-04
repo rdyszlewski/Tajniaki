@@ -8,6 +8,8 @@ import { TooltipCreator } from './tooltip_creator';
 import { GameEventsManager } from './gameEventsManager';
 import { ConnectionPath } from '../shared/connectionPath';
 import { Team } from '../lobby/team';
+import { Player } from '../lobby/lobby_player';
+import { GamePlayer } from './models/gamePlayer';
 
 @Component({
   selector: 'app-game',
@@ -21,6 +23,8 @@ export class GameComponent implements OnInit {
   model: GameState = new GameState();
   tooltip: TooltipCreator = new TooltipCreator();
   eventsManager: GameEventsManager = new GameEventsManager();
+  bluePlayers: Player[];
+  redPlayers: Player[];
   constructor() { }
 
   ngOnInit(): void {
@@ -46,6 +50,10 @@ export class GameComponent implements OnInit {
 
   isBoss(){
     return PlayerService.getRole()==Role.BOSS;
+  }
+
+  isPlayerBoss(player:GamePlayer){
+    return player.role == Role.BOSS;
   }
 
   getClientTeam(){
@@ -80,5 +88,38 @@ export class GameComponent implements OnInit {
 
   getNickname(){
     return PlayerService.getNickname();
+  }
+
+  getFirstTeamPlayers(){
+    if(PlayerService.getTeam() == Team.BLUE){
+      return this.model.bluePlayers;
+    } else if (PlayerService.getTeam()==Team.RED){
+      return this.model.redPlayers;
+    }
+  }
+
+  getSecondTeamPlayers(){
+    if(PlayerService.getTeam() == Team.RED){
+      return this.model.bluePlayers;
+    } else if (PlayerService.getTeam()==Team.BLUE){
+      return this.model.redPlayers;
+    }
+  }
+
+  isPlayerAnswer(player:GamePlayer){
+    for(let i=0; i< this.model.cards.length; i++){
+      let card = this.model.cards[i];
+      for(let j=0; j< card.answers.length; j++){
+        let answer = card.answers[j];
+        if(answer == player.nickname){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  isCurrentPlayer(player:GamePlayer){
+    return player.team == this.model.currentTeam && player.role == this.model.currentStage;
   }
 }
