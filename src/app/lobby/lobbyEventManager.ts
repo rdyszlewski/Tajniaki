@@ -30,7 +30,7 @@ export class LobbyEventsManager{
 
     private subscribeOnCloseEvent(){
         ConnectionService.setOnCloseEvent(()=>{
-            alert("Nastąpiło rozłączenie ze serwerem");
+            this.unsubscribeAll();
             this.router.navigate(['mainmenu']); 
         });
     }
@@ -38,7 +38,7 @@ export class LobbyEventsManager{
     private subscribeDisconnect(){
         ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
             let data = JSON.parse(message.body);
-            let player = PlayerAdapter.createPlayer(data);
+            let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
             this.model.removePlayer(this.model.getPlayerById(player.id));
         });
     }
@@ -134,5 +134,14 @@ export class LobbyEventsManager{
 
     public sendJoinToLobby(){
         ConnectionService.send(PlayerService.getNickname(), ConnectionPath.CONNECT);
+    }
+
+    public unsubscribeAll(){
+        ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.LOBBY_END_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.READY_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.CHANGE_TEAM_REPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.CONNECT_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.PLAYERS_RESPONSE);
     }
 }

@@ -22,7 +22,7 @@ export class ConnectionPath{
     
 
     //      common
-    public static readonly DISCONNECT_RESPONSE = "/user/common/disconnect";
+    public static readonly DISCONNECT_RESPONSE = "/user/queue/common/disconnect";
 
     // SENDING
     //      game

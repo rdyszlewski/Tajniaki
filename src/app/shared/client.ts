@@ -3,8 +3,6 @@ import * as Stomp from "stompjs"
 
 export class Client{
 
-    private serverUrl = 'http://localhost:8080/tajniaki'
-
     private connected;
     private socket;
     private onConnectedEvent;

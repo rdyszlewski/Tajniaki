@@ -7,7 +7,7 @@ import { GameComponent } from './app/game/game.component';
 const ROUTES: Routes = [
     {path: '', redirectTo: 'mainmenu', pathMatch: "full"},
     {path: 'mainmenu', component: MainMenuComponent},
-    {path: 'lobby', component:LobbyComponent,},
+    {path: 'lobby', component:LobbyComponent},
     {path: 'boss', component:BossComponent},
     {path: 'game', component:GameComponent}
 ];

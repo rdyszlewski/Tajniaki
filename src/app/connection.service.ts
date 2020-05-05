@@ -26,7 +26,11 @@ export class ConnectionService {
 
   public static subscribe(path, method){
     console.log(path);
-    this._connection.getSocket().subscribe(path, method);
+    this._connection.getSocket().subscribe(path, method, {id: path});
+  }
+
+  public static unsubscribe(path){
+    this._connection.getSocket().unsubscribe(path);
   }
 
   public static isConnected():boolean{

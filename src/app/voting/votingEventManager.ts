@@ -28,7 +28,7 @@ export class VotingEventManager{
     }
 
     private updateList(message){
-        // TODO: na razie listy są zastępowane, a nie tylo aktualizowane. Później można to naprawić
+        // TODO: na razie listy są zastępowane, a nie tylo aktualizowane. Później można to naprawić 
         let playersList = JSON.parse(message.body);
           playersList.forEach(element => {
             let player = this.createVotingPlayer(element);
@@ -68,8 +68,14 @@ export class VotingEventManager{
     private subscribeDisconnect(){
         ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
             let data = JSON.parse(message.body);
-            let player = PlayerAdapter.createPlayer(data);
+            let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
             this.model.removePlayerById(player.id);
+            let currentStep = data['currentStep'];
+            if(currentStep == "LOBBY"){
+                alert("Zbyt mało graczy. Powrót do lobby"); // TODO: dowiedzieć się, czy można to czerpać napisy z zewnątrz
+                this.unsubscribeAll();
+                this.router.navigate(['lobby']); // TODO: umieścić to w jakiś stałych
+            }
           });
     }
 
@@ -81,5 +87,11 @@ export class VotingEventManager{
         ConnectionService.send(player.id, ConnectionPath.VOTE);
     }
 
+    public unsubscribeAll(){
+        ConnectionService.unsubscribe(ConnectionPath.START_VOTING_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.END_VOTING_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.VOTE_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
+    }
 
 }   
