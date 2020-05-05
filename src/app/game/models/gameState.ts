@@ -41,10 +41,23 @@ export class GameState{
 
     public addPlayer(player:GamePlayer){
         if(player.team == Team.RED){
-            this.redPlayers.push(player);
+            if(!this.redPlayers.find(x=>x.id==player.id)){
+                this.redPlayers.push(player);
+            }
         } else if (player.team == Team.BLUE){
-            this.bluePlayers.push(player);
+            if(!this.bluePlayers.find(x=>x.id == player.id)){
+                this.bluePlayers.push(player);
+            }
         }
     }
-    
+
+    public removePlayer(id: number){
+        this.bluePlayers = this.bluePlayers.filter(x=>x.id != id);
+        this.redPlayers = this.redPlayers.filter(x=>x.id != id);
+    }
+
+    public removeAllPlayers(){
+        this.bluePlayers = [];
+        this.redPlayers = [];
+    }
 }

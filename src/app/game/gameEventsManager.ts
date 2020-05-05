@@ -8,6 +8,8 @@ import { ConnectionPath } from '../shared/connectionPath';
 import { BossMessage } from './bossMessage';
 import * as $ from 'jquery';
 import { GamePlayer } from './models/gamePlayer';
+import { Router } from '@angular/router';
+import { PlayerAdapter } from '../shared/adapters/playerAdapter';
 
 export class GameEventsManager{
 
@@ -15,10 +17,12 @@ export class GameEventsManager{
   
     private model:GameState;
     private playerRole:Role;
+    private router: Router;
 
-    public init( model:GameState){
+    public init( model:GameState, router:Router){
         this.model = model;
         this.playerRole = PlayerService.getRole();
+        this.router = router;
         
         this.subscribeEvents();
     }
@@ -29,6 +33,8 @@ export class GameEventsManager{
         this.subscribeQuestionEvent();
         this.subscribeAnswerEvent();
         this.subscribeClickEvent();
+        this.subscribeDisconnect();
+        this.setOnCloseEvent();
 
         if(this.playerRole==Role.PLAYER){
             this.subscribeClickEvent();
@@ -171,5 +177,43 @@ export class GameEventsManager{
 
     public sendStartMessage() {
         ConnectionService.send("START", ConnectionPath.GAME_START);
+    }
+
+    private setOnCloseEvent(){
+      ConnectionService.setOnCloseEvent(()=>{
+        alert("Nastąpiło rozłączenie z serwerem");
+        this.router.navigate(['mainmenu']);
+      });
+    }
+
+    private subscribeDisconnect(){
+      ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
+        let data = JSON.parse(message.body);
+        let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
+        let currentStep = data['currentStep'];
+        let playersText = data['players'];
+        this.model.removePlayer(player.id);
+        if(currentStep == 'LOBBY'){
+          alert("Za mało graczy. Powrót do lobby.");
+          this.unsubscribeAll();
+          this.router.navigate(['lobby']);
+        }
+        if(playersText != null){
+          console.log("Zmiana szefa w drużynie");
+          let players = this.getPlayersList(playersText);
+          this.model.removeAllPlayers();
+          players.forEach(x=>this.model.addPlayer(x));
+          // TODO: wstawianie wielu graczy można przerzucić do modelu
+          // TODO: wyświetlić jeszcze jakąś wiadomość, że nastapiła zmiana w drużynie
+        }
+      });
+    }
+
+    public unsubscribeAll(){
+      ConnectionService.unsubscribe(ConnectionPath.END_GAME_RESPONSE);
+      ConnectionService.unsubscribe(ConnectionPath.QUESTION_RESPONSE);
+      ConnectionService.unsubscribe(ConnectionPath.CLICK_RESPONSE);
+      ConnectionService.unsubscribe(ConnectionPath.ANSWER_RESPONSE);
+      ConnectionService.unsubscribe(ConnectionPath.START_RESPONSE);
     }
 }

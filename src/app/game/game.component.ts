@@ -10,6 +10,7 @@ import { ConnectionPath } from '../shared/connectionPath';
 import { Team } from '../lobby/team';
 import { Player } from '../lobby/lobby_player';
 import { GamePlayer } from './models/gamePlayer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -25,11 +26,11 @@ export class GameComponent implements OnInit {
   eventsManager: GameEventsManager = new GameEventsManager();
   bluePlayers: Player[];
   redPlayers: Player[];
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit(): void {
     this.preventRightClickMenu();
-    this.eventsManager.init(this.model);
+    this.eventsManager.init(this.model, this.router);
     this.sendStartMessage();
     
   }
