@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConnectionService } from '../connection.service';
 import { PlayerService } from '../playerService';
 import * as $ from 'jquery';
+import { DialogService } from '../dialog/dialog.service';
+import { DialogMode } from '../dialog/dialogMode';
+import { DialogComponent } from '../dialog/dialog.component';
 
 (window as any).global = window;
 
@@ -14,15 +17,15 @@ import * as $ from 'jquery';
 export class MainMenuComponent implements OnInit {
 
   nickname_editing:boolean;
+  infoDialog: DialogService;
 
-  constructor(private router: Router) {
-    this.connect();
+  constructor(private router: Router, private injector:Injector) {
+    
   }
 
-
   ngOnInit(): void {
-
-    // throw new Error("Method not implemented.");
+    this.infoDialog = this.injector.get(DialogService);
+    this.connect();
   }
 
   start(){
@@ -31,12 +34,27 @@ export class MainMenuComponent implements OnInit {
   }
 
   connect(){
-    ConnectionService.connect('localhost', 8080, ()=>{});
+    this.infoDialog.setMessage("Łączenie...").setMode(DialogMode.INFO).open(DialogComponent);
+    let connected = false;
+    ConnectionService.connect('localhost', 8080, ()=>{
+      console.log("Połączono");
+      setTimeout(() => 
+      {
+        this.infoDialog.close();
+      },
+      500);
+    });
+
+    setTimeout(()=>{
+      if(!connected){
+        // TODO: poinformować o błędzie połączniea
+        this.infoDialog.close();
+      }
+    }, 5000); // TODO: ustawić zmienną z timeout
   }
 
   isConnected():boolean{
     return ConnectionService.isConnected();
-    return false;
   }
 
   exit(){
@@ -66,5 +84,4 @@ export class MainMenuComponent implements OnInit {
   startVoting(){
     this.router.navigate(['boss']);
   }
-
 }

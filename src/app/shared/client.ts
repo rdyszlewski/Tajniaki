@@ -16,6 +16,7 @@ export class Client{
         var path = 'http://'+host+':'+port+'/tajniaki';
         var socket = new SockJS(path);
         this.socket = Stomp.over(socket);
+        this.onConnectedEvent = on_connected;
         this.socket.connect({}, ()=>{
             this.connected = true;
             if(this.onConnectedEvent != null){

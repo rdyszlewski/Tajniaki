@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { ConnectionService } from '../connection.service';
 import { Role } from './role';
 import { PlayerService } from '../playerService';
@@ -26,11 +26,11 @@ export class GameComponent implements OnInit {
   eventsManager: GameEventsManager = new GameEventsManager();
   bluePlayers: Player[];
   redPlayers: Player[];
-  constructor(private router:Router) { }
+  constructor(private router:Router, private injector: Injector) { }
 
   ngOnInit(): void {
     this.preventRightClickMenu();
-    this.eventsManager.init(this.model, this.router);
+    this.eventsManager.init(this.model, this.router, this.injector);
     this.sendStartMessage();
     
   }

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { VotingPlayer } from './voting_player';
 import { Router } from '@angular/router';
 import { PlayerService } from '../playerService';
 import { VotingModel } from './votingModel';
 import { VotingEventManager } from './votingEventManager';
+import { DialogService } from '../dialog/dialog.service';
 
 @Component({
   selector: 'app-boss',
@@ -14,14 +15,15 @@ export class BossComponent implements OnInit {
 
   model: VotingModel;
   eventManager: VotingEventManager;
-  constructor(private router: Router) { 
+
+
+  constructor(private router: Router, private injector:Injector) { 
     this.model = new VotingModel();
     this.eventManager = new VotingEventManager();
-    
   }
 
   ngOnInit(): void {
-    this.eventManager.init(this.model, this.router);
+    this.eventManager.init(this.model, this.router, this.injector);
     this.eventManager.sendStartMessage();
   }
 

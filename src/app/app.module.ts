@@ -12,6 +12,8 @@ import { BossComponent } from './voting/voting.component';
 import { GameComponent } from './game/game.component';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { TooltipCreator } from './game/tooltip_creator';
+import { DialogComponent } from './dialog/dialog.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -19,13 +21,15 @@ import { TooltipCreator } from './game/tooltip_creator';
     MainMenuComponent,
     LobbyComponent,
     BossComponent,
-    GameComponent
+    GameComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CONST_ROUTING,
     TooltipModule,
+    BrowserAnimationsModule
   ],
   providers: [ConnectionService],
   bootstrap: [AppComponent]

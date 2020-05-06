@@ -7,17 +7,23 @@ import { Team } from './team';
 import { GameService } from '../gameService';
 import { Router } from '@angular/router';
 import { PlayerAdapter } from '../shared/adapters/playerAdapter';
+import { DialogService } from '../dialog/dialog.service';
+import { Injector } from '@angular/core';
+import { DialogMode } from '../dialog/dialogMode';
+import { DialogComponent } from '../dialog/dialog.component';
 
 export class LobbyEventsManager{
     
     private model: LobbyModel;
+    private dialog: DialogService;
 
-    public constructor(private router:Router){
+    public constructor(private router:Router, private injector:Injector){
 
     }
 
     public init(model:LobbyModel){
         this.model = model;
+        this.dialog = this.injector.get(DialogService);
         
         this.subscribeJoinToLobbyResponse();
         this.subscribePlayerConnect();
@@ -31,7 +37,11 @@ export class LobbyEventsManager{
     private subscribeOnCloseEvent(){
         ConnectionService.setOnCloseEvent(()=>{
             this.unsubscribeAll();
-            this.router.navigate(['mainmenu']); 
+            this.dialog.setMessage("Rozłączono z serwerem").setMode(DialogMode.WARNING).setOnCancelClick(()=>{
+                this.unsubscribeAll();
+                this.dialog.close();
+                this.router.navigate(['mainmenu']); 
+            }).open(DialogComponent);
         });
     }
 

@@ -10,6 +10,10 @@ import * as $ from 'jquery';
 import { GamePlayer } from './models/gamePlayer';
 import { Router } from '@angular/router';
 import { PlayerAdapter } from '../shared/adapters/playerAdapter';
+import { Injector } from '@angular/core';
+import { DialogService } from '../dialog/dialog.service';
+import { DialogMode } from '../dialog/dialogMode';
+import { DialogComponent } from '../dialog/dialog.component';
 
 export class GameEventsManager{
 
@@ -18,11 +22,13 @@ export class GameEventsManager{
     private model:GameState;
     private playerRole:Role;
     private router: Router;
+    private dialog: DialogService;
 
-    public init( model:GameState, router:Router){
+    public init( model:GameState, router:Router, injector: Injector){
         this.model = model;
         this.playerRole = PlayerService.getRole();
         this.router = router;
+        this.dialog = injector.get(DialogService);
         
         this.subscribeEvents();
     }
@@ -181,8 +187,9 @@ export class GameEventsManager{
 
     private setOnCloseEvent(){
       ConnectionService.setOnCloseEvent(()=>{
-        alert("Nastąpiło rozłączenie z serwerem");
-        this.router.navigate(['mainmenu']);
+        this.dialog.setMessage("Nastąpiło rozłączenie z serwerem").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+          this.exit('mainmenu');
+        }).open(DialogComponent);
       });
     }
 
@@ -194,19 +201,25 @@ export class GameEventsManager{
         let playersText = data['players'];
         this.model.removePlayer(player.id);
         if(currentStep == 'LOBBY'){
-          alert("Za mało graczy. Powrót do lobby.");
-          this.unsubscribeAll();
-          this.router.navigate(['lobby']);
+          this.dialog.setMessage("Za mało graczy. Powrót do lobby").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+            this.exit('lobby');
+          }).open(DialogComponent);
         }
+
         if(playersText != null){
-          console.log("Zmiana szefa w drużynie");
+          // TODO: można wysłać informacje do nowego szefa
           let players = this.getPlayersList(playersText);
           this.model.removeAllPlayers();
           players.forEach(x=>this.model.addPlayer(x));
-          // TODO: wstawianie wielu graczy można przerzucić do modelu
-          // TODO: wyświetlić jeszcze jakąś wiadomość, że nastapiła zmiana w drużynie
+
         }
       });
+    }
+
+    private exit(newLocation:string){
+        this.unsubscribeAll();
+        this.dialog.close();
+        this.router.navigate([newLocation]);
     }
 
     public unsubscribeAll(){

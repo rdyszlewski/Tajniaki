@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import {Team} from './team';
 import { LobbyModel } from './lobbyModel';
 import { LobbyEventsManager } from './lobbyEventManager';
@@ -18,8 +18,8 @@ export class LobbyComponent implements OnInit {
   model: LobbyModel = new LobbyModel();
   eventsManager: LobbyEventsManager;
 
-  constructor(private router:Router) { 
-    this.eventsManager = new LobbyEventsManager(router);
+  constructor(private router:Router, private injector: Injector) { 
+    this.eventsManager = new LobbyEventsManager(router, injector);
   }
 
   ngOnInit(): void {
