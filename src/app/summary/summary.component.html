@@ -1,0 +1,44 @@
+<div class="summary">
+    <div class="info-conainer">
+        <div class="winner">
+            Wygrali : {{model.winner == team.BLUE? 'Zieleni': 'Czerwieni'}}
+        </div>
+        <div [ngSwitch]="model.cause" class="couse">
+            <div *ngSwitchCase="cause.KILLER">
+              Odkryto zabójcę
+            </div>
+            <div *ngSwitchCase="cause.ALL_FOUND">
+              Znaleziono wszystkie hasła
+            </div>
+            <div *ngSwitchCase="cause.QUIT">
+              Gracz opuścił grę
+            </div>
+            <div *ngSwitchDefault>
+              Powód nieznany
+            </div>
+        </div>
+        <div class="statistics"> 
+            Przegranym pozostało: {{getLoserRemainings()}}
+        </div>
+    </div>
+    <div class="game-statistics">
+        Przebieg gry:
+        <ol class= 'entry'>
+            <li *ngFor="let entry of model.processEntries" 
+            [ngClass]="{
+                'blue-entry': isBlue(entry),
+                'red-entry': isRed(entry)
+            }">
+                <span>{{entry.question}}: {{entry.number}}</span>;
+                <span *ngFor="let answer of entry.answers" 
+                [ngClass] ='{
+                    "red-answer": answer.color == color.RED,
+                    "blue-answer": answer.color == color.BLUE,
+                    "killer-answer": answer.color == color.KILLER,
+                    "neutral-answer": answer.color == color.NEUTRAL
+                }'>{{answer.word}}, </span>
+            </li>
+        </ol>
+    </div>
+    <input type="submit" value="Zamknij" (click)='backToMenu()' />
+</div>

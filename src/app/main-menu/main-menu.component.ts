@@ -84,4 +84,9 @@ export class MainMenuComponent implements OnInit {
   startVoting(){
     this.router.navigate(['boss']);
   }
+
+  startSummary(){
+    console.log("Przechodzenie do posumowania");
+    this.router.navigate(['summary']);
+  }
 }

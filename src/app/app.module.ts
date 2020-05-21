@@ -14,6 +14,7 @@ import { TooltipModule } from 'ng2-tooltip-directive';
 import { TooltipCreator } from './game/tooltip_creator';
 import { DialogComponent } from './dialog/dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LobbyComponent,
     BossComponent,
     GameComponent,
-    DialogComponent
+    DialogComponent,
+    SummaryComponent
   ],
   imports: [
     BrowserModule,

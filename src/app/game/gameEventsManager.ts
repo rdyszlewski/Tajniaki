@@ -169,16 +169,20 @@ export class GameEventsManager{
     }
 
     public sendBossMessage(){
-        let wordInput = $("#wordInput");
-        let numberInput = $("#numberInput");
-        let message = new BossMessage(wordInput.val() as string, numberInput.val() as number);
-        ConnectionService.send(JSON.stringify(message),ConnectionPath.QUESTION);
-        wordInput.val("");
-        numberInput.val(1);
+      let wordInput = $("#wordInput");
+      let numberInput = $("#numberInput");
+      let message = new BossMessage(wordInput.val() as string, numberInput.val() as number);
+      ConnectionService.send(JSON.stringify(message),ConnectionPath.QUESTION);
+      wordInput.val("");
+      numberInput.val(1);
     }
 
     public sendClick(word:string){
         ConnectionService.send(word, ConnectionPath.CLICK);
+    }
+
+    public sendPass(){
+      ConnectionService.send("--PASS--", ConnectionPath.CLICK);
     }
 
     public sendStartMessage() {

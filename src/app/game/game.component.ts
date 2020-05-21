@@ -123,4 +123,6 @@ export class GameComponent implements OnInit {
   isCurrentPlayer(player:GamePlayer){
     return player.team == this.model.currentTeam && player.role == this.model.currentStage;
   }
+
+
 }
