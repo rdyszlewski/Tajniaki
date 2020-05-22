@@ -110,7 +110,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   startVoting(){
-    this.router.navigate(['boss']);
+    this.router.navigate(['voting']);
   }
 
   startSummary(){
@@ -120,5 +120,11 @@ export class MainMenuComponent implements OnInit {
 
   startLobby(){
     this.router.navigate(["lobby"]);
+  }
+
+  nicknameKeydown(event){
+    if (event.keyCode === 13) {
+      this.confirmNickname();
+    }
   }
 }

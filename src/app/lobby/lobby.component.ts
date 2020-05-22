@@ -62,15 +62,14 @@ export class LobbyComponent implements OnInit {
   }
 
   canJoinToBlue(){
-    return this.countBlue() < GameService.getMaxTeamSize();
+    return this.countBlue() < this.model.getMaxPlayersInTeam();
   }
 
   canJoinToRed(){
-    return this.countRed() < GameService.getMaxTeamSize();
+    return this.countRed() < this.model.getMaxPlayersInTeam();
   }
 
   canSetReady(){
     return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
   }
-
 }

@@ -12,7 +12,7 @@
                 <input class="button_column" type="submit" value="Zmień" (click)="setChangeNicknameState()" />
             </div>
             <div [hidden]="!nickname_editing">
-                <input id="nickname_input" class="value_column"/> 
+                <input id="nickname_input" class="value_column" (keydown)="nicknameKeydown($event)"/> 
                 <input class="button_column" type="submit" value="Zmień" (click)="confirmNickname()">
             </div>
         </div>

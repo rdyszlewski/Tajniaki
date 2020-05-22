@@ -3,7 +3,11 @@
 <div id="lobby">
     <table id="blue_table" class="players_table">
         <tr>
-            <th>Zieleni ({{countBlue()}})</th>
+            <th>Zieleni 
+                <span [ngClass]='{"not-min-players":countBlue()<model.getMinPlayersInTeam()}'>
+                    ({{countBlue()}}/{{model.getMaxPlayersInTeam()}})
+                </span>
+            </th>
         </tr>
         <tr *ngFor="let player of model.getPlayers(teams.BLUE)">
             <td [ngClass]="{
@@ -17,7 +21,11 @@
     
     <table id="red_table" class="players_table"> 
         <tr>
-            <th>Czerwieni ({{countRed()}})</th>
+            <th>Czerwieni
+                <span [ngClass]='{"not-min-players":countRed()<model.getMinPlayersInTeam()}'>
+                    ({{countRed()}}/{{model.getMaxPlayersInTeam()}})
+                </span> 
+            </th>
         </tr>
         <tr *ngFor="let player of model.getPlayers(teams.RED)">
             <td [ngClass]="{
@@ -58,11 +66,3 @@
         {{isPlayerReady()?"Nie gotowy": "Gotowy"}}
     </button>
 </div>
-
-<!-- <div id="dialog-container">
-    <div id="dialog-box">
-        <div id='dialog'></div>
-        <input type="submit" id="dialog-ok-button" value="OK">
-    </div>
-</div> -->
-

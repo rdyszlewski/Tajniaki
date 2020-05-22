@@ -18,7 +18,7 @@ export class ConnectionPath{
     public static readonly CONNECT_RESPONSE = "/user/queue/connect";
     public static readonly CHANGE_TEAM_REPONSE = "/user/lobby/team";
     public static readonly READY_RESPONSE = "/user/lobby/ready";
-    public static readonly LOBBY_END_RESPONSE = "/queue/lobby/start";
+    public static readonly LOBBY_END_RESPONSE = "/user/queue/lobby/start";
     
 
     //      common

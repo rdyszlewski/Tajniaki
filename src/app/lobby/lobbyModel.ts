@@ -3,9 +3,27 @@ import { Team } from './team';
 
 export class LobbyModel{
 
+    // TODO: dodać informacje o minimalnej i maksymalnej liczbie graczy
     private clientPlayer: Player;
+    private minPlayersInTeam: number;
+    private maxPlayerInTeam: number;
     private players: Player[] = [];
 
+    public getMinPlayersInTeam(){
+        return this.minPlayersInTeam;
+    }
+
+    public setMinPlayersInTeam(number: number){
+        this.minPlayersInTeam = number;
+    }
+
+    public getMaxPlayersInTeam(){
+        return this.maxPlayerInTeam;
+    }
+
+    public setMaxPlayersInTeam(number: number){
+        this.maxPlayerInTeam = number;
+    }
 
     public addPlayer(player:Player){
         if(!this.existsPlayer(player)){

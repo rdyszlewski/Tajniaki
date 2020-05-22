@@ -9,7 +9,7 @@ const ROUTES: Routes = [
     {path: '', redirectTo: 'mainmenu', pathMatch: "full"},
     {path: 'mainmenu', component: MainMenuComponent},
     {path: 'lobby', component:LobbyComponent},
-    {path: 'boss', component:BossComponent},
+    {path: 'voting', component:BossComponent},
     {path: 'game', component:GameComponent},
     {path: 'summary', component:SummaryComponent}
 ];
