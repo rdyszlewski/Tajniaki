@@ -12,6 +12,7 @@ export class ConnectionPath{
     public static readonly START_VOTING_RESPONSE = "/user/boss/start";
     public static readonly END_VOTING_RESPONSE = "/user/boss/end";
     public static readonly VOTE_RESPONSE = "/user/boss/vote";
+    public static readonly VOTING_TIMER_RESPONSE = "/user/boss/timer";
 
     //      lobby
     public static readonly PLAYERS_RESPONSE = "/user/lobby/players";

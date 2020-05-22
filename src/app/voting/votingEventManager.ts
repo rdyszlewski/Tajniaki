@@ -13,7 +13,6 @@ export class VotingEventManager{
 
     private model:VotingModel;
     private router: Router;
-    private injector: Injector;
 
     private dialog: DialogService;
 
@@ -21,13 +20,19 @@ export class VotingEventManager{
         this.model = model;
         this.router = router;
         this.dialog = injector.get(DialogService);
-        // this.injector = injector;
 
         this.subscribeStart();
         this.subscribeEnd();
         this.subscribeVote();
         this.subscribeDisconnect();
         this.setOncloseEvent();
+        this.subscribeTimer();
+    }
+
+    private subscribeTimer(){
+        ConnectionService.subscribe(ConnectionPath.VOTING_TIMER_RESPONSE, message=>{
+            this.model.setTime(message.body);
+        });
     }
 
     private subscribeStart(){
@@ -69,7 +74,6 @@ export class VotingEventManager{
 
     private setOncloseEvent(){
         ConnectionService.setOnCloseEvent(()=>{
-            alert("Nastąpiło rozłączenie z serwerem");
             this.unsubscribeAll();
             this.dialog.setMessage("Nastąpiło rozłączenie z serwerem").setMode(DialogMode.WARNING).setOnOkClick(()=>{
                 this.dialog.close();

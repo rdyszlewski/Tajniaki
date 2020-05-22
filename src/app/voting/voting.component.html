@@ -1,4 +1,7 @@
 <div class="voting">
+    <div id="timer">
+        {{model.getTimeFormat()}}
+    </div>
     <div *ngFor="let player of model.getPlayers()" class="candidate">
         <input (click)="eventManager.sendVote(player)" type="submit" value='{{player.nickname}}' 
         [ngClass]="{
