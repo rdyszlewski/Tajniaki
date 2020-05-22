@@ -6,6 +6,7 @@ import * as $ from 'jquery';
 import { DialogService } from '../dialog/dialog.service';
 import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
+import { CookieService } from 'ngx-cookie-service';
 
 (window as any).global = window;
 
@@ -16,16 +17,31 @@ import { DialogComponent } from '../dialog/dialog.component';
 })
 export class MainMenuComponent implements OnInit {
 
+  private readonly CONNECTION_DIALOG_DELAY = 500;
+  private readonly CONNECTION_TIMEOUT = 5000;
+
   nickname_editing:boolean;
   infoDialog: DialogService;
 
-  constructor(private router: Router, private injector:Injector) {
+  constructor(private router: Router, private injector:Injector, private cookieService: CookieService) {
     
   }
 
   ngOnInit(): void {
     this.infoDialog = this.injector.get(DialogService);
-    this.connect();
+    this.setPlayerNickname();
+    if(!ConnectionService.isConnected()){
+      this.connect();
+    }
+  }
+
+  private setPlayerNickname(){
+    const nickname = this.readNickname();
+    if(nickname){
+      PlayerService.setNickname(nickname);
+    } else {
+      PlayerService.setNickname("Player");
+    }
   }
 
   start(){
@@ -35,22 +51,25 @@ export class MainMenuComponent implements OnInit {
 
   connect(){
     this.infoDialog.setMessage("Łączenie...").setMode(DialogMode.INFO).open(DialogComponent);
-    let connected = false;
     ConnectionService.connect('localhost', 8080, ()=>{
-      console.log("Połączono");
-      setTimeout(() => 
-      {
-        this.infoDialog.close();
-      },
-      500);
+      setTimeout(() => this.infoDialog.close(), this.CONNECTION_DIALOG_DELAY);
     });
+    this.startConnectionTimeout();
+  }
 
-    setTimeout(()=>{
-      if(!connected){
-        // TODO: poinformować o błędzie połączniea
+  private startConnectionTimeout() {
+    setTimeout(() => {
+      if (!ConnectionService.isConnected()) {
         this.infoDialog.close();
+        this.showConnectionError();
       }
-    }, 5000); // TODO: ustawić zmienną z timeout
+    }, this.CONNECTION_TIMEOUT);
+  }
+
+  private showConnectionError(){
+    this.infoDialog.setMessage("Połączenie nieudane").setMode(DialogMode.WARNING)
+        .setOnOkClick(()=>this.infoDialog.close())
+        .open(DialogComponent);
   }
 
   isConnected():boolean{
@@ -70,6 +89,15 @@ export class MainMenuComponent implements OnInit {
     let nickname = $("#nickname_input").val();
     PlayerService.setNickname(nickname as string);
     this.nickname_editing = false;
+    this.saveNickname(nickname as string);
+  }
+
+  private saveNickname(nickname:string):void{
+    this.cookieService.set('tajniaki-nickname', nickname);
+  }
+
+  private readNickname():string{
+    return this.cookieService.get("tajniaki-nickname");
   }
 
   getNickname(){
@@ -88,5 +116,9 @@ export class MainMenuComponent implements OnInit {
   startSummary(){
     console.log("Przechodzenie do posumowania");
     this.router.navigate(['summary']);
+  }
+
+  startLobby(){
+    this.router.navigate(["lobby"]);
   }
 }

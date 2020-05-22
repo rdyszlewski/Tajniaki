@@ -15,6 +15,7 @@ import { TooltipCreator } from './game/tooltip_creator';
 import { DialogComponent } from './dialog/dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SummaryComponent } from './summary/summary.component';
+import { CookieService} from "ngx-cookie-service"
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { SummaryComponent } from './summary/summary.component';
     TooltipModule,
     BrowserAnimationsModule
   ],
-  providers: [ConnectionService],
+  providers: [ConnectionService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

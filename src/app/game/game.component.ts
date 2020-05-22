@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, HostListener } from '@angular/core';
 import { ConnectionService } from '../connection.service';
 import { Role } from './role';
 import { PlayerService } from '../playerService';
@@ -33,6 +33,11 @@ export class GameComponent implements OnInit {
     this.eventsManager.init(this.model, this.router, this.injector);
     this.sendStartMessage();
     
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) { // back button pressed
+    this.eventsManager.unsubscribeAll();
   }
 
   private preventRightClickMenu() {

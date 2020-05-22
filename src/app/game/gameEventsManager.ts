@@ -199,6 +199,7 @@ export class GameEventsManager{
 
     private subscribeDisconnect(){
       ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
+        console.log("To się daje wykonuje");
         let data = JSON.parse(message.body);
         let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
         let currentStep = data['currentStep'];
@@ -232,5 +233,7 @@ export class GameEventsManager{
       ConnectionService.unsubscribe(ConnectionPath.CLICK_RESPONSE);
       ConnectionService.unsubscribe(ConnectionPath.ANSWER_RESPONSE);
       ConnectionService.unsubscribe(ConnectionPath.START_RESPONSE);
+      ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
+      ConnectionService.setOnCloseEvent(null);
     }
 }
