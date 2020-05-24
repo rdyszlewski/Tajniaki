@@ -93,6 +93,7 @@ export class LobbyEventsManager{
     private subscribeJoinToLobbyResponse() {
         ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (message) => {
             var data = JSON.parse(message.body);
+            PlayerService.setId(data['playerId']);
             this.setSettings(data['settings']);
             this.setPlayers(data['players']);
             this.model.setMinPlayersInTeam(data['minPlayersInTeam']);

@@ -33,6 +33,15 @@ export class MainMenuComponent implements OnInit {
     if(!ConnectionService.isConnected()){
       this.connect();
     }
+    this.testSubscribeIdEvent();
+
+  }
+
+  private testSubscribeIdEvent(){
+    ConnectionService.subscribe("/user/queue/lobby/id", message => {
+      PlayerService.setId(message.body);
+    });
+    ConnectionService.send("DAJ","/app/test/getid");
   }
 
   private setPlayerNickname(){
@@ -52,6 +61,7 @@ export class MainMenuComponent implements OnInit {
   connect(){
     this.infoDialog.setMessage("Łączenie...").setMode(DialogMode.INFO).open(DialogComponent);
     ConnectionService.connect('localhost', 8080, ()=>{
+      this.testSubscribeIdEvent();
       setTimeout(() => this.infoDialog.close(), this.CONNECTION_DIALOG_DELAY);
     });
     this.startConnectionTimeout();

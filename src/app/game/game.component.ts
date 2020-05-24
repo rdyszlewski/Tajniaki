@@ -37,6 +37,21 @@ export class GameComponent implements OnInit {
 
   @HostListener('window:popstate', ['$event'])
   onPopState(event) { // back button pressed
+    this.onLeave();    
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeunload(event){
+    event.returnValue = "Czy na pewno wyjść?";
+  }
+
+  @HostListener('window:unload')
+  onUnload(){
+    console.log("Usuwanie subskrybcji");
+    this.onLeave();
+  }
+
+  private onLeave(){
     this.eventsManager.unsubscribeAll();
   }
 
@@ -81,10 +96,12 @@ export class GameComponent implements OnInit {
   }
 
   isAnswerByClient(card:Card){
+    // TODO: przerobić to, żeby korzystało z id
     return card.answers.includes(PlayerService.getNickname());
   }
 
   isFlagByClient(card: Card){
+    // TODO: przerobić to, żeby korzystało z id
     return card.flags.includes(PlayerService.getNickname())
   }
 

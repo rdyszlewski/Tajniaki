@@ -37,17 +37,18 @@ export class VotingEventManager{
 
     private subscribeStart(){
         ConnectionService.subscribe(ConnectionPath.START_VOTING_RESPONSE, message=>{
-            this.updateList(message);
+            let data = JSON.parse(message.body);
+            this.model.setTime(data['time']);
+            this.updateList(data['players']);
         });
     }
 
-    private updateList(message){
+    private updateList(playersList){
         // TODO: na razie listy są zastępowane, a nie tylo aktualizowane. Później można to naprawić 
-        let playersList = JSON.parse(message.body);
-          playersList.forEach(element => {
-            let player = this.createVotingPlayer(element);
-            this.model.addPlayer(player);
-          });
+        playersList.forEach(element => {
+        let player = this.createVotingPlayer(element);
+        this.model.addPlayer(player);
+        });
     }
 
     private createVotingPlayer(element){
@@ -111,6 +112,10 @@ export class VotingEventManager{
         ConnectionService.unsubscribe(ConnectionPath.END_VOTING_RESPONSE);
         ConnectionService.unsubscribe(ConnectionPath.VOTE_RESPONSE);
         ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.VOTING_TIMER_RESPONSE);
+
     }
+
+    
 
 }   

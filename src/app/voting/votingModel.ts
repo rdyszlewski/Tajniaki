@@ -35,4 +35,5 @@ export class VotingModel{
         const zeroPad = (num, places) => String(num).padStart(places, '0')
         return zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2);
     }
+    
 }
