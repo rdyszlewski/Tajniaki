@@ -135,3 +135,7 @@
   text-shadow: 0 0 10px green;
   border: 1px solid green;
 }
+
+.pass-button{
+  width: 200px;
+}

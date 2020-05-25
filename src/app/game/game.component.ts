@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.css']
+  styleUrls: ['./game.component.css'],
 })
 export class GameComponent implements OnInit {
 
@@ -42,7 +42,10 @@ export class GameComponent implements OnInit {
 
   @HostListener('window:beforeunload', ['$event'])
   onBeforeunload(event){
-    event.returnValue = "Czy na pewno wyjść?";
+    // sprawdzamy, czy połączenie jest aktywne. Nie chcemy, aby komunikat wyskakiwał w przypadku rozłączenia z siecią
+    if(ConnectionService.isConnected()){
+      event.returnValue = "Czy na pewno wyjść?";
+    }
   }
 
   @HostListener('window:unload')
@@ -88,7 +91,6 @@ export class GameComponent implements OnInit {
   preventWhispace(event)
   {
     if (event.keyCode === 32){
-      console.log("Naciśnięto spację");
       event.preventDefault();
     }
   }
@@ -126,8 +128,9 @@ export class GameComponent implements OnInit {
   }
 
   isPlayerAnswer(player:GamePlayer){
-    for(let i=0; i< this.model.cards.length; i++){
-      let card = this.model.cards[i];
+    let cards: Card[] = this.model.getCardsWithPassCard();
+    for(let i=0; i< cards.length; i++){
+      let card = cards[i];
       for(let j=0; j< card.answers.length; j++){
         let answer = card.answers[j];
         if(answer == player.id){

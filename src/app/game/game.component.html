@@ -44,7 +44,7 @@
   
       <div class="board grid">
      
-          <div *ngFor='let card of model.cards' 
+          <div *ngFor='let card of model.getCards()' 
           [ngClass]="{
             'my_answer': isAnswerByClient(card),
             'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
@@ -54,7 +54,7 @@
             'killer':card.color.toString()=='KILLER',
             'lack': card.color.toString()=='LACK',
             'card ' :true}" 
-            (click)="eventsManager.sendClick(card.word)" (contextmenu)="eventsManager.sendFlag(card.word)">
+            (click)="eventsManager.sendClick(card.id)" (contextmenu)="eventsManager.sendFlag(card.id)">
             <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'" 
               class="click_amount" id="answers"
               tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
@@ -103,24 +103,20 @@
       <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło" [disabled]='!isPlayerTurn()'/>
     </div>
     <div *ngIf="!isBoss()">
-      <!-- <div  
+      <!-- Dla uproszczenia deklarujemy zmienną. Do tego celu korzystamy z ngFor -->
+      <div  *ngIf="model.getPassCard() as card"
           [ngClass]="{
             'my_answer': isAnswerByClient(card),
-            'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
-            'card ' :true}" 
-            (click)="eventsManager.sendClick(card.word)" (contextmenu)="eventsManager.sendFlag(card.word)">
+            'card ' :true,
+            'pass-button':true}" 
+            (click)="eventsManager.sendClick(card.id)">
             <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'" 
               class="click_amount" id="answers"
               tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
             </span>
-            <span [hidden]="isWordHidden(card)" class="word"> {{card.word}} </span>
-    
-            <span [style.visibility]="card.flags.length == 0 ? 'hidden':'visible'" 
-              class="click_amount" id="flags"
-              tooltip={{tooltip.getTooltipText(card.flags)}} [options]="tooltip.getTooltipOptions(card.flags)">{{card.flags.length}}
-            </span>
-          </div> -->
-      <input id="pass-button" (click)="eventsManager.sendPass()" type="submit" value="Pomiń" />
+            <span class="word"> Pomiń </span>
+          </div>
+      <!-- <input id="pass-button" (click)="eventsManager.sendPass()" type="submit" value="Pomiń" /> -->
       <!-- <div>{{model.cards.find(x=>x == null).answers.length}}</div> -->
     </div>
     <div id="player_info">

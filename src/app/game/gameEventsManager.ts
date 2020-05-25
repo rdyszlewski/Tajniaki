@@ -2,7 +2,7 @@ import { Team } from '../lobby/team';
 import { ConnectionService } from '../connection.service';
 import { GameState } from './models/gameState';
 import { Role } from './role';
-import { CardCreator } from './models/card';
+import { CardCreator, Card } from './models/card';
 import { PlayerService } from '../playerService';
 import { ConnectionPath } from '../shared/connectionPath';
 import { BossMessage } from './bossMessage';
@@ -53,7 +53,6 @@ export class GameEventsManager{
     
     private endGame() {
         ConnectionService.subscribe(ConnectionPath.END_GAME_RESPONSE, message => {
-            console.log(message);
             // TODO: sprawdzić, czy trzeba przekazywać jakiś komunikat
             console.log("Koniec gry");
             this.router.navigate(['summary']);
@@ -67,7 +66,6 @@ export class GameEventsManager{
       }
     
     private updateStateAfterReceiveQuestion(message: any) {
-        console.log(message);
         let data = JSON.parse(message.body);
         this.updateGameState(data["gameState"]);
     }
@@ -79,13 +77,9 @@ export class GameEventsManager{
       }
     
     private updateStateAfterClick(message: any) {
-      console.log(message);
         var data = JSON.parse(message.body);
-        console.log(data);
         let editedCards = data['editedCards'];
-        console.log(editedCards);
         let cards = this.createCards(editedCards);
-        console.log(cards);
         this.updateCards(cards);
     }
 
@@ -113,13 +107,12 @@ export class GameEventsManager{
       }
 
     private startGame(message: any) {
-        console.log(message.body);
         var data = JSON.parse(message.body);
         PlayerService.setNickname(data['nickname']);
         PlayerService.setRole(this.getRole(data["playerRole"]));
         PlayerService.setTeam(this.getTeam(data['playerTeam']));
         this.updateGameState(data["gameState"]);
-        this.model.cards = this.createCards(data["cards"]);
+        this.model.setCards(this.createCards(data["cards"]));
         let playersList = this.getPlayersList(data['players']);
         playersList.forEach(x=>this.model.addPlayer(x));
     }
@@ -134,8 +127,6 @@ export class GameEventsManager{
           player.team = this.getTeam(x['team']);
           playersResult.push(player);
         });
-        console.log("Wynik tworzenia listy graczy");
-        console.log(playersResult);
         return playersResult;
     }
 
@@ -167,14 +158,19 @@ export class GameEventsManager{
     private createCards(cardsTextList){
         let cards= []
         cardsTextList.forEach(element => {
-            cards.push(CardCreator.createCard(element));
+            let card  = CardCreator.createCard(element);
+            cards.push(card);
         });
         cards = cards.sort((x1,x2)=>x1.id-x2.id);
         return cards
     }
 
-    public sendFlag(word){
-        ConnectionService.send(word, ConnectionPath.FLAG);
+    private isPassCard(card:Card){
+      return card.id == -1;
+    }
+
+    public sendFlag(cardId:number){
+        ConnectionService.send(cardId, ConnectionPath.FLAG);
     }
 
     public sendBossMessage(){
@@ -186,12 +182,14 @@ export class GameEventsManager{
       numberInput.val(1);
     }
 
-    public sendClick(word:string){
-        ConnectionService.send(word, ConnectionPath.CLICK);
+    public sendClick(cardId:number){
+        console.log("Click ");
+        console.log(cardId);
+        ConnectionService.send(cardId, ConnectionPath.CLICK);
     }
 
     public sendPass(){
-      ConnectionService.send("--PASS--", ConnectionPath.CLICK);
+      ConnectionService.send(-1, ConnectionPath.CLICK);
     }
 
     public sendStartMessage() {
@@ -208,7 +206,6 @@ export class GameEventsManager{
 
     private subscribeDisconnect(){
       ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
-        console.log("To się daje wykonuje");
         let data = JSON.parse(message.body);
         let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
         let currentStep = data['currentStep'];

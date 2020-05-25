@@ -5,7 +5,8 @@ import { GamePlayer } from './gamePlayer';
 
 export class GameState{
 
-    public cards: Card[] = []
+    // zawiera karty słów oraz kartę pominięcia
+    private cards: Card[] = []
     public currentTeam: Team;
     public currentStage: Role;
     public remainingBlue: number;
@@ -17,13 +18,35 @@ export class GameState{
     public redPlayers: GamePlayer[] = []
 
     public getCard(word: string):Card{
-        let index = this.getCardIndex(word);
+        let index = this.getCardId(word);
         if(index!=null){
             return this.cards[index];
         }
     }
 
-    private getCardIndex(word:string):number {
+    public getCards():Card[]{
+        let cards =  this.cards.filter(card=>card.id>=0);
+        console.log("KARTY");
+        console.log(cards);
+        return cards;
+    }
+
+    public getCardsWithPassCard(){
+        return this.cards;
+    }
+
+    public getPassCard():Card{
+        let card =  this.cards.filter(card=>card.id==-1)[0];
+        console.log(" TO jest karta pomijania");
+        console.log(card);
+        return card;
+    }
+
+    public setCards(cards: Card[]){
+        this.cards = cards;
+    }
+
+    private getCardId(word:string):number {
         for(let i=0; i<this.cards.length; i++){
             if(this.cards[i].word == word){
                 return i;
@@ -32,7 +55,7 @@ export class GameState{
     }
 
     public replaceCard(word: string, card:Card){
-        let index = this.getCardIndex(word);
+        let index = this.getCardId(word);
         if(index != null){
             console.log(index);
             this.cards[index] = card;
@@ -60,4 +83,6 @@ export class GameState{
         this.bluePlayers = [];
         this.redPlayers = [];
     }
+
+
 }
