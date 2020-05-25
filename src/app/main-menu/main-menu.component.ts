@@ -39,7 +39,7 @@ export class MainMenuComponent implements OnInit {
 
   private testSubscribeIdEvent(){
     ConnectionService.subscribe("/user/queue/lobby/id", message => {
-      PlayerService.setId(message.body);
+      PlayerService.setId(parseInt(message.body));
     });
     ConnectionService.send("DAJ","/app/test/getid");
   }

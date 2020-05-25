@@ -78,8 +78,6 @@ export class GameComponent implements OnInit {
   }
 
   getClientTeam(){
-    // TODO: dodać jakieś informacje
-    console.log(PlayerService.getTeam());
     return PlayerService.getTeam();
   }
 
@@ -96,13 +94,11 @@ export class GameComponent implements OnInit {
   }
 
   isAnswerByClient(card:Card){
-    // TODO: przerobić to, żeby korzystało z id
-    return card.answers.includes(PlayerService.getNickname());
+    return card.answers.includes(PlayerService.getId());
   }
 
   isFlagByClient(card: Card){
-    // TODO: przerobić to, żeby korzystało z id
-    return card.flags.includes(PlayerService.getNickname())
+    return card.flags.includes(PlayerService.getId());
   }
 
   isWordHidden(card: Card){
@@ -134,7 +130,7 @@ export class GameComponent implements OnInit {
       let card = this.model.cards[i];
       for(let j=0; j< card.answers.length; j++){
         let answer = card.answers[j];
-        if(answer == player.nickname){
+        if(answer == player.id){
           return true;
         }
       }
@@ -146,5 +142,8 @@ export class GameComponent implements OnInit {
     return player.team == this.model.currentTeam && player.role == this.model.currentStage;
   }
 
+  isPlayerTurn(){
+    return PlayerService.getTeam() == this.model.currentTeam && PlayerService.getRole() == this.model.currentStage;
+  }
 
 }

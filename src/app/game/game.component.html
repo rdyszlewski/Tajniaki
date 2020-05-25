@@ -98,11 +98,28 @@
     
   
     <div *ngIf="isBoss()">
-      <input id="wordInput" (keydown)="preventWhispace($event)"/>
-      <input id="numberInput" type="number" value=1 min=1 max=9/>
-      <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło"/>
+      <input id="wordInput" (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()'/>
+      <input id="numberInput" type="number" value=1 min=1 max=9 [disabled]='!isPlayerTurn()'/>
+      <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło" [disabled]='!isPlayerTurn()'/>
     </div>
     <div *ngIf="!isBoss()">
+      <!-- <div  
+          [ngClass]="{
+            'my_answer': isAnswerByClient(card),
+            'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
+            'card ' :true}" 
+            (click)="eventsManager.sendClick(card.word)" (contextmenu)="eventsManager.sendFlag(card.word)">
+            <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'" 
+              class="click_amount" id="answers"
+              tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
+            </span>
+            <span [hidden]="isWordHidden(card)" class="word"> {{card.word}} </span>
+    
+            <span [style.visibility]="card.flags.length == 0 ? 'hidden':'visible'" 
+              class="click_amount" id="flags"
+              tooltip={{tooltip.getTooltipText(card.flags)}} [options]="tooltip.getTooltipOptions(card.flags)">{{card.flags.length}}
+            </span>
+          </div> -->
       <input id="pass-button" (click)="eventsManager.sendPass()" type="submit" value="Pomiń" />
       <!-- <div>{{model.cards.find(x=>x == null).answers.length}}</div> -->
     </div>

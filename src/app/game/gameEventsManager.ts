@@ -54,6 +54,9 @@ export class GameEventsManager{
     private endGame() {
         ConnectionService.subscribe(ConnectionPath.END_GAME_RESPONSE, message => {
             console.log(message);
+            // TODO: sprawdzić, czy trzeba przekazywać jakiś komunikat
+            console.log("Koniec gry");
+            this.router.navigate(['summary']);
         });
     }
 
@@ -78,8 +81,11 @@ export class GameEventsManager{
     private updateStateAfterClick(message: any) {
       console.log(message);
         var data = JSON.parse(message.body);
+        console.log(data);
         let editedCards = data['editedCards'];
+        console.log(editedCards);
         let cards = this.createCards(editedCards);
+        console.log(cards);
         this.updateCards(cards);
     }
 
@@ -91,9 +97,12 @@ export class GameEventsManager{
     
     private updateStateAfterReceiveAnswer(message: any) {
         var data = JSON.parse(message.body);
-        let clientCard = CardCreator.createCard(data['card']);
+        // let clientCard = CardCreator.createCard(data['card']);
+        let editedCards = data['cardsToUpdate'];
+        let cards = this.createCards(editedCards);
+        this.updateCards(cards);
         var correct = data["correct"]; // TODO: coś z tym zrobić
-        this.model.replaceCard(clientCard.word, clientCard);
+        // this.model.replaceCard(clientCard.word, clientCard);
         this.updateGameState(data["gameState"]);
     }
 

@@ -5,8 +5,8 @@ export class Card{
     word:string;
     color:WordColor;
     checked: boolean;
-    answers: string[];
-    flags: string[];
+    answers: number[];
+    flags: number[];
 
     constructor(id, word, color, checked){
         this.id = id;
