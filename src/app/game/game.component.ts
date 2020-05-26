@@ -45,17 +45,19 @@ export class GameComponent implements OnInit {
     // sprawdzamy, czy połączenie jest aktywne. Nie chcemy, aby komunikat wyskakiwał w przypadku rozłączenia z siecią
     if(ConnectionService.isConnected()){
       event.returnValue = "Czy na pewno wyjść?";
+    } else {
+      event.returnValue = false;
     }
   }
 
   @HostListener('window:unload')
   onUnload(){
-    console.log("Usuwanie subskrybcji");
     this.onLeave();
   }
 
   private onLeave(){
     this.eventsManager.unsubscribeAll();
+    this.eventsManager.closeDialog();
   }
 
   private preventRightClickMenu() {
@@ -147,6 +149,10 @@ export class GameComponent implements OnInit {
 
   isPlayerTurn(){
     return PlayerService.getTeam() == this.model.currentTeam && PlayerService.getRole() == this.model.currentStage;
+  }
+
+  getRemainingWordsInPlayerTeam(){
+    return PlayerService.getTeam() == Team.BLUE? this.model.remainingBlue : this.model.remainingRed;
   }
 
 }

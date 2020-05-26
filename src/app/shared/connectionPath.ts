@@ -2,7 +2,7 @@ export class ConnectionPath{
     // LISTENING
 
     //      game
-    public static readonly END_GAME_RESPONSE  = "/user/queue/game/end";
+    public static readonly END_GAME_RESPONSE  = "/user/queue/game/end_game";
     public static readonly QUESTION_RESPONSE = "/user/queue/game/question";
     public static readonly CLICK_RESPONSE = "/user/queue/game/click";
     public static readonly ANSWER_RESPONSE = "/user/queue/game/answer";

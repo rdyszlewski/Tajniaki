@@ -98,6 +98,9 @@ export class GameEventsManager{
         var correct = data["correct"]; // TODO: coś z tym zrobić
         // this.model.replaceCard(clientCard.word, clientCard);
         this.updateGameState(data["gameState"]);
+        if(!data['active']){
+          this.endGame();
+        }
     }
 
       private subscribeStartEvent() {
@@ -183,8 +186,6 @@ export class GameEventsManager{
     }
 
     public sendClick(cardId:number){
-        console.log("Click ");
-        console.log(cardId);
         ConnectionService.send(cardId, ConnectionPath.CLICK);
     }
 
@@ -207,16 +208,18 @@ export class GameEventsManager{
     private subscribeDisconnect(){
       ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
         let data = JSON.parse(message.body);
+        console.log(data);
         let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
-        let currentStep = data['currentStep'];
-        let playersText = data['players'];
-        this.model.removePlayer(player.id);
-        if(currentStep == 'LOBBY'){
+        console.log("Disconnected: " + player.nickname);
+        this.model.removePlayer(player.id); // TODO: sprawdzić, czy usunięcie gracza działa
+
+        if(data['currentStep'] == 'LOBBY'){
           this.dialog.setMessage("Za mało graczy. Powrót do lobby").setMode(DialogMode.WARNING).setOnOkClick(()=>{
             this.exit('lobby');
           }).open(DialogComponent);
         }
-
+        
+        let playersText = data['players'];
         if(playersText != null){
           // TODO: można wysłać informacje do nowego szefa
           let players = this.getPlayersList(playersText);
@@ -241,5 +244,9 @@ export class GameEventsManager{
       ConnectionService.unsubscribe(ConnectionPath.START_RESPONSE);
       ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
       ConnectionService.setOnCloseEvent(null);
+    }
+
+    public closeDialog(){
+      this.dialog.close();
     }
 }

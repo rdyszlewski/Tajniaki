@@ -25,10 +25,7 @@ export class GameState{
     }
 
     public getCards():Card[]{
-        let cards =  this.cards.filter(card=>card.id>=0);
-        console.log("KARTY");
-        console.log(cards);
-        return cards;
+        return this.cards.filter(card=>card.id>=0);
     }
 
     public getCardsWithPassCard(){
@@ -36,10 +33,7 @@ export class GameState{
     }
 
     public getPassCard():Card{
-        let card =  this.cards.filter(card=>card.id==-1)[0];
-        console.log(" TO jest karta pomijania");
-        console.log(card);
-        return card;
+        return this.cards.filter(card=>card.id==-1)[0];
     }
 
     public setCards(cards: Card[]){
@@ -57,7 +51,6 @@ export class GameState{
     public replaceCard(word: string, card:Card){
         let index = this.getCardId(word);
         if(index != null){
-            console.log(index);
             this.cards[index] = card;
         }
     }

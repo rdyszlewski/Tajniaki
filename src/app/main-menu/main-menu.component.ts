@@ -54,7 +54,6 @@ export class MainMenuComponent implements OnInit {
   }
 
   start(){
-    console.log("start");
     this.router.navigate(['lobby']);
   }
 
@@ -111,7 +110,6 @@ export class MainMenuComponent implements OnInit {
   }
 
   getNickname(){
-    console.log(PlayerService.getNickname());
     return PlayerService.getNickname();
   }
 

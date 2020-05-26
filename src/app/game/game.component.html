@@ -98,12 +98,12 @@
     
   
     <div *ngIf="isBoss()">
-      <input id="wordInput" (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()'/>
-      <input id="numberInput" type="number" value=1 min=1 max=9 [disabled]='!isPlayerTurn()'/>
+      <input id="wordInput" (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()' (keyup.enter)="eventsManager.sendBossMessage()"/>
+      <input id="numberInput" type="number" value=1 min=1 max="{{getRemainingWordsInPlayerTeam()}}" [disabled]='!isPlayerTurn() ' (keyup.enter)="eventsManager.sendBossMessage()"/>
       <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło" [disabled]='!isPlayerTurn()'/>
     </div>
     <div *ngIf="!isBoss()">
-      <!-- Dla uproszczenia deklarujemy zmienną. Do tego celu korzystamy z ngFor -->
+      <!-- Dla uproszczenia deklarujemy zmienną. Do tego celu korzystamy z ngId -->
       <div  *ngIf="model.getPassCard() as card"
           [ngClass]="{
             'my_answer': isAnswerByClient(card),
@@ -116,8 +116,6 @@
             </span>
             <span class="word"> Pomiń </span>
           </div>
-      <!-- <input id="pass-button" (click)="eventsManager.sendPass()" type="submit" value="Pomiń" /> -->
-      <!-- <div>{{model.cards.find(x=>x == null).answers.length}}</div> -->
     </div>
     <div id="player_info">
       <span> {{getNickname()}} </span>

@@ -64,7 +64,6 @@ export class VotingEventManager{
 
     private subscribeVote(){
         ConnectionService.subscribe(ConnectionPath.VOTE_RESPONSE, message=>{
-            console.log(message);
             let data = JSON.parse(message.body);
             data.forEach(element=>{
               let player = this.model.getPlayer(element['id']);

@@ -77,7 +77,6 @@ export class LobbyEventsManager{
 
     private setPlayerTeam(message: any) {
         var json = JSON.parse(message.body);
-        console.log(json);
         var player = this.model.getPlayerById(json['id']);
         player.team = this.getTeam(json['team']);
     }
@@ -98,8 +97,6 @@ export class LobbyEventsManager{
             this.setPlayers(data['players']);
             this.model.setMinPlayersInTeam(data['minPlayersInTeam']);
             this.model.setMaxPlayersInTeam(data['maxPlayersInTeam']);
-            console.log(this.model.getMinPlayersInTeam());
-            console.log(this.model.getMaxPlayersInTeam());
         });
     }
 
@@ -159,5 +156,9 @@ export class LobbyEventsManager{
         ConnectionService.unsubscribe(ConnectionPath.CHANGE_TEAM_REPONSE);
         ConnectionService.unsubscribe(ConnectionPath.CONNECT_RESPONSE);
         ConnectionService.unsubscribe(ConnectionPath.PLAYERS_RESPONSE);
+    }
+
+    public closeDialog(){
+        this.dialog.close();
     }
 }

@@ -24,7 +24,6 @@ export class SummaryComponent implements OnInit {
   ngOnInit(): void {
     ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
       let data = JSON.parse(message.body);
-      console.log(data);
       this.model.winner =   this.getTeam(data['winner']);
       this.model.blueRemaining = data['blueRemaining'];
       this.model.redRemaining = data['redRemaining'];
@@ -80,12 +79,10 @@ export class SummaryComponent implements OnInit {
 
 
   isBlue(entry){
-    console.log(entry);
     return entry.team == Team.BLUE;
   }
 
   isRed(entry){
-    console.log(entry);
     return entry.team == Team.RED;
   }
 

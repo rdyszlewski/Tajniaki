@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, HostListener } from '@angular/core';
 import {Team} from './team';
 import { LobbyModel } from './lobbyModel';
 import { LobbyEventsManager } from './lobbyEventManager';
@@ -27,6 +27,22 @@ export class LobbyComponent implements OnInit {
     this.eventsManager.sendJoinToLobby();
   }
 
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) { // back button pressed
+    this.onLeave();    
+  }
+
+  @HostListener('window:unload')
+  onUnload(){
+    console.log("Usuwanie subskrybcji");
+    this.onLeave();
+  }
+
+  private onLeave(){
+    this.eventsManager.unsubscribeAll();
+    this.eventsManager.closeDialog();
+  }
+
 
   isBlue(player){
     return player.team==Team.BLUE;
@@ -49,7 +65,6 @@ export class LobbyComponent implements OnInit {
   }
 
   countObserver(){
-    console.log(this.model.getPlayers(Team.OBSERVER));
     return this.model.getPlayers(Team.OBSERVER).length;
   }
 
