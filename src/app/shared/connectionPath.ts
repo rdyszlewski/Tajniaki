@@ -27,7 +27,7 @@ export class ConnectionPath{
     public static readonly DISCONNECT_RESPONSE = "/user/queue/common/disconnect";
 
     //      summary
-    public static readonly SUMMARY_RESPONSE = '/user/queue/game/summary';
+    public static readonly SUMMARY_RESPONSE = '/user/queue/summary/summary';
 
     // SENDING
     //      game
@@ -50,5 +50,5 @@ export class ConnectionPath{
     public static readonly DISCONNECT = '/app/common/disconnect';
 
     //      summary
-    public static readonly SUMMARY = '/app/game/summary';
+    public static readonly SUMMARY = '/app/summary/summary';
 }

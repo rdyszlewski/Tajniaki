@@ -1,3 +1,5 @@
+@import '../../styles.css';
+
 .blue-entry{
     /* background-color: blue; */
     color: blue;
@@ -28,4 +30,22 @@
 
 .neutral-answer {
     color: yellow;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+    transform-style: preserve-3d;
+}
+
+.team-color{
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+}
+
+.card:hover{
+    transform: none;
+    box-shadow: none;
 }

@@ -1,6 +1,6 @@
 
 export enum Team{
     BLUE = "BLUE",
-    RED= "RED",
+    RED = "RED",
     OBSERVER = "OBSERVER"
 }

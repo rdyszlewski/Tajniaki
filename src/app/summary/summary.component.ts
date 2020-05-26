@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SummaryModel, SummaryEntry, SummaryWord } from './summaryModel';
+import { SummaryModel, SummaryEntry, SummaryWord, SummaryCard } from './summaryModel';
 import { Team } from '../lobby/team';
 import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
@@ -27,11 +27,12 @@ export class SummaryComponent extends View implements OnInit {
   ngOnInit(): void {
     ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
       let data = JSON.parse(message.body);
-      this.model.winner =   this.getTeam(data['winner']);
+      this.model.winner = this.getTeam(data['winner']);
       this.model.blueRemaining = data['blueRemaining'];
       this.model.redRemaining = data['redRemaining'];
       this.model.cause = CauseGetter.get(data['cause']);
       this.model.processEntries = this.getProcess(data['process']);
+      this.model.cards = this.getCards(data['cards']);
     });
 
     ConnectionService.send("Podsumowanie", ConnectionPath.SUMMARY);
@@ -47,6 +48,8 @@ export class SummaryComponent extends View implements OnInit {
         return Team.BLUE; 
     }
   }
+
+  // TODO: przenieść to do oddzielnej klasy
 
   private getProcess(summary){
     let entries: SummaryEntry[] = [];
@@ -67,7 +70,24 @@ export class SummaryComponent extends View implements OnInit {
     return entries;
   }
 
-  private getColor(colorText:string){
+  private getCards(summary){
+    console.log(summary);
+    let cards: SummaryCard[] = [];
+    summary.forEach(element=>{
+      let card = new SummaryCard();
+      card.id = element['id'];
+      card.word = element['word'];
+      card.color = this.getColor(element['color']);
+      card.team = this.getTeam(element['team']);
+      console.log(card.team);
+
+      card.question = element['question'];
+      cards.push(card);
+    })
+    return cards;
+  }
+
+  private getColor(colorText:string):WordColor{
     switch(colorText){
       case "BLUE":
         return WordColor.BLUE;

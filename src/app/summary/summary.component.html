@@ -21,6 +21,29 @@
             Przegranym pozostało: {{getLoserRemainings()}}
         </div>
     </div>
+
+    <div class="board grid">
+        <div *ngFor='let card of model.cards' 
+            [ngClass]="{
+              'blue': card.color == color.BLUE,
+              'red': card.color == color.RED,
+              'neutral': card.color == color.NEUTRAL,
+              'killer':card.color == color.KILLER,
+              'lack': card.color == color.LACK,
+              'card ' :true}" 
+              >
+              <span [style.visibility]="card.question == null ? 'hidden':'visible'" 
+                [ngClass]="{
+                    'blue': card.team == team.BLUE,
+                    'red': card.team == team.RED,
+                    'team-color':true
+                }"
+                >
+              </span>
+              <span class="word"> {{card.word}} </span>
+        </div>
+    </div>
+
     <div class="game-statistics">
         Przebieg gry:
         <ol class= 'entry'>

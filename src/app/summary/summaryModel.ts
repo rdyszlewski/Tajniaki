@@ -1,5 +1,5 @@
 import { Team } from '../lobby/team';
-import { WordColor } from '../game/models/word_color';
+import { WordColor as CardColor } from '../game/models/word_color';
 import { WinnerCause } from './winnerCause';
 
 export class SummaryModel{
@@ -8,6 +8,7 @@ export class SummaryModel{
     public blueRemaining: number;
     public redRemaining: number;
     public processEntries: SummaryEntry[];
+    public cards: SummaryCard[];
 
 }
 
@@ -20,5 +21,13 @@ export class SummaryEntry{
 
 export class SummaryWord {
     public word: string;
-    public color: WordColor;
+    public color: CardColor;
+}
+
+export class SummaryCard {
+    public id: number;
+    public word: string;
+    public color: CardColor;
+    public team: Team;
+    public question: string;
 }

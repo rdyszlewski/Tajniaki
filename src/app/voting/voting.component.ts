@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { PlayerService } from '../playerService';
 import { VotingModel } from './votingModel';
 import { VotingEventManager } from './votingEventManager';
-import { DialogService } from '../dialog/dialog.service';
-import { Player } from '../lobby/lobby_player';
 import { View } from '../shared/view';
 
 @Component({
