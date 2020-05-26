@@ -7,6 +7,7 @@ export class ConnectionPath{
     public static readonly CLICK_RESPONSE = "/user/queue/game/click";
     public static readonly ANSWER_RESPONSE = "/user/queue/game/answer";
     public static readonly START_RESPONSE = "/user/queue/game/start";
+    public static readonly NEW_BOSS_RESPONSE = "/user/queue/game/new_boss";
 
     //      boss voting
     public static readonly START_VOTING_RESPONSE = "/user/boss/start";

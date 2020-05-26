@@ -112,7 +112,10 @@ export class VotingEventManager{
         ConnectionService.unsubscribe(ConnectionPath.VOTE_RESPONSE);
         ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
         ConnectionService.unsubscribe(ConnectionPath.VOTING_TIMER_RESPONSE);
+    }
 
+    public closeDialog(){
+        this.dialog.close();
     }
 
     

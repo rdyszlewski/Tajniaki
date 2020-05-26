@@ -6,20 +6,23 @@ import { ConnectionPath } from '../shared/connectionPath';
 import { WordColor } from '../game/models/word_color';
 import { CauseGetter, WinnerCause } from './winnerCause';
 import { Router } from '@angular/router';
+import { View } from '../shared/view';
 
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.css']
 })
-export class SummaryComponent implements OnInit {
+export class SummaryComponent extends View implements OnInit {
 
   team = Team;
   cause = WinnerCause;
   color = WordColor;
   model: SummaryModel = new SummaryModel();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    super();
+   }
 
   ngOnInit(): void {
     ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
@@ -32,8 +35,8 @@ export class SummaryComponent implements OnInit {
     });
 
     ConnectionService.send("Podsumowanie", ConnectionPath.SUMMARY);
-
   }
+
 
   // TODO: przenieśc metodę do odzielnej klasy
   private getTeam(team:string){

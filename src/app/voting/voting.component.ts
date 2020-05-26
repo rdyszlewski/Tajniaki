@@ -6,19 +6,21 @@ import { VotingModel } from './votingModel';
 import { VotingEventManager } from './votingEventManager';
 import { DialogService } from '../dialog/dialog.service';
 import { Player } from '../lobby/lobby_player';
+import { View } from '../shared/view';
 
 @Component({
   selector: 'app-boss',
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.css']
 })
-export class BossComponent implements OnInit {
+export class BossComponent extends View implements OnInit {
 
   model: VotingModel;
   eventManager: VotingEventManager;
 
 
-  constructor(private router: Router, private injector:Injector) { 
+  constructor(private router: Router, private injector:Injector) {
+    super();
     this.model = new VotingModel();
     this.eventManager = new VotingEventManager();
   }
@@ -26,26 +28,15 @@ export class BossComponent implements OnInit {
   ngOnInit(): void {
     this.eventManager.init(this.model, this.router, this.injector);
     this.eventManager.sendStartMessage();
-
+    this.setOnLeave(this.onLeaveEvent);
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  onBeforeunload(event){
-    this.onLeave();
-  }
-
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event) { // back button pressed
-    this.onLeave();    
-  }
-
-  private onLeave(){
+  private onLeaveEvent(){
     this.eventManager.unsubscribeAll();
+    this.eventManager.closeDialog();
   }
 
   isSelected(player:VotingPlayer):boolean{
-    // TODO: sprawdzić, czy to działa
-    // TODO: zmienić to na id
     for(let i =0; i < player.votes.length; i++){
       let id = player.votes[i];
       let votingPlayer = this.model.getPlayer(id);

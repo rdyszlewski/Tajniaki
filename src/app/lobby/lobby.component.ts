@@ -1,48 +1,38 @@
-import { Component, OnInit, Injector, HostListener } from '@angular/core';
+import { Component, OnInit, Injector} from '@angular/core';
 import {Team} from './team';
 import { LobbyModel } from './lobbyModel';
 import { LobbyEventsManager } from './lobbyEventManager';
 import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
-import { GameService } from '../gameService';
 import { Router } from '@angular/router';
+import { View as ViewComponent } from '../shared/view';
 
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css']
 })
-export class LobbyComponent implements OnInit {
+export class LobbyComponent extends ViewComponent implements OnInit {
 
   teams = Team;
   model: LobbyModel = new LobbyModel();
   eventsManager: LobbyEventsManager;
 
-  constructor(private router:Router, private injector: Injector) { 
+  constructor(private router:Router, private injector: Injector) {
+    super(); 
     this.eventsManager = new LobbyEventsManager(router, injector);
   }
 
   ngOnInit(): void {
     this.eventsManager.init(this.model);
     this.eventsManager.sendJoinToLobby();
+    this.setOnLeave(this.onLeaveEvent);
   }
 
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event) { // back button pressed
-    this.onLeave();    
-  }
-
-  @HostListener('window:unload')
-  onUnload(){
-    console.log("Usuwanie subskrybcji");
-    this.onLeave();
-  }
-
-  private onLeave(){
+  private onLeaveEvent(){
     this.eventsManager.unsubscribeAll();
     this.eventsManager.closeDialog();
   }
-
 
   isBlue(player){
     return player.team==Team.BLUE;

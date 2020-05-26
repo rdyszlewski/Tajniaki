@@ -35,6 +35,7 @@ export class GameEventsManager{
 
     private subscribeEvents(){
         this.subscribeStartEvent();
+        this.subscribeNewBossEvent();
         this.subscribeEndEvent();
         this.subscribeQuestionEvent();
         this.subscribeAnswerEvent();
@@ -91,12 +92,9 @@ export class GameEventsManager{
     
     private updateStateAfterReceiveAnswer(message: any) {
         var data = JSON.parse(message.body);
-        // let clientCard = CardCreator.createCard(data['card']);
         let editedCards = data['cardsToUpdate'];
         let cards = this.createCards(editedCards);
         this.updateCards(cards);
-        var correct = data["correct"]; // TODO: coś z tym zrobić
-        // this.model.replaceCard(clientCard.word, clientCard);
         this.updateGameState(data["gameState"]);
         if(!data['active']){
           this.endGame();
@@ -106,6 +104,15 @@ export class GameEventsManager{
       private subscribeStartEvent() {
         ConnectionService.subscribe(ConnectionPath.START_RESPONSE, message => {
           this.startGame(message);
+        });
+      }
+
+      private subscribeNewBossEvent(){
+        ConnectionService.subscribe(ConnectionPath.NEW_BOSS_RESPONSE, message=>{
+          this.startGame(message);
+          this.dialog.setMode(DialogMode.ALERT).setMessage("Poprzedni szeff wyszedł z gry. Zostajesz nowym szefem").setOnOkClick(()=>{
+            this.dialog.close();
+          }).open(DialogComponent);
         });
       }
 
@@ -242,6 +249,7 @@ export class GameEventsManager{
       ConnectionService.unsubscribe(ConnectionPath.CLICK_RESPONSE);
       ConnectionService.unsubscribe(ConnectionPath.ANSWER_RESPONSE);
       ConnectionService.unsubscribe(ConnectionPath.START_RESPONSE);
+      ConnectionService.unsubscribe(ConnectionPath.NEW_BOSS_RESPONSE);
       ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
       ConnectionService.setOnCloseEvent(null);
     }

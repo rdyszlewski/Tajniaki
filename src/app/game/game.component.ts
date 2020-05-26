@@ -11,13 +11,14 @@ import { Team } from '../lobby/team';
 import { Player } from '../lobby/lobby_player';
 import { GamePlayer } from './models/gamePlayer';
 import { Router } from '@angular/router';
+import { View } from '../shared/view';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css'],
 })
-export class GameComponent implements OnInit {
+export class GameComponent extends View implements OnInit  {
 
   team = Team;
   role = Role;
@@ -26,20 +27,17 @@ export class GameComponent implements OnInit {
   eventsManager: GameEventsManager = new GameEventsManager();
   bluePlayers: Player[];
   redPlayers: Player[];
-  constructor(private router:Router, private injector: Injector) { }
+  constructor(private router:Router, private injector: Injector) {
+    super();
+   }
 
   ngOnInit(): void {
     this.preventRightClickMenu();
     this.eventsManager.init(this.model, this.router, this.injector);
     this.sendStartMessage();
-    
+    this.setOnLeave(this.onLeaveEvent);
   }
-
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event) { // back button pressed
-    this.onLeave();    
-  }
-
+  
   @HostListener('window:beforeunload', ['$event'])
   onBeforeunload(event){
     // sprawdzamy, czy połączenie jest aktywne. Nie chcemy, aby komunikat wyskakiwał w przypadku rozłączenia z siecią
@@ -50,12 +48,8 @@ export class GameComponent implements OnInit {
     }
   }
 
-  @HostListener('window:unload')
-  onUnload(){
-    this.onLeave();
-  }
-
-  private onLeave(){
+  private onLeaveEvent(){
+    console.log("WYSZJFAJK FJASJDLFJASKLJFL:AJFjsdhjf sd");
     this.eventsManager.unsubscribeAll();
     this.eventsManager.closeDialog();
   }
