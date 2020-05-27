@@ -1,20 +1,35 @@
-<div id="table">
-  
-  <div class="table-container">
+<div class="game_head_row">
+  <div class="gamer_column">
+    <span class="gamer_column">Gracz: {{getNickname()}}</span>
+    <span class="gamer_column">Drużyna: {{getTeam()=="BLUE"?"Zieleni":"Czerwieni"}}</span>
+    <span class="gamer_column">Funkcja: {{getRole()=="BOSS"?"Szeff":"Zgadywacz"}}</span>
+  </div>
+
+  <div class="round_information_column">
+
+    <div class="current_state">
+      Tura
+      <span id="current_stage" class="state_element">
+        {{model.currentStage==role.BOSS?"Szeffa":"Zgadywacza"}}
+      </span>
+      <span id="current_team" class="state_element">
+        {{model.currentTeam==team.BLUE?"Zielenich":"Czerwienich"}}
+      </span>
+    </div>
+
+    <div id="word_sign">Hasło:</div>
     <div class="word_container">
       <span id="word" class="word_element">{{model.currentWord}} </span>
       <span id="number" class="word_element">{{model.remainingAnswers}}</span>
     </div>
-    <div class="current_state">
-      <span id="current_team" class="state_element">
-        {{model.currentTeam==team.BLUE?"Zieleni":"Czerwieni"}}
-      </span>
-      <span id="current_stage" class="state_element">
-        {{model.currentStage==role.BOSS?"Szeff":"Zgadywacz"}}
-      </span>
-    </div>
-  
-  
+  </div>
+
+</div>
+
+
+
+<div id="table">
+  <div class="table-container">
     <div class="game_container">
       <span id="first_team">
         <div [ngClass]="{
@@ -25,10 +40,10 @@
         <div class="points">
             {{getClientTeam()==team.BLUE ? model.remainingBlue: model.remainingRed}}
         </div>
-       
+
         <div class="first-team-players">
             Gracze
-            <div *ngFor="let player of this.getFirstTeamPlayers()" class="players" 
+            <div *ngFor="let player of this.getFirstTeamPlayers()" class="players"
               [ngClass] = "{
                 'current-player': isCurrentPlayer(player),
                 'players': true
@@ -41,10 +56,10 @@
             </div>
         </div>
       </span>
-  
+
       <div class="board grid">
-     
-          <div *ngFor='let card of model.cards' 
+
+          <div *ngFor='let card of model.cards'
           [ngClass]="{
             'my_answer': isAnswerByClient(card),
             'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
@@ -53,23 +68,23 @@
             'neutral': card.color.toString()=='NEUTRAL',
             'killer':card.color.toString()=='KILLER',
             'lack': card.color.toString()=='LACK',
-            'card ' :true}" 
+            'card ' :true}"
             (click)="eventsManager.sendClick(card.word)" (contextmenu)="eventsManager.sendFlag(card.word)">
-            <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'" 
+            <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'"
               class="click_amount" id="answers"
               tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
             </span>
             <span [hidden]="isWordHidden(card)" class="word"> {{card.word}} </span>
-    
-            <span [style.visibility]="card.flags.length == 0 ? 'hidden':'visible'" 
+
+            <span [style.visibility]="card.flags.length == 0 ? 'hidden':'visible'"
               class="click_amount" id="flags"
               tooltip={{tooltip.getTooltipText(card.flags)}} [options]="tooltip.getTooltipOptions(card.flags)">{{card.flags.length}}
             </span>
           </div>
-        
+
       </div>
-     
-  
+
+
       <span id="second_team">
         <div [ngClass]="{
           'current_team':  model.currentTeam == getClientTeam(),
@@ -82,7 +97,7 @@
 
         <div class="team-players">
           Gracze
-          <div *ngFor="let player of this.getSecondTeamPlayers()" class="players" 
+          <div *ngFor="let player of this.getSecondTeamPlayers()" class="players"
             [ngClass] = "{
               'current-player': isCurrentPlayer(player),
               'players': true
@@ -95,21 +110,16 @@
       </div>
       </span>
     </div>
-    
-  
+
+
     <div *ngIf="isBoss()">
       <input id="wordInput" (keydown)="preventWhispace($event)"/>
       <input id="numberInput" type="number" value=1 min=1 max=9/>
       <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło"/>
     </div>
-    <div id="player_info">
-      <span> {{getNickname()}} </span>
-      <span> {{getClientTeam()==team.BLUE?"Zieleni":"Czerwieni"}} </span>
-      <span> {{getClientRole()==role.BOSS?"Szeff":"Zgadywacz"}} </span>
-    </div>
   </div>
 
-  
-  
+
+
 </div>
- 
+

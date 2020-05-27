@@ -32,8 +32,50 @@
     margin-right:auto;
     position: sticky;
     width: 50%;
+
+  background: rgba(76, 175, 80, 0);
+  border: none;
+  box-shadow: none;
+  height: 2em;
 }
 
 .selected{
     box-shadow: 0 0 10px green;
+}
+
+.vote_table_header{
+  margin: auto;
+  width: 55%;
+  height: 2em;
+  display: block;
+  align-items: center;
+  background: blueviolet;
+}
+
+.vote_table_row{
+  margin: auto;
+  width: 55%;
+  height: 10em;
+  display: block;
+  align-items: center;
+  background: violet;
+}
+
+.gamer_column{
+  width: 80%;
+  float:left;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.votes_column{
+  padding-top: 5px;
+  float:right;
+  width: 20%;
+}
+
+#button_container{
+  width: 15%;
+  margin: auto;
 }

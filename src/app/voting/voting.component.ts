@@ -14,10 +14,10 @@ export class BossComponent implements OnInit {
 
   model: VotingModel;
   eventManager: VotingEventManager;
-  constructor(private router: Router) { 
+  constructor(private router: Router) {
     this.model = new VotingModel();
     this.eventManager = new VotingEventManager();
-    
+
   }
 
   ngOnInit(): void {
@@ -36,5 +36,9 @@ export class BossComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  continue(): void {
+    //TODO:przejście do gry po kliknięciu przycisku
   }
 }

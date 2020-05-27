@@ -1,28 +1,32 @@
-<div id="connection_status">
-    <div>Status połączenia</div>
-    <div> 
-        {{isConnected()?"Połączono":"Nie połączono"}}
-    </div>
-</div>
-<div id="menu">
-        <img src="../../assets/cat.jpg" alt="Italian Trulli" id="logo">
-        <div class="form_row">
-            <div [hidden]="nickname_editing">
-                <span class="value_column">{{getNickname()}}</span> 
-                <input class="button_column" type="submit" value="Zmień" (click)="setChangeNicknameState()" />
-            </div>
-            <div [hidden]="!nickname_editing">
-                <input id="nickname_input" class="value_column"/> 
-                <input class="button_column" type="submit" value="Zmień" (click)="confirmNickname()">
-            </div>
-        </div>
+<!--<img src="../../assets/cat.jpg" alt="Italian Trulli" id="logo">-->
+<div id="logo1">Tajniaki</div>
 
-        <div id="menu_entries">
-            <input type="submit" value="Rozpocznij" (click)="start()" *ngIf="isConnected()" class="button-item card"/>
-            <input type="submit" value="Połącz" (click) ="connect()" *ngIf="!isConnected()" class="button-item card"/>
-            <input type="submit" value="Wyjście" (click)="exit()" class="button-item card" />
-        </div>  
-    
+<div class="form_row">
+  <div class="name_column">Nazwa gracza: </div>
+  <div [hidden]="nickname_editing">
+
+    <span class="value_column" id="nickname">{{getNickname()}}</span>
+    <input class="button_column" type="submit" value="Zmień" (click)="setChangeNicknameState()" />
+  </div>
+  <div [hidden]="!nickname_editing">
+    <input id="nickname_input" class="value_column"/>
+    <input class="button_column" type="submit" value="Zmień" (click)="confirmNickname()">
+  </div>
+</div>
+
+<div class="form_row">
+  <div class="name_column">Status połączenia: </div>
+  <div [hidden]="!isConnected()">
+    <span class="value_column" id="conected">Połączono</span>
+  </div>
+  <div [hidden]="isConnected()">
+    <span class="value_column" id="disconected">Nie połączono</span>
+    <input class="button_column" type="submit" value="Połącz" (click) ="connect()"/>
+  </div>
+</div>
+
+<div id="menu">
+
         <input type="submit" value="Gra" (click)="startGame()" class="button-item card"/>
         <input type="submit" value="Głosowanie" (click)="startVoting()" class="button-item card" />
 

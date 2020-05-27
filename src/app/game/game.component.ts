@@ -32,7 +32,7 @@ export class GameComponent implements OnInit {
     this.preventRightClickMenu();
     this.eventsManager.init(this.model, this.router);
     this.sendStartMessage();
-    
+
   }
 
   private preventRightClickMenu() {
@@ -89,6 +89,14 @@ export class GameComponent implements OnInit {
 
   getNickname(){
     return PlayerService.getNickname();
+  }
+
+  getRole(){
+    return PlayerService.getRole();
+  }
+
+  getTeam(){
+    return PlayerService.getTeam();
   }
 
   getFirstTeamPlayers(){
