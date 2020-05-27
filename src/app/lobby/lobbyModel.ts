@@ -1,10 +1,9 @@
 import { Player } from './lobby_player';
 import { Team } from './team';
+import { PlayerService } from '../playerService';
 
 export class LobbyModel{
 
-    // TODO: dodać informacje o minimalnej i maksymalnej liczbie graczy
-    private clientPlayer: Player;
     private minPlayersInTeam: number;
     private maxPlayerInTeam: number;
     private players: Player[] = [];
@@ -51,15 +50,16 @@ export class LobbyModel{
         return this.players.filter(x=>x.team == team);
     }
 
-    public setClientPlayer(player){
-        this.clientPlayer = player;
-    }
-
     public getClientPlayer(){
-        return this.clientPlayer;
+        for(let i=0; i < this.players.length; i++){
+            let player = this.players[i];
+            if(player.id == PlayerService.getId()){
+                return player;
+            }
+        }
     }
 
     public isClientPlayer(player:Player):boolean{
-        return player.id == this.clientPlayer.id;
+        return player.id == PlayerService.getId();
     }
 }

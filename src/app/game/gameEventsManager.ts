@@ -1,4 +1,4 @@
-import { Team } from '../lobby/team';
+import { Team, TeamAdapter } from '../lobby/team';
 import { ConnectionService } from '../connection.service';
 import { GameState } from './models/gameState';
 import { Role } from './role';
@@ -120,7 +120,7 @@ export class GameEventsManager{
         var data = JSON.parse(message.body);
         PlayerService.setNickname(data['nickname']);
         PlayerService.setRole(this.getRole(data["playerRole"]));
-        PlayerService.setTeam(this.getTeam(data['playerTeam']));
+        PlayerService.setTeam(TeamAdapter.getTeam(data['playerTeam']));
         this.updateGameState(data["gameState"]);
         this.model.setCards(this.createCards(data["cards"]));
         let playersList = this.getPlayersList(data['players']);
@@ -134,14 +134,14 @@ export class GameEventsManager{
           player.id = x['id'];
           player.nickname = x['nickname'];
           player.role = this.getRole(x['role']);
-          player.team = this.getTeam(x['team']);
+          player.team = TeamAdapter.getTeam(x['team']);
           playersResult.push(player);
         });
         return playersResult;
     }
 
     private updateGameState(data){
-        this.model.currentTeam = this.getTeam(data["currentTeam"]);
+        this.model.currentTeam = TeamAdapter.getTeam(data["currentTeam"]);
         this.model.currentStage = this.getRole(data["currentStage"]);
         this.model.remainingBlue = data["remainingBlue"];
         this.model.remainingRed = data["remainingRed"];
@@ -149,10 +149,6 @@ export class GameEventsManager{
         this.model.remainingAnswers = data["remainingAnswers"];
     }
 
-    // TODO: przenieśc to do innej metody
-    private getTeam(teamText){
-        return teamText == "BLUE" ? Team.BLUE :Team.RED;
-    }
 
     private getRole(roleText){
         return roleText == "BOSS" ? Role.BOSS: Role.PLAYER;

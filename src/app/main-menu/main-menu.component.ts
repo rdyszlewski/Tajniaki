@@ -34,12 +34,12 @@ export class MainMenuComponent implements OnInit {
     if(!ConnectionService.isConnected()){
       this.connect();
     }
-    this.testSubscribeIdEvent();
-
+    // this.testSubscribeIdEvent();
   }
 
   private testSubscribeIdEvent(){
     ConnectionService.subscribe("/user/queue/lobby/id", message => {
+      console.log("Czy to się wykonuje?");
       PlayerService.setId(parseInt(message.body));
     });
     ConnectionService.send("DAJ","/app/test/getid");

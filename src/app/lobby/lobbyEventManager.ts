@@ -3,7 +3,7 @@ import { LobbyModel } from './lobbyModel';
 import { PlayerService } from '../playerService';
 import { ConnectionPath } from '../shared/connectionPath';
 import { Player } from './lobby_player';
-import { Team } from './team';
+import { Team, TeamAdapter } from './team';
 import { GameService } from '../gameService';
 import { Router } from '@angular/router';
 import { PlayerAdapter } from '../shared/adapters/playerAdapter';
@@ -78,7 +78,7 @@ export class LobbyEventsManager{
     private setPlayerTeam(message: any) {
         var json = JSON.parse(message.body);
         var player = this.model.getPlayerById(json['id']);
-        player.team = this.getTeam(json['team']);
+        player.team = TeamAdapter.getTeam(json['team']);
     }
 
     private subscribePlayerConnect() {
@@ -93,6 +93,7 @@ export class LobbyEventsManager{
         ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (message) => {
             var data = JSON.parse(message.body);
             PlayerService.setId(data['playerId']);
+            console.log("Id podłączonego gracza " + PlayerService.getId());
             this.setSettings(data['settings']);
             this.setPlayers(data['players']);
             this.model.setMinPlayersInTeam(data['minPlayersInTeam']);
@@ -100,16 +101,6 @@ export class LobbyEventsManager{
         });
     }
 
-    private getTeam(teamText:string):Team{
-        switch(teamText){
-          case "RED":
-            return Team.RED;
-          case "BLUE":
-            return Team.BLUE;
-          case "OBSERVER":
-            return Team.OBSERVER;
-        }
-    }
 
     private setSettings(settings): void {
         let maxTeamSize = settings['maxTeamSize'];
@@ -120,17 +111,7 @@ export class LobbyEventsManager{
         players.forEach(playerElement => {
             var player = PlayerAdapter.createPlayer(playerElement);
             this.model.addPlayer(player);
-            if (this.isClientPlayer(player)){
-                this.model.setClientPlayer(player);
-            };
         });
-    }
-
-
-    private isClientPlayer(player:Player):boolean{
-        // TODO: zastanwoić się, co zrobić w sytuacji, w której więcej graczy ustawi sobie ten sam nick
-        // TODO: zrobić to za pomocą 
-        return player.nickname == PlayerService.getNickname();
     }
 
     public sendReady(){

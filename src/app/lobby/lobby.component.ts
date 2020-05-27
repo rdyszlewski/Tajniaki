@@ -14,7 +14,7 @@ import { View as ViewComponent } from '../shared/view';
 })
 export class LobbyComponent extends ViewComponent implements OnInit {
 
-  teams = Team;
+  team = Team;
   model: LobbyModel = new LobbyModel();
   eventsManager: LobbyEventsManager;
 
@@ -43,7 +43,7 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   isObserver(player){
-    return player.team == Team.OBSERVER;
+    return player.team == Team.LACK;
   }
 
   countBlue(){
@@ -55,7 +55,7 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   countObserver(){
-    return this.model.getPlayers(Team.OBSERVER).length;
+    return this.model.getPlayers(Team.LACK).length;
   }
 
   autoJoinToTeam(){

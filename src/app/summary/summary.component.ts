@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SummaryModel, SummaryEntry, SummaryWord, SummaryCard } from './summaryModel';
-import { Team } from '../lobby/team';
+import { Team, TeamAdapter } from '../lobby/team';
 import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
 import { WordColor } from '../game/models/word_color';
@@ -27,7 +27,7 @@ export class SummaryComponent extends View implements OnInit {
   ngOnInit(): void {
     ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
       let data = JSON.parse(message.body);
-      this.model.winner = this.getTeam(data['winner']);
+      this.model.winner = TeamAdapter.getTeam(data['winner']);
       this.model.blueRemaining = data['blueRemaining'];
       this.model.redRemaining = data['redRemaining'];
       this.model.cause = CauseGetter.get(data['cause']);
@@ -38,26 +38,13 @@ export class SummaryComponent extends View implements OnInit {
     ConnectionService.send("Podsumowanie", ConnectionPath.SUMMARY);
   }
 
-
-  // TODO: przenieśc metodę do odzielnej klasy
-  private getTeam(team:string){
-    switch(team){
-      case "RED":
-        return Team.RED;
-      case "BLUE":
-        return Team.BLUE; 
-    }
-  }
-
-  // TODO: przenieść to do oddzielnej klasy
-
   private getProcess(summary){
     let entries: SummaryEntry[] = [];
     summary.forEach(element => {
       let entry = new SummaryEntry();
       entry.question = element['question'];
       entry.number = element['number'];
-      entry.team = this.getTeam(element['team']);
+      entry.team = TeamAdapter.getTeam(element['team']);
       entry.answers = [];
       element['answers'].forEach(x=>{
         let answer = new SummaryWord();
@@ -78,7 +65,7 @@ export class SummaryComponent extends View implements OnInit {
       card.id = element['id'];
       card.word = element['word'];
       card.color = this.getColor(element['color']);
-      card.team = this.getTeam(element['team']);
+      card.team = TeamAdapter.getTeam(element['team']);
       console.log(card.team);
 
       card.question = element['question'];

@@ -17,6 +17,7 @@ import { Role } from './game/role';
     }
 
     public static setId(id:number):void{
+      console.log("Zmieniono id");
       this.id = id;
     }
   

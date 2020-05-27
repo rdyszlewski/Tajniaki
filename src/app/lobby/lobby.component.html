@@ -9,7 +9,7 @@
                 </span>
             </th>
         </tr>
-        <tr *ngFor="let player of model.getPlayers(teams.BLUE)">
+        <tr *ngFor="let player of model.getPlayers(team.BLUE)">
             <td [ngClass]="{
                 'current_player': model.isClientPlayer(player)
             }">
@@ -27,7 +27,7 @@
                 </span> 
             </th>
         </tr>
-        <tr *ngFor="let player of model.getPlayers(teams.RED)">
+        <tr *ngFor="let player of model.getPlayers(team.RED)">
             <td [ngClass]="{
                 'current_player': model.isClientPlayer(player)
             }">
@@ -41,7 +41,7 @@
         <tr>
             <th>Nieprzydzieleni ({{countObserver()}})</th>
         </tr>
-        <tr *ngFor="let player of model.getPlayers(teams.OBSERVER)">
+        <tr *ngFor="let player of model.getPlayers(team.LACK)">
             <td [ngClass]="{
                 'current_player': model.isClientPlayer(player)
             }">
