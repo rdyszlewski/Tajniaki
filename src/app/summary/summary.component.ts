@@ -97,7 +97,7 @@ export class SummaryComponent extends View implements OnInit {
   }
 
   backToMenu(){
-    this.router.navigate(['mainmenu']);
+    this.router.navigate(['lobby']);
   }
 
   getLoserRemainings(){
