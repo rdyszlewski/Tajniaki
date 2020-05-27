@@ -2,6 +2,7 @@ export class ConnectionPath{
     // LISTENING
 
     //      game
+    public static readonly POSSIBLE_GAME_RESPONSE ="/user/queue/game/possible_game";
     public static readonly END_GAME_RESPONSE  = "/user/queue/game/end_game";
     public static readonly QUESTION_RESPONSE = "/user/queue/game/question";
     public static readonly CLICK_RESPONSE = "/user/queue/game/click";
@@ -31,6 +32,7 @@ export class ConnectionPath{
 
     // SENDING
     //      game
+    public static readonly FREE_GAME = '/app/game/possible_game';
     public static readonly GAME_START = "/app/game/start";
     public static readonly CLICK = "/app/game/click";
     public static readonly QUESTION = "/app/game/question"

@@ -7,6 +7,7 @@ import { DialogService } from '../dialog/dialog.service';
 import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
 import { CookieService } from 'ngx-cookie-service';
+import { ConnectionPath } from '../shared/connectionPath';
 
 (window as any).global = window;
 
@@ -61,6 +62,7 @@ export class MainMenuComponent implements OnInit {
     this.infoDialog.setMessage("Łączenie...").setMode(DialogMode.INFO).open(DialogComponent);
     ConnectionService.connect('localhost', 8080, ()=>{
       this.testSubscribeIdEvent();
+      this.subscribeCheckPossibleGame();
       setTimeout(() => this.infoDialog.close(), this.CONNECTION_DIALOG_DELAY);
     });
     this.startConnectionTimeout();
@@ -79,6 +81,17 @@ export class MainMenuComponent implements OnInit {
     this.infoDialog.setMessage("Połączenie nieudane").setMode(DialogMode.WARNING)
         .setOnOkClick(()=>this.infoDialog.close())
         .open(DialogComponent);
+  }
+
+  private subscribeCheckPossibleGame(){
+    ConnectionService.subscribe(ConnectionPath.POSSIBLE_GAME_RESPONSE, message=>{
+      console.log(message.body);
+      if(message.body =='true'){
+        this.router.navigate(['lobby']);
+      } else {
+        this.infoDialog.setMode(DialogMode.WARNING).setMessage("Aktualnie nie ma wolnych gier. Poczekaj.").setOnOkClick(()=>this.infoDialog.close()).open(DialogComponent);
+      }
+    });
   }
 
   isConnected():boolean{
@@ -134,5 +147,9 @@ export class MainMenuComponent implements OnInit {
     if (event.keyCode === 13) {
       this.confirmNickname();
     }
+  }
+
+  sendCheckPossibleGame(){
+    ConnectionService.send("?", ConnectionPath.FREE_GAME);
   }
 }
