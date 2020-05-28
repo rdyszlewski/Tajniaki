@@ -24,10 +24,13 @@ export class SummaryComponent extends View implements OnInit {
     super();
    }
 
+   // TODO: stworzyć klasę, w której będzie obsługa wszystkich wydarzeń
   ngOnInit(): void {
     ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
       let data = JSON.parse(message.body);
       this.model.winner = TeamAdapter.getTeam(data['winner']);
+      this.model.bluePoints = data['bluePoints'];
+      this.model.redPoints = data['redPoints'];
       this.model.blueRemaining = data['blueRemaining'];
       this.model.redRemaining = data['redRemaining'];
       this.model.cause = CauseGetter.get(data['cause']);
