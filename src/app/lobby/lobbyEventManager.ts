@@ -3,21 +3,27 @@ import { LobbyModel } from './lobbyModel';
 import { PlayerService } from '../playerService';
 import { ConnectionPath } from '../shared/connectionPath';
 import { Player } from './lobby_player';
-import { Team } from './team';
+import { Team, TeamAdapter } from './team';
 import { GameService } from '../gameService';
 import { Router } from '@angular/router';
 import { PlayerAdapter } from '../shared/adapters/playerAdapter';
+import { DialogService } from '../dialog/dialog.service';
+import { Injector } from '@angular/core';
+import { DialogMode } from '../dialog/dialogMode';
+import { DialogComponent } from '../dialog/dialog.component';
 
 export class LobbyEventsManager{
     
     private model: LobbyModel;
+    private dialog: DialogService;
 
-    public constructor(private router:Router){
+    public constructor(private router:Router, private injector:Injector){
 
     }
 
     public init(model:LobbyModel){
         this.model = model;
+        this.dialog = this.injector.get(DialogService);
         
         this.subscribeJoinToLobbyResponse();
         this.subscribePlayerConnect();
@@ -31,7 +37,11 @@ export class LobbyEventsManager{
     private subscribeOnCloseEvent(){
         ConnectionService.setOnCloseEvent(()=>{
             this.unsubscribeAll();
-            this.router.navigate(['mainmenu']); 
+            this.dialog.setMessage("Rozłączono z serwerem").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+                this.unsubscribeAll();
+                this.dialog.close();
+                this.router.navigate(['mainmenu']); 
+            }).open(DialogComponent);
         });
     }
 
@@ -47,6 +57,7 @@ export class LobbyEventsManager{
         ConnectionService.subscribe(ConnectionPath.LOBBY_END_RESPONSE, message => {
             // TODO: uruchamianie kolejnego ekranu
             console.log("Rozpoczynamy grę");
+            this.router.navigate(['voting']);
         });
     }
 
@@ -66,9 +77,8 @@ export class LobbyEventsManager{
 
     private setPlayerTeam(message: any) {
         var json = JSON.parse(message.body);
-        console.log(json);
         var player = this.model.getPlayerById(json['id']);
-        player.team = this.getTeam(json['team']);
+        player.team = TeamAdapter.getTeam(json['team']);
     }
 
     private subscribePlayerConnect() {
@@ -82,21 +92,15 @@ export class LobbyEventsManager{
     private subscribeJoinToLobbyResponse() {
         ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (message) => {
             var data = JSON.parse(message.body);
+            PlayerService.setId(data['playerId']);
+            console.log("Id podłączonego gracza " + PlayerService.getId());
             this.setSettings(data['settings']);
             this.setPlayers(data['players']);
+            this.model.setMinPlayersInTeam(data['minPlayersInTeam']);
+            this.model.setMaxPlayersInTeam(data['maxPlayersInTeam']);
         });
     }
 
-    private getTeam(teamText:string):Team{
-        switch(teamText){
-          case "RED":
-            return Team.RED;
-          case "BLUE":
-            return Team.BLUE;
-          case "OBSERVER":
-            return Team.OBSERVER;
-        }
-    }
 
     private setSettings(settings): void {
         let maxTeamSize = settings['maxTeamSize'];
@@ -107,17 +111,7 @@ export class LobbyEventsManager{
         players.forEach(playerElement => {
             var player = PlayerAdapter.createPlayer(playerElement);
             this.model.addPlayer(player);
-            if (this.isClientPlayer(player)){
-                this.model.setClientPlayer(player);
-            };
         });
-    }
-
-
-    private isClientPlayer(player:Player):boolean{
-        // TODO: zastanwoić się, co zrobić w sytuacji, w której więcej graczy ustawi sobie ten sam nick
-        // TODO: zrobić to za pomocą 
-        return player.nickname == PlayerService.getNickname();
     }
 
     public sendReady(){
@@ -143,5 +137,9 @@ export class LobbyEventsManager{
         ConnectionService.unsubscribe(ConnectionPath.CHANGE_TEAM_REPONSE);
         ConnectionService.unsubscribe(ConnectionPath.CONNECT_RESPONSE);
         ConnectionService.unsubscribe(ConnectionPath.PLAYERS_RESPONSE);
+    }
+
+    public closeDialog(){
+        this.dialog.close();
     }
 }

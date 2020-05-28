@@ -4,36 +4,51 @@ import { ConnectionPath } from '../shared/connectionPath';
 import { VotingPlayer } from './voting_player';
 import { Router } from '@angular/router';
 import { PlayerAdapter } from '../shared/adapters/playerAdapter';
+import { Injector } from '@angular/core';
+import { DialogService } from '../dialog/dialog.service';
+import { DialogMode } from '../dialog/dialogMode';
+import { DialogComponent } from '../dialog/dialog.component';
 
 export class VotingEventManager{
 
     private model:VotingModel;
     private router: Router;
 
-    public init(model:VotingModel, router:Router):void{
+    private dialog: DialogService;
+
+    public init(model:VotingModel, router:Router, injector:Injector):void{
         this.model = model;
         this.router = router;
+        this.dialog = injector.get(DialogService);
 
         this.subscribeStart();
         this.subscribeEnd();
         this.subscribeVote();
         this.subscribeDisconnect();
         this.setOncloseEvent();
+        this.subscribeTimer();
+    }
+
+    private subscribeTimer(){
+        ConnectionService.subscribe(ConnectionPath.VOTING_TIMER_RESPONSE, message=>{
+            this.model.setTime(message.body);
+        });
     }
 
     private subscribeStart(){
         ConnectionService.subscribe(ConnectionPath.START_VOTING_RESPONSE, message=>{
-            this.updateList(message);
+            let data = JSON.parse(message.body);
+            this.model.setTime(data['time']);
+            this.updateList(data['players']);
         });
     }
 
-    private updateList(message){
+    private updateList(playersList){
         // TODO: na razie listy są zastępowane, a nie tylo aktualizowane. Później można to naprawić 
-        let playersList = JSON.parse(message.body);
-          playersList.forEach(element => {
-            let player = this.createVotingPlayer(element);
-            this.model.addPlayer(player);
-          });
+        playersList.forEach(element => {
+        let player = this.createVotingPlayer(element);
+        this.model.addPlayer(player);
+        });
     }
 
     private createVotingPlayer(element){
@@ -49,7 +64,6 @@ export class VotingEventManager{
 
     private subscribeVote(){
         ConnectionService.subscribe(ConnectionPath.VOTE_RESPONSE, message=>{
-            console.log(message);
             let data = JSON.parse(message.body);
             data.forEach(element=>{
               let player = this.model.getPlayer(element['id']);
@@ -60,8 +74,11 @@ export class VotingEventManager{
 
     private setOncloseEvent(){
         ConnectionService.setOnCloseEvent(()=>{
-            alert("Nastąpiło rozłączenie z serwerem");
-            this.router.navigate(['mainmenu']);
+            this.unsubscribeAll();
+            this.dialog.setMessage("Nastąpiło rozłączenie z serwerem").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+                this.dialog.close();
+                this.router.navigate(['mainmenu']);
+            }).open(DialogComponent);
           });
     }
 
@@ -72,9 +89,11 @@ export class VotingEventManager{
             this.model.removePlayerById(player.id);
             let currentStep = data['currentStep'];
             if(currentStep == "LOBBY"){
-                alert("Zbyt mało graczy. Powrót do lobby"); // TODO: dowiedzieć się, czy można to czerpać napisy z zewnątrz
-                this.unsubscribeAll();
-                this.router.navigate(['lobby']); // TODO: umieścić to w jakiś stałych
+                this.dialog.setMessage("Zbyt mało graczy. Powrót do lobby").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+                    this.unsubscribeAll();
+                    this.dialog.close();
+                    this.router.navigate(['lobby']);
+                }).open(DialogComponent);
             }
           });
     }
@@ -92,6 +111,13 @@ export class VotingEventManager{
         ConnectionService.unsubscribe(ConnectionPath.END_VOTING_RESPONSE);
         ConnectionService.unsubscribe(ConnectionPath.VOTE_RESPONSE);
         ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
+        ConnectionService.unsubscribe(ConnectionPath.VOTING_TIMER_RESPONSE);
     }
+
+    public closeDialog(){
+        this.dialog.close();
+    }
+
+    
 
 }   

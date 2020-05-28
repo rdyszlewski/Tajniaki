@@ -59,7 +59,7 @@
 
       <div class="board grid">
 
-          <div *ngFor='let card of model.cards'
+          <div *ngFor='let card of model.getCards()'
           [ngClass]="{
             'my_answer': isAnswerByClient(card),
             'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
@@ -69,7 +69,7 @@
             'killer':card.color.toString()=='KILLER',
             'lack': card.color.toString()=='LACK',
             'card ' :true}"
-            (click)="eventsManager.sendClick(card.word)" (contextmenu)="eventsManager.sendFlag(card.word)">
+            (click)="eventsManager.sendClick(card.id)" (contextmenu)="eventsManager.sendFlag(card.id)">
             <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'"
               class="click_amount" id="answers"
               tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
@@ -113,9 +113,29 @@
 
 
     <div *ngIf="isBoss()">
-      <input id="wordInput" (keydown)="preventWhispace($event)"/>
-      <input id="numberInput" type="number" value=1 min=1 max=9/>
-      <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło"/>
+      <input id="wordInput" (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()' (keyup.enter)="eventsManager.sendBossMessage()"/>
+      <input id="numberInput" type="number" value=1 min=1 max="{{getRemainingWordsInPlayerTeam()}}" [disabled]='!isPlayerTurn() ' (keyup.enter)="eventsManager.sendBossMessage()"/>
+      <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło" [disabled]='!isPlayerTurn()'/>
+    </div>
+    <div *ngIf="!isBoss()">
+      <!-- Dla uproszczenia deklarujemy zmienną. Do tego celu korzystamy z ngId -->
+      <div  *ngIf="model.getPassCard() as card"
+          [ngClass]="{
+            'my_answer': isAnswerByClient(card),
+            'card ' :true,
+            'pass-button':true}"
+            (click)="eventsManager.sendClick(card.id)">
+            <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'"
+              class="click_amount" id="answers"
+              tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
+            </span>
+            <span class="word"> Pomiń </span>
+          </div>
+    </div>
+    <div id="player_info">
+      <span> {{getNickname()}} </span>
+      <span> {{getClientTeam()==team.BLUE?"Zieleni":"Czerwieni"}} </span>
+      <span> {{getClientRole()==role.BOSS?"Szeff":"Zgadywacz"}} </span>
     </div>
   </div>
 

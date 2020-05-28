@@ -7,9 +7,19 @@ import { Role } from './game/role';
   })
   export class PlayerService {
   
-    private static nickname: string = "Player";
+    private static id: number; 
+    private static nickname: string = "Player"; 
     private static role: Role;
     private static team: Team;
+
+    public static getId():number{
+      return this.id;
+    }
+
+    public static setId(id:number):void{
+      console.log("Zmieniono id");
+      this.id = id;
+    }
   
     public static getNickname():string{
         return this.nickname;

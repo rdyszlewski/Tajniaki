@@ -1,16 +1,23 @@
-<h3>Wybór kapitana</h3>
+<!--<h3>Wybór kapitana</h3>-->
 
-Gracz:Nazwa gracza
+<!--Gracz:Nazwa gracza-->
 
-<div class="vote_table_header">
-  <div class="gamer_column">Nazwa gracza</div>
-  <div class="votes_column">Głosy</div>
-</div>
+<!--<div class="vote_table_header">-->
+<!--  <div class="gamer_column">Nazwa gracza</div>-->
+<!--  <div class="votes_column">Głosy</div>-->
+<!--</div>-->
 
-<div class="vote_table_row">
-  <div *ngFor="let player of model.getPlayers()" class="candidate">
-    <input class="gamer_column" (click)="eventManager.sendVote(player)" type="submit" value='{{player.nickname}}'
-           [ngClass]="{
+<!--<div class="vote_table_row">-->
+<!--  <div *ngFor="let player of model.getPlayers()" class="candidate">-->
+<!--    <input class="gamer_column" (click)="eventManager.sendVote(player)" type="submit" value='{{player.nickname}}'-->
+<!--           [ngClass]="{-->
+<div class="voting">
+    <div id="timer">
+        {{model.getTimeFormat()}}
+    </div>
+    <div *ngFor="let player of model.getPlayers()" class="candidate">
+        <input (click)="eventManager.sendVote(player)" type="submit" value='{{player.nickname}}'
+        [ngClass]="{
             'selected': isSelected(player),
             'button-item card inline': true
         }"

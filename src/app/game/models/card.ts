@@ -5,8 +5,8 @@ export class Card{
     word:string;
     color:WordColor;
     checked: boolean;
-    answers: string[];
-    flags: string[];
+    answers: number[];
+    flags: number[];
 
     constructor(id, word, color, checked){
         this.id = id;
@@ -16,7 +16,6 @@ export class Card{
         this.answers = [];
         this.flags = [];
     }
-    
 }
 
 export class CardCreator{
@@ -24,6 +23,7 @@ export class CardCreator{
     public static createCard(data):Card{
         let id = data['id'];
         let word = data["word"];
+        // TODO: tworzneie koloru jest do poprawy
         let color = data['color'];
         let checked = data['checked'];
         let card = new Card(id, word, color, checked);

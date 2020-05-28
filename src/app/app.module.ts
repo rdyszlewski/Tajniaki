@@ -12,6 +12,10 @@ import { BossComponent } from './voting/voting.component';
 import { GameComponent } from './game/game.component';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { TooltipCreator } from './game/tooltip_creator';
+import { DialogComponent } from './dialog/dialog.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SummaryComponent } from './summary/summary.component';
+import { CookieService} from "ngx-cookie-service"
 
 @NgModule({
   declarations: [
@@ -19,15 +23,18 @@ import { TooltipCreator } from './game/tooltip_creator';
     MainMenuComponent,
     LobbyComponent,
     BossComponent,
-    GameComponent
+    GameComponent,
+    DialogComponent,
+    SummaryComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CONST_ROUTING,
     TooltipModule,
+    BrowserAnimationsModule
   ],
-  providers: [ConnectionService],
+  providers: [ConnectionService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

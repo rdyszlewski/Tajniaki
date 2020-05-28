@@ -1,0 +1,51 @@
+@import '../../styles.css';
+
+.blue-entry{
+    /* background-color: blue; */
+    color: blue;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.red-entry{
+    /* background-color: red; */
+    color: red;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.entry{
+    font-size: 1.5em;
+}
+
+.red-answer{
+    color: red;
+}
+
+.blue-answer {
+    color: blue;
+}
+
+.killer-answer {
+    color: grey;
+}
+
+.neutral-answer {
+    color: yellow;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+    transform-style: preserve-3d;
+}
+
+.team-color{
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+}
+
+.card:hover{
+    transform: none;
+    box-shadow: none;
+}

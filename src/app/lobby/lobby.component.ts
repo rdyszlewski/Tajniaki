@@ -1,32 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector} from '@angular/core';
 import {Team} from './team';
 import { LobbyModel } from './lobbyModel';
 import { LobbyEventsManager } from './lobbyEventManager';
 import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
-import { GameService } from '../gameService';
 import { Router } from '@angular/router';
+import { View as ViewComponent } from '../shared/view';
 
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css']
 })
-export class LobbyComponent implements OnInit {
+export class LobbyComponent extends ViewComponent implements OnInit {
 
-  teams = Team;
+  team = Team;
   model: LobbyModel = new LobbyModel();
   eventsManager: LobbyEventsManager;
 
-  constructor(private router:Router) { 
-    this.eventsManager = new LobbyEventsManager(router);
+  constructor(private router:Router, private injector: Injector) {
+    super(); 
+    this.eventsManager = new LobbyEventsManager(router, injector);
   }
 
   ngOnInit(): void {
     this.eventsManager.init(this.model);
     this.eventsManager.sendJoinToLobby();
+    this.setOnLeave(this.onLeaveEvent);
   }
 
+  private onLeaveEvent(){
+    this.eventsManager.unsubscribeAll();
+    this.eventsManager.closeDialog();
+  }
 
   isBlue(player){
     return player.team==Team.BLUE;
@@ -37,7 +43,7 @@ export class LobbyComponent implements OnInit {
   }
 
   isObserver(player){
-    return player.team == Team.OBSERVER;
+    return player.team == Team.LACK;
   }
 
   countBlue(){
@@ -49,8 +55,7 @@ export class LobbyComponent implements OnInit {
   }
 
   countObserver(){
-    console.log(this.model.getPlayers(Team.OBSERVER));
-    return this.model.getPlayers(Team.OBSERVER).length;
+    return this.model.getPlayers(Team.LACK).length;
   }
 
   autoJoinToTeam(){
@@ -62,15 +67,14 @@ export class LobbyComponent implements OnInit {
   }
 
   canJoinToBlue(){
-    return this.countBlue() < GameService.getMaxTeamSize();
+    return this.countBlue() < this.model.getMaxPlayersInTeam();
   }
 
   canJoinToRed(){
-    return this.countRed() < GameService.getMaxTeamSize();
+    return this.countRed() < this.model.getMaxPlayersInTeam();
   }
 
   canSetReady(){
     return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
   }
-
 }

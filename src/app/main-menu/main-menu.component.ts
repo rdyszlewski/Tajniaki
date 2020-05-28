@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConnectionService } from '../connection.service';
 import { PlayerService } from '../playerService';
 import * as $ from 'jquery';
+import { DialogService } from '../dialog/dialog.service';
+import { DialogMode } from '../dialog/dialogMode';
+import { DialogComponent } from '../dialog/dialog.component';
+import { CookieService } from 'ngx-cookie-service';
+import { ConnectionPath } from '../shared/connectionPath';
 
 (window as any).global = window;
 
@@ -13,30 +18,84 @@ import * as $ from 'jquery';
 })
 export class MainMenuComponent implements OnInit {
 
-  nickname_editing:boolean;
+  private readonly CONNECTION_DIALOG_DELAY = 500;
+  private readonly CONNECTION_TIMEOUT = 5000;
 
-  constructor(private router: Router) {
-    this.connect();
+  nickname_editing:boolean;
+  infoDialog: DialogService;
+
+  constructor(private router: Router, private injector:Injector, private cookieService: CookieService) {
+    
   }
 
-
   ngOnInit(): void {
+    this.infoDialog = this.injector.get(DialogService);
+    this.setPlayerNickname();
+    if(!ConnectionService.isConnected()){
+      this.connect();
+    }
+    // this.testSubscribeIdEvent();
+  }
 
-    // throw new Error("Method not implemented.");
+  private testSubscribeIdEvent(){
+    ConnectionService.subscribe("/user/queue/lobby/id", message => {
+      console.log("Czy to się wykonuje?");
+      PlayerService.setId(parseInt(message.body));
+    });
+    ConnectionService.send("DAJ","/app/test/getid");
+  }
+
+  private setPlayerNickname(){
+    const nickname = this.readNickname();
+    if(nickname){
+      PlayerService.setNickname(nickname);
+    } else {
+      PlayerService.setNickname("Player");
+    }
   }
 
   start(){
-    console.log("start");
     this.router.navigate(['lobby']);
   }
 
   connect(){
-    ConnectionService.connect('localhost', 8080, ()=>{});
+    this.infoDialog.setMessage("Łączenie...").setMode(DialogMode.INFO).open(DialogComponent);
+    ConnectionService.connect('localhost', 8080, ()=>{
+      this.testSubscribeIdEvent();
+      this.subscribeCheckPossibleGame();
+      setTimeout(() => this.infoDialog.close(), this.CONNECTION_DIALOG_DELAY);
+    });
+    this.startConnectionTimeout();
+  }
+
+  private startConnectionTimeout() {
+    setTimeout(() => {
+      if (!ConnectionService.isConnected()) {
+        this.infoDialog.close();
+        this.showConnectionError();
+      }
+    }, this.CONNECTION_TIMEOUT);
+  }
+
+  private showConnectionError(){
+    this.infoDialog.setMessage("Połączenie nieudane").setMode(DialogMode.WARNING)
+        .setOnOkClick(()=>this.infoDialog.close())
+        .open(DialogComponent);
+  }
+
+  private subscribeCheckPossibleGame(){
+    ConnectionService.subscribe(ConnectionPath.POSSIBLE_GAME_RESPONSE, message=>{
+      console.log(message.body);
+      if(message.body =='true'){
+        this.router.navigate(['lobby']);
+      } else {
+        this.infoDialog.setMode(DialogMode.WARNING).setMessage("Aktualnie nie ma wolnych gier. Poczekaj.").setOnOkClick(()=>this.infoDialog.close()).open(DialogComponent);
+      }
+    });
   }
 
   isConnected():boolean{
     return ConnectionService.isConnected();
-    return false;
   }
 
   exit(){
@@ -52,10 +111,18 @@ export class MainMenuComponent implements OnInit {
     let nickname = $("#nickname_input").val();
     PlayerService.setNickname(nickname as string);
     this.nickname_editing = false;
+    this.saveNickname(nickname as string);
+  }
+
+  private saveNickname(nickname:string):void{
+    this.cookieService.set('tajniaki-nickname', nickname);
+  }
+
+  private readNickname():string{
+    return this.cookieService.get("tajniaki-nickname");
   }
 
   getNickname(){
-    console.log(PlayerService.getNickname());
     return PlayerService.getNickname();
   }
 
@@ -64,7 +131,25 @@ export class MainMenuComponent implements OnInit {
   }
 
   startVoting(){
-    this.router.navigate(['boss']);
+    this.router.navigate(['voting']);
   }
 
+  startSummary(){
+    console.log("Przechodzenie do posumowania");
+    this.router.navigate(['summary']);
+  }
+
+  startLobby(){
+    this.router.navigate(["lobby"]);
+  }
+
+  nicknameKeydown(event){
+    if (event.keyCode === 13) {
+      this.confirmNickname();
+    }
+  }
+
+  sendCheckPossibleGame(){
+    ConnectionService.send("?", ConnectionPath.FREE_GAME);
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector, HostListener } from '@angular/core';
 import { ConnectionService } from '../connection.service';
 import { Role } from './role';
 import { PlayerService } from '../playerService';
@@ -11,13 +11,14 @@ import { Team } from '../lobby/team';
 import { Player } from '../lobby/lobby_player';
 import { GamePlayer } from './models/gamePlayer';
 import { Router } from '@angular/router';
+import { View } from '../shared/view';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.css']
+  styleUrls: ['./game.component.css'],
 })
-export class GameComponent implements OnInit {
+export class GameComponent extends View implements OnInit  {
 
   team = Team;
   role = Role;
@@ -26,13 +27,31 @@ export class GameComponent implements OnInit {
   eventsManager: GameEventsManager = new GameEventsManager();
   bluePlayers: Player[];
   redPlayers: Player[];
-  constructor(private router:Router) { }
+  constructor(private router:Router, private injector: Injector) {
+    super();
+   }
 
   ngOnInit(): void {
     this.preventRightClickMenu();
-    this.eventsManager.init(this.model, this.router);
+    this.eventsManager.init(this.model, this.router, this.injector);
     this.sendStartMessage();
+    this.setOnLeave(this.onLeaveEvent);
+  }
 
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeunload(event){
+    // sprawdzamy, czy połączenie jest aktywne. Nie chcemy, aby komunikat wyskakiwał w przypadku rozłączenia z siecią
+    if(ConnectionService.isConnected()){
+      event.returnValue = "Czy na pewno wyjść?";
+    } else {
+      event.returnValue = false;
+    }
+  }
+
+  private onLeaveEvent(){
+    console.log("WYSZJFAJK FJASJDLFJASKLJFL:AJFjsdhjf sd");
+    this.eventsManager.unsubscribeAll();
+    this.eventsManager.closeDialog();
   }
 
   private preventRightClickMenu() {
@@ -58,8 +77,6 @@ export class GameComponent implements OnInit {
   }
 
   getClientTeam(){
-    // TODO: dodać jakieś informacje
-    console.log(PlayerService.getTeam());
     return PlayerService.getTeam();
   }
 
@@ -70,17 +87,16 @@ export class GameComponent implements OnInit {
   preventWhispace(event)
   {
     if (event.keyCode === 32){
-      console.log("Naciśnięto spację");
       event.preventDefault();
     }
   }
 
   isAnswerByClient(card:Card){
-    return card.answers.includes(PlayerService.getNickname());
+    return card.answers.includes(PlayerService.getId());
   }
 
   isFlagByClient(card: Card){
-    return card.flags.includes(PlayerService.getNickname())
+    return card.flags.includes(PlayerService.getId());
   }
 
   isWordHidden(card: Card){
@@ -116,11 +132,12 @@ export class GameComponent implements OnInit {
   }
 
   isPlayerAnswer(player:GamePlayer){
-    for(let i=0; i< this.model.cards.length; i++){
-      let card = this.model.cards[i];
+    let cards: Card[] = this.model.getCardsWithPassCard();
+    for(let i=0; i< cards.length; i++){
+      let card = cards[i];
       for(let j=0; j< card.answers.length; j++){
         let answer = card.answers[j];
-        if(answer == player.nickname){
+        if(answer == player.id){
           return true;
         }
       }
@@ -131,4 +148,13 @@ export class GameComponent implements OnInit {
   isCurrentPlayer(player:GamePlayer){
     return player.team == this.model.currentTeam && player.role == this.model.currentStage;
   }
+
+  isPlayerTurn(){
+    return PlayerService.getTeam() == this.model.currentTeam && PlayerService.getRole() == this.model.currentStage;
+  }
+
+  getRemainingWordsInPlayerTeam(){
+    return PlayerService.getTeam() == Team.BLUE? this.model.remainingBlue : this.model.remainingRed;
+  }
+
 }

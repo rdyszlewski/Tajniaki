@@ -64,3 +64,7 @@
     display: block;
     background-color: aquamarine;
 }
+
+.not-min-players{
+    color: red;
+}
