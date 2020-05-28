@@ -8,6 +8,7 @@ import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
 import { CookieService } from 'ngx-cookie-service';
 import { ConnectionPath } from '../shared/connectionPath';
+import { ResourceManager } from '../shared/resourceManager';
 
 (window as any).global = window;
 
@@ -151,5 +152,9 @@ export class MainMenuComponent implements OnInit {
 
   sendCheckPossibleGame(){
     ConnectionService.send("?", ConnectionPath.FREE_GAME);
+  }
+
+  getImagePath(name:string):string{
+    return ResourceManager.getImagePath(name);
   }
 }

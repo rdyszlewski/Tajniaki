@@ -3,7 +3,8 @@ var path = require("path");
 var url = require("url");
 var win;
 function createWindow() {
-    win = new BrowserWindow({ width: 800, height: 600, webPreferences: {
+    // TODO: zrobić ustawianie rozdzielczości
+    win = new BrowserWindow({ width: 800, height: 600,frame: true, webPreferences: {
             nodeIntegration: true
         } });
     // load the dist folder from Angular
@@ -17,6 +18,7 @@ function createWindow() {
     win.on("closed", function () {
         win = null;
     });
+    win.removeMenu();
 }
 app.on("ready", createWindow);
 // on macOS, closing the window doesn't quit the app

@@ -64,6 +64,16 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+#logo-image{
+  width:100px;
+  height:50px;
+  background: url('../../assets/cat.jpg');
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:cover
+}
+
 /* 
 .dialog{
     width: 100%;

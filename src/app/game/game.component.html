@@ -34,9 +34,13 @@
                 'players': true
               }"
             >
-              <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
+              <div [ngClass]="{
+                'boss-icon': isPlayerBoss(player),
+                'quessing-icon': !isPlayerBoss(player),
+                'game-icon':true
+              }"></div>
               <div class="player-name">{{player.nickname}}</div>
-              <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
+              <div class="game-icon answer-icon" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"></div>
               <span></span>
             </div>
         </div>
@@ -88,11 +92,21 @@
               'players': true
             }"
           >
-            <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
+            <div *ngFor="let player of this.getFirstTeamPlayers()" class="players" 
+            [ngClass] = "{
+              'current-player': isCurrentPlayer(player),
+              'players': true
+            }"  
+            ></div>
+            <div [ngClass]="{
+              'boss-icon': isPlayerBoss(player),
+              'quessing-icon': !isPlayerBoss(player),
+              'game-icon':true
+            }"></div>
             <div class="player-name">{{player.nickname}}</div>
-            <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
+            <div class="game-icon answer-icon" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"></div>          
           </div>
-      </div>
+        </div>
       </span>
     </div>
     

@@ -110,11 +110,32 @@
   display: flex;
 }
 
-.player-role{
+.boss-icon{
+  background: url('../../assets/boss-icon.png');
+}
+
+.quessing-icon{
+  background: url('../../assets/player-icon.png');
+}
+
+.player-icon{
   width: 15px;
   height: 15px;
   display: inline;
   float: left;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:cover
+}
+
+.game-icon{
+  width: 15px;
+  height: 15px;
+  display: inline;
+  float: left;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:cover
 }
 
 .player-name{
@@ -124,11 +145,8 @@
   width: 100% ;
 }
 
-.player-answer{
-  width: 15px;
-  height: 15px;
-  display: inline;
-  float: right;
+.answer-icon{
+  background: url('../../assets/check.png');
 }
 
 .current-player{
