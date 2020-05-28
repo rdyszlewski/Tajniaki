@@ -57,6 +57,7 @@ export class LobbyModel{
                 return player;
             }
         }
+        return null;
     }
 
     public isClientPlayer(player:Player):boolean{

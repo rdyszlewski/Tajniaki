@@ -24,6 +24,7 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("ngOnInit()");
     this.eventsManager.init(this.model);
     this.eventsManager.sendJoinToLobby();
     this.setOnLeave(this.onLeaveEvent);
@@ -63,7 +64,11 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   isPlayerReady(){
-    return this.model.getClientPlayer().ready;
+    let clientPlayer = this.model.getClientPlayer();
+    if(clientPlayer){
+      return this.model.getClientPlayer().ready;
+    }
+    return false;
   }
 
   canJoinToBlue(){
@@ -75,6 +80,10 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   canSetReady(){
-    return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
+    let clientPlayer = this.model.getClientPlayer();
+    if(clientPlayer){
+      return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
+    }
+    return false;
   }
 }
