@@ -37,7 +37,7 @@ export class GameComponent extends View implements OnInit  {
     this.sendStartMessage();
     this.setOnLeave(this.onLeaveEvent);
   }
-  
+
   @HostListener('window:beforeunload', ['$event'])
   onBeforeunload(event){
     // sprawdzamy, czy połączenie jest aktywne. Nie chcemy, aby komunikat wyskakiwał w przypadku rozłączenia z siecią
@@ -105,6 +105,14 @@ export class GameComponent extends View implements OnInit  {
 
   getNickname(){
     return PlayerService.getNickname();
+  }
+
+  getRole(){
+    return PlayerService.getRole();
+  }
+
+  getTeam(){
+    return PlayerService.getTeam();
   }
 
   getFirstTeamPlayers(){
