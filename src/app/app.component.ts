@@ -5,6 +5,7 @@ import { AppService, GameStep } from './shared/appService';
 import { DialogService } from './dialog/dialog.service';
 import { DialogMode } from './dialog/dialogMode';
 import { DialogComponent } from './dialog/dialog.component';
+import { ConnectionService } from './connection.service';
 
 @Component({
   selector: 'app-root',
@@ -40,8 +41,10 @@ export class AppComponent {
   goToMenu(){
     this.menuShow = false;
     this.dialog.setMessage("Czy na pewno wyjść").setMode(DialogMode.ALERT).setOnOkClick(()=>{
+      ConnectionService.send("PAPA", '/app/game/quit');
       this.dialog.close();
       this.menuShow = false;
+      AppService.setCurrentStep(GameStep.MAIN);
       this.router.navigate(['mainmenu']);
     }).setOnCancelClick(()=>{
       this.dialog.close();

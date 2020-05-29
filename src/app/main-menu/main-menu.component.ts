@@ -30,8 +30,6 @@ export class MainMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("MAIN - onInit");
-    AppService.setCurrentStep(GameStep.MAIN);
     this.infoDialog = this.injector.get(DialogService);
     this.setPlayerNickname();
     if(!ConnectionService.isConnected()){
