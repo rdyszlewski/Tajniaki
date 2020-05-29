@@ -6,6 +6,7 @@ import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
 import { Router } from '@angular/router';
 import { View as ViewComponent } from '../shared/view';
+import { AppService, GameStep } from '../shared/appService';
 
 @Component({
   selector: 'app-lobby',
@@ -24,6 +25,8 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('Lobby - onInit');
+    AppService.setCurrentStep(GameStep.LOBBY);
     this.eventsManager.init(this.model);
     this.eventsManager.sendJoinToLobby();
     this.setOnLeave(this.onLeaveEvent);

@@ -12,6 +12,7 @@ import { Player } from '../lobby/lobby_player';
 import { GamePlayer } from './models/gamePlayer';
 import { Router } from '@angular/router';
 import { View } from '../shared/view';
+import { AppService, GameStep } from '../shared/appService';
 
 @Component({
   selector: 'app-game',
@@ -32,6 +33,8 @@ export class GameComponent extends View implements OnInit  {
    }
 
   ngOnInit(): void {
+    console.log("Game - onInit");
+    AppService.setCurrentStep(GameStep.GAME);
     this.preventRightClickMenu();
     this.eventsManager.init(this.model, this.router, this.injector);
     this.sendStartMessage();
