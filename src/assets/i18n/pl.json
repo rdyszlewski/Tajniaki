@@ -1,0 +1,9 @@
+{
+    "menu.title": "Tajniaki2",
+    "menu.start": "Rozpocznij",
+    "menu.nickname": "Nazwa gracza",
+    "menu.connection_state": "Status połączenia",
+    "menu.connected": "Połączono",
+    "menu.not_connected": "Nie połączono",
+    "common.change": "Zmień"
+}

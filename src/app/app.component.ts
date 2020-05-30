@@ -6,6 +6,7 @@ import { DialogService } from './dialog/dialog.service';
 import { DialogMode } from './dialog/dialogMode';
 import { DialogComponent } from './dialog/dialog.component';
 import { ConnectionService } from './connection.service';
+import {TranslateService} from '@ngx-translate/core'
 
 @Component({
   selector: 'app-root',
@@ -21,8 +22,10 @@ export class AppComponent {
   private  menuShow = false;
 
 
-  constructor (private router:Router, private injector: Injector){
+  constructor (private router:Router, private injector: Injector, private translate:TranslateService){
     this.dialog = injector.get(DialogService);
+    translate.setDefaultLang('pl');
+    
   }
 
   openMenu(){
