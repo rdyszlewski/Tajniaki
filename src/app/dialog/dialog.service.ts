@@ -10,6 +10,7 @@ export type Content<T> = string | TemplateRef<T> | Type<T>
   providedIn: 'root'
 })
 export class DialogService {
+  // TODO: zrobić, aby open nie wymagało podawania parametru
 
   private component: DialogComponent;
   private componentRef: ComponentRef<DialogComponent>;

@@ -7,6 +7,7 @@ import { WordColor } from '../game/models/word_color';
 import { CauseGetter, WinnerCause } from './winnerCause';
 import { Router } from '@angular/router';
 import { View } from '../shared/view';
+import { AppService, GameStep } from '../shared/appService';
 
 @Component({
   selector: 'app-summary',
@@ -25,6 +26,8 @@ export class SummaryComponent extends View implements OnInit {
    }
 
   ngOnInit(): void {
+    console.log("SUMMARY - onInit");
+    AppService.setCurrentStep(GameStep.SUMMARY);
     ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
       let data = JSON.parse(message.body);
       this.model.winner = TeamAdapter.getTeam(data['winner']);

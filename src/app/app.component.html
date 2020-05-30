@@ -3,5 +3,13 @@
     <router-outlet></router-outlet>
   </div>
 </div>
+<!-- <div class="game-menu"></div> -->
+<div class="game-menu" [hidden]="isMenuHidden()">
+  <button class="menu-button" (click)="openMenu()"></button>
+  <ul a="menu-active" [hidden]="areMenuItemHidden()"> 
+    <li><a class="menu-item" (click)="goToMenu()">Wyjdź do menu</a></li>
+  </ul>
+</div>
+
 
 

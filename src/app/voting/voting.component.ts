@@ -5,6 +5,7 @@ import { PlayerService } from '../playerService';
 import { VotingModel } from './votingModel';
 import { VotingEventManager } from './votingEventManager';
 import { View } from '../shared/view';
+import { AppService, GameStep } from '../shared/appService';
 
 @Component({
   selector: 'app-boss',
@@ -24,6 +25,8 @@ export class BossComponent extends View implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("VOTING - onInit");
+    AppService.setCurrentStep(GameStep.VOTING);
     this.eventManager.init(this.model, this.router, this.injector);
     this.eventManager.sendStartMessage();
     this.setOnLeave(this.onLeaveEvent);

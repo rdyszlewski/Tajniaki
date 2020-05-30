@@ -8,6 +8,7 @@ import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
 import { CookieService } from 'ngx-cookie-service';
 import { ConnectionPath } from '../shared/connectionPath';
+import { AppService, GameStep } from '../shared/appService';
 
 (window as any).global = window;
 
@@ -30,12 +31,14 @@ export class MainMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.infoDialog = this.injector.get(DialogService);
+
     this.setPlayerNickname();
     if(!ConnectionService.isConnected()){
       this.connect();
     }
-    // this.testSubscribeIdEvent();
+    // this.testSubscribeIdEvent(); 
   }
+  
 
   private testSubscribeIdEvent(){
     ConnectionService.subscribe("/user/queue/lobby/id", message => {

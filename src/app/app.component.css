@@ -1,2 +1,74 @@
 
+.game-menu{  
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index:2;
 
+	padding:10px 18px;
+	box-shadow:0px 1px 1px rgba(0,0,0,0.15);
+	border-radius:3px;
+  }
+  
+  .menu-button{
+    width: 50px;
+    height: 50px;
+    background: url('/assets/boss-icon.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    float: right;
+  }
+  
+  .game-menu ul{
+        width:200px;
+		position:absolute;
+		top:120%;
+        /* left:0px; */
+        right:0px;
+		/* padding:10px 18px; */
+		box-shadow:0px 1px 1px rgba(0,0,0,0.15);
+		border-radius:3px;
+		background:#303030;
+  }
+
+  .game-menu ul:after {
+    width:0px;
+    height:0px;
+    position:absolute;
+    top:0%;
+    right:22px;
+    content:'';
+    transform:translate(0%, -100%);
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-bottom:7px solid #303030;
+}
+  
+  .game-menu li{
+        margin:5px 0px 5px 0px;
+		float:none;
+		display:block;
+  }
+
+  .game-menu a {
+    
+}
+
+  .game-menu li:last-child {
+	margin-right:0px; 
+    }
+
+  .game-menu a {
+    display:block;
+      text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+      color:#777;
+      transition:color linear 0.15s;
+      font-size: medium;
+  }
+  
+  .game-menu a:hover, .menu .current-item a {
+      text-decoration:none;
+      color:#66a992;
+      cursor: pointer;
+  }
