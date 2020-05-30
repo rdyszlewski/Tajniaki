@@ -43,7 +43,7 @@ export class AppComponent {
 
   goToMenu(){
     this.menuShow = false;
-    this.dialog.setMessage("Czy na pewno wyjść").setMode(DialogMode.ALERT).setOnOkClick(()=>{
+    this.dialog.setMessage("dialog.sure_quit").setMode(DialogMode.ALERT).setOnOkClick(()=>{
       ConnectionService.send("PAPA", '/app/game/quit');
       this.dialog.close();
       this.menuShow = false;

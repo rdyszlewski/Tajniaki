@@ -26,7 +26,6 @@ export class SummaryComponent extends View implements OnInit {
    }
 
   ngOnInit(): void {
-    console.log("SUMMARY - onInit");
     AppService.setCurrentStep(GameStep.SUMMARY);
     ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
       let data = JSON.parse(message.body);
@@ -38,7 +37,7 @@ export class SummaryComponent extends View implements OnInit {
       this.model.cards = this.getCards(data['cards']);
     });
 
-    ConnectionService.send("Podsumowanie", ConnectionPath.SUMMARY);
+    ConnectionService.send("SUMMARY", ConnectionPath.SUMMARY);
   }
 
   private getProcess(summary){

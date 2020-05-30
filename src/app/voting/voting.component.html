@@ -1,16 +1,16 @@
 
 
-<h3>Wybór kapitana</h3>
+<h3>{{"voting.title"|translate}}</h3>
 
-Gracz: {{getNickname()}}
+{{"voting.player"|translate}}: {{getNickname()}}
 
 <div id="timer">
   {{model.getTimeFormat()}}
 </div>
 
 <div class="vote_table_header">
-  <div class="gamer_column">Nazwa gracza</div>
-  <div class="votes_column">Głosy</div>
+  <div class="gamer_column">{{"voting.player_name"|translate}}</div>
+  <div class="votes_column">{{"voting.votes"|translate}}</div>
 </div>
 
 <div class="vote_table_row">
@@ -25,9 +25,3 @@ Gracz: {{getNickname()}}
     <span class="votes_column" >{{player.votes.length}}</span>
   </div>
 </div>
-
-<!--<div id="button_container">-->
-<!--  <input type="submit" value="Gotowy!" (click)="continue()" />-->
-<!--</div>-->
-
-

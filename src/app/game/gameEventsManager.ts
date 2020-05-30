@@ -54,8 +54,6 @@ export class GameEventsManager{
     
     private endGame() {
         ConnectionService.subscribe(ConnectionPath.END_GAME_RESPONSE, message => {
-            // TODO: sprawdzić, czy trzeba przekazywać jakiś komunikat
-            console.log("Koniec gry");
             this.router.navigate(['summary']);
         });
     }
@@ -110,7 +108,7 @@ export class GameEventsManager{
       private subscribeNewBossEvent(){
         ConnectionService.subscribe(ConnectionPath.NEW_BOSS_RESPONSE, message=>{
           this.startGame(message);
-          this.dialog.setMode(DialogMode.ALERT).setMessage("Poprzedni szeff wyszedł z gry. Zostajesz nowym szefem").setOnOkClick(()=>{
+          this.dialog.setMode(DialogMode.ALERT).setMessage("dialog.you_are_new_boss").setOnOkClick(()=>{
             this.dialog.close();
           }).open(DialogComponent);
         });
@@ -154,7 +152,6 @@ export class GameEventsManager{
         return roleText == "BOSS" ? Role.BOSS: Role.PLAYER;
     }
 
-    // TODO: utworzyć 
     private updateCards(cards){
         cards.forEach(card => {
             this.model.replaceCard(card.word, card);
@@ -202,7 +199,7 @@ export class GameEventsManager{
 
     private setOnCloseEvent(){
       ConnectionService.setOnCloseEvent(()=>{
-        this.dialog.setMessage("Nastąpiło rozłączenie z serwerem").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+        this.dialog.setMessage("dialog.disconnected").setMode(DialogMode.WARNING).setOnOkClick(()=>{
           this.exit('mainmenu');
         }).open(DialogComponent);
       });
@@ -217,7 +214,7 @@ export class GameEventsManager{
         this.model.removePlayer(player.id); // TODO: sprawdzić, czy usunięcie gracza działa
 
         if(data['currentStep'] == 'LOBBY'){
-          this.dialog.setMessage("Za mało graczy. Powrót do lobby").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+          this.dialog.setMessage("dialog.not_enough_players").setMode(DialogMode.WARNING).setOnOkClick(()=>{
             this.exit('lobby');
           }).open(DialogComponent);
         }

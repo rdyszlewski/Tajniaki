@@ -57,7 +57,6 @@ export class VotingEventManager{
 
     private subscribeEnd(){
         ConnectionService.subscribe(ConnectionPath.END_VOTING_RESPONSE,  message=>{
-            console.log("Koniec głosowania");
             this.router.navigate(['game']);
           });
     }
@@ -75,7 +74,7 @@ export class VotingEventManager{
     private setOncloseEvent(){
         ConnectionService.setOnCloseEvent(()=>{
             this.unsubscribeAll();
-            this.dialog.setMessage("Nastąpiło rozłączenie z serwerem").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+            this.dialog.setMessage("dialog.disconnected").setMode(DialogMode.WARNING).setOnOkClick(()=>{
                 this.dialog.close();
                 this.router.navigate(['mainmenu']);
             }).open(DialogComponent);
@@ -89,7 +88,7 @@ export class VotingEventManager{
             this.model.removePlayerById(player.id);
             let currentStep = data['currentStep'];
             if(currentStep == "LOBBY"){
-                this.dialog.setMessage("Zbyt mało graczy. Powrót do lobby").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+                this.dialog.setMessage("dialog.not_enough_players").setMode(DialogMode.WARNING).setOnOkClick(()=>{
                     this.unsubscribeAll();
                     this.dialog.close();
                     this.router.navigate(['lobby']);
@@ -117,7 +116,5 @@ export class VotingEventManager{
     public closeDialog(){
         this.dialog.close();
     }
-
-    
 
 }   

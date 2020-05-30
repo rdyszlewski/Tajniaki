@@ -37,7 +37,7 @@ export class LobbyEventsManager{
     private subscribeOnCloseEvent(){
         ConnectionService.setOnCloseEvent(()=>{
             this.unsubscribeAll();
-            this.dialog.setMessage("Rozłączono z serwerem").setMode(DialogMode.WARNING).setOnOkClick(()=>{
+            this.dialog.setMessage("dialog.disconnected").setMode(DialogMode.WARNING).setOnOkClick(()=>{
                 this.unsubscribeAll();
                 this.dialog.close();
                 this.router.navigate(['mainmenu']); 
@@ -55,8 +55,6 @@ export class LobbyEventsManager{
 
     private subscribeEndLobby() {
         ConnectionService.subscribe(ConnectionPath.LOBBY_END_RESPONSE, message => {
-            // TODO: uruchamianie kolejnego ekranu
-            console.log("Rozpoczynamy grę");
             this.router.navigate(['voting']);
         });
     }
@@ -93,7 +91,6 @@ export class LobbyEventsManager{
         ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (message) => {
             var data = JSON.parse(message.body);
             PlayerService.setId(data['playerId']);
-            console.log("Id podłączonego gracza " + PlayerService.getId());
             this.setSettings(data['settings']);
             this.setPlayers(data['players']);
             this.model.setMinPlayersInTeam(data['minPlayersInTeam']);

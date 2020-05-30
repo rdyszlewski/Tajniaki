@@ -1,24 +1,24 @@
 <div class="summary">
     <div class="info-conainer">
         <div class="winner">
-            Wygrali : {{model.winner == team.BLUE? 'Zieleni': 'Czerwieni'}}
+             {{"summary.winner"|translate}}: {{model.winner == team.BLUE? "game.blue_team": "game.red_team"|translate}}
         </div>
         <div [ngSwitch]="model.cause" class="couse">
             <div *ngSwitchCase="cause.KILLER">
-              Odkryto zabójcę
+                {{"game.cause_killer"|translate}}
             </div>
             <div *ngSwitchCase="cause.ALL_FOUND">
-              Znaleziono wszystkie hasła
+                {{"game.cause_all_found"|translate}}
             </div>
             <div *ngSwitchCase="cause.QUIT">
-              Gracz opuścił grę
+                {{"game.cause_quit"|translate}}
             </div>
             <div *ngSwitchDefault>
-              Powód nieznany
+                {{"summary.cause_unknown"|translate}}
             </div>
         </div>
         <div class="statistics"> 
-            Przegranym pozostało: {{getLoserRemainings()}}
+            {{"summary.loser_remainings"|translate}}: {{getLoserRemainings()}}
         </div>
     </div>
 
@@ -45,7 +45,7 @@
     </div>
 
     <div class="game-statistics">
-        Przebieg gry:
+        {{"summary.process"|translate}}:
         <ol class= 'entry'>
             <li *ngFor="let entry of model.processEntries" 
             [ngClass]="{
@@ -63,5 +63,5 @@
             </li>
         </ol>
     </div>
-    <input type="submit" value="Zamknij" (click)='backToMenu()' />
+    <button (click)="backToMenu()">{{"common.close"|translate}}</button>
 </div>

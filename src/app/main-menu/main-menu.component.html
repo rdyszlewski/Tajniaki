@@ -1,35 +1,33 @@
-<div id="logo1">Tajniaki</div>
+<div id="logo1">{{'menu.title'|translate}}</div>
 
 <div class="form_row">
-  <div class="name_column">Nazwa gracza: </div>
+  <div class="name_column">{{"menu.nickname"| translate}}</div>
   <div [hidden]="nickname_editing">
-
     <span class="value_column" id="nickname">{{getNickname()}}</span>
-    <input class="button_column" type="submit" value="Zmień" (click)="setChangeNicknameState()" />
+    <button class="button_column" (click)="setChangeNicknameState()">{{"common.change"|translate}}</button>
   </div>
   <div [hidden]="!nickname_editing">
     <input id="nickname_input" class="value_column" (keydown)="nicknameKeydown($event)"/>
-    <input class="button_column" type="submit" value="Zmień" (click)="confirmNickname()">
+    <button class="button_column" (click)="confirmNickname()">{{"common.change"|translate}}</button>
   </div>
 </div>
 
 <div class="form_row">
-  <div class="name_column">Status połączenia: </div>
+  <div class="name_column">{{"menu.connection_state"|translate}}</div>
   <div [hidden]="!isConnected()">
-    <span class="value_column" id="conected">Połączono</span>
+    <span class="value_column" id="conected">{{"menu.connected"|translate}}</span>
   </div>
   <div [hidden]="isConnected()">
-    <span class="value_column" id="disconected">Nie połączono</span>
-    <input class="button_column" type="submit" value="Połącz" (click) ="connect()"/>
+    <span class="value_column" id="disconected">{{"menu.not_connected"|translate}}</span>
+    <button class="button_column" (click)="connect()">{{"menu.connect"|translate}}</button>
   </div>
 </div>
 
 <div id="menu">
 
         <div id="menu_entries">
-            <input type="submit" value="Rozpocznij" (click)="sendCheckPossibleGame()" *ngIf="isConnected()" class="button-item card"/>
+          <button class="button-item card" (click)="startGame()" *ngIf="isConnected()">{{"menu.start"|translate}}</button>
         </div>
-
         <input type="submit" value="Gra" (click)="startGame()" class="button-item card"/>
         <input type="submit" value="Głosowanie" (click)="startVoting()" class="button-item card" />
         <input type='submit' value="Posumowanie" (click)="startSummary()" class="button-item card" />

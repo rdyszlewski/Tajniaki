@@ -8,7 +8,7 @@ import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
 import { CookieService } from 'ngx-cookie-service';
 import { ConnectionPath } from '../shared/connectionPath';
-import { AppService, GameStep } from '../shared/appService';
+import { TranslateService } from '@ngx-translate/core';
 
 (window as any).global = window;
 
@@ -25,7 +25,7 @@ export class MainMenuComponent implements OnInit {
   nickname_editing:boolean;
   infoDialog: DialogService;
 
-  constructor(private router: Router, private injector:Injector, private cookieService: CookieService) {
+  constructor(private router: Router, private injector:Injector, private cookieService: CookieService, private translate: TranslateService ) {
     
   }
 
@@ -42,7 +42,6 @@ export class MainMenuComponent implements OnInit {
 
   private testSubscribeIdEvent(){
     ConnectionService.subscribe("/user/queue/lobby/id", message => {
-      console.log("Czy to się wykonuje?");
       PlayerService.setId(parseInt(message.body));
     });
     ConnectionService.send("DAJ","/app/test/getid");
@@ -62,7 +61,9 @@ export class MainMenuComponent implements OnInit {
   }
 
   connect(){
-    this.infoDialog.setMessage("Łączenie...").setMode(DialogMode.INFO).open(DialogComponent);
+    let message = this.translate.instant("dialog.connecting");
+    console.log(message);
+    this.infoDialog.setMessage("dialog.connecting").setMode(DialogMode.INFO).open(DialogComponent);
     ConnectionService.connect('localhost', 8080, ()=>{
       this.testSubscribeIdEvent();
       this.subscribeCheckPossibleGame();
@@ -81,7 +82,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   private showConnectionError(){
-    this.infoDialog.setMessage("Połączenie nieudane").setMode(DialogMode.WARNING)
+    this.infoDialog.setMessage("dialog.connecting_failed").setMode(DialogMode.WARNING)
         .setOnOkClick(()=>this.infoDialog.close())
         .open(DialogComponent);
   }
@@ -92,7 +93,7 @@ export class MainMenuComponent implements OnInit {
       if(message.body =='true'){
         this.router.navigate(['lobby']);
       } else {
-        this.infoDialog.setMode(DialogMode.WARNING).setMessage("Aktualnie nie ma wolnych gier. Poczekaj.").setOnOkClick(()=>this.infoDialog.close()).open(DialogComponent);
+        this.infoDialog.setMode(DialogMode.WARNING).setMessage("dialog.no_game").setOnOkClick(()=>this.infoDialog.close()).open(DialogComponent);
       }
     });
   }
@@ -138,7 +139,6 @@ export class MainMenuComponent implements OnInit {
   }
 
   startSummary(){
-    console.log("Przechodzenie do posumowania");
     this.router.navigate(['summary']);
   }
 
@@ -147,7 +147,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   nicknameKeydown(event){
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13) { //ENTER
       this.confirmNickname();
     }
   }

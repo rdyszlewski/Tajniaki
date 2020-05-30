@@ -9,8 +9,9 @@
              "hidden": model.mode == dialogMode.INFO,
              "buttons": true 
          }'>
-            <input class="dialog-button" (click)='model.onCancelEvent()' type="submit" value="anuluj" id="cancel-button" [hidden]='model.mode != dialogMode.ALERT'>
-            <input class="dialog-button" (click)='model.onOkEvent()' type='submit' value="ok" id="ok-button">
+
+            <button class="dialog-button" (click)='model.onCancelEvent()'id="cancel-button" [hidden]='model.mode != dialogMode.ALERT'>{{"common.cancel"|translate}}</button>
+            <button class="dialog-button" (click)='model.onOkEvent()'id="ok-button"> {{"common.ok"|translate}}</button>
         </div>
     </div>
 </div>>
