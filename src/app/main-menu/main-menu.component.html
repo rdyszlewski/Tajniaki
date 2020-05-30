@@ -5,11 +5,15 @@
   <div [hidden]="nickname_editing">
 
     <span class="value_column" id="nickname">{{getNickname()}}</span>
-    <input class="button_column" type="submit" value="Zmień" (click)="setChangeNicknameState()" />
+    <div class="button_column">
+      <button class=" button_white" type="submit" (click)="setChangeNicknameState()">Zmień</button>
+    </div>
   </div>
   <div [hidden]="!nickname_editing">
     <input id="nickname_input" class="value_column" (keydown)="nicknameKeydown($event)"/>
-    <input class="button_column" type="submit" value="Zmień" (click)="confirmNickname()">
+    <div class="button_column">
+      <button class="button_white" type="submit" (click)="confirmNickname()">Zmień</button>
+    </div>
   </div>
 </div>
 
@@ -20,19 +24,34 @@
   </div>
   <div [hidden]="isConnected()">
     <span class="value_column" id="disconected">Nie połączono</span>
-    <input class="button_column" type="submit" value="Połącz" (click) ="connect()"/>
+    <div class="button_column">
+      <button class="button_white" type="submit" (click) ="connect() ">Połącz</button>
+    </div>
   </div>
 </div>
 
-<div id="menu">
+<div id="table">
+  <div class="table-container">
+    <div class="game_container">
+      <div class="ready-div">
+        <button type="submit"  (click)="sendCheckPossibleGame()" *ngIf="isConnected()" class="card lack">Rozpocznij</button>
+      </div>
 
-        <div id="menu_entries">
-            <input type="submit" value="Rozpocznij" (click)="sendCheckPossibleGame()" *ngIf="isConnected()" class="button-item card"/>
-        </div>
-
-        <input type="submit" value="Gra" (click)="startGame()" class="button-item card"/>
-        <input type="submit" value="Głosowanie" (click)="startVoting()" class="button-item card" />
-        <input type='submit' value="Posumowanie" (click)="startSummary()" class="button-item card" />
-        <input type='submit' value="Drużyny" (click)="startLobby()" class="button-item card" />
-
+    </div>
+  </div>
 </div>
+
+
+<!--<div id="menu">-->
+
+<!--        <div id="menu_entries">-->
+<!--            <input type="submit" value="Rozpocznij" (click)="sendCheckPossibleGame()" *ngIf="isConnected()" class="button-item card"/>-->
+<!--        </div>-->
+<!--&lt;!&ndash;  <input type="submit" value="Gra" (click)="startGame()"  class="button_white"/>&ndash;&gt;-->
+
+<!--        <input type="submit" value="Gra" (click)="startGame()"  class="button-item card"/>-->
+<!--        <input type="submit" value="Głosowanie" (click)="startVoting()" class="button-item card" />-->
+<!--        <input type='submit' value="Posumowanie" (click)="startSummary()" class="button-item card" />-->
+<!--        <input type='submit' value="Drużyny" (click)="startLobby()" class="button-item card" />-->
+
+<!--</div>-->

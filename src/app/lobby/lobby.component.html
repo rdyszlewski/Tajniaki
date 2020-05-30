@@ -62,13 +62,13 @@
 </div>
 
 <div class="buttons">
-  <div class="single_button"><button (click)="eventsManager.sendJoinBlue()"  [hidden]="!canJoinToBlue()">Zieleni</button></div>
-  <div class="single_button"><button (click)="autoJoinToTeam()"  [disabled]="!canJoinToBlue() && !canJoinToRed()">Automatycznie</button></div>
-  <div class="single_button"><button (click)="eventsManager.sendJoinRed()"  [hidden]="!canJoinToRed()">Czerwieni</button></div>
+  <div class="single_button"><button class="button_white" (click)="eventsManager.sendJoinBlue()"  [hidden]="!canJoinToBlue()">Zieleni</button></div>
+  <div class="single_button"><button class="button_white" (click)="autoJoinToTeam()"  [disabled]="!canJoinToBlue() && !canJoinToRed()">Automatycznie</button></div>
+  <div class="single_button"><button class="button_white" (click)="eventsManager.sendJoinRed()"  [hidden]="!canJoinToRed()">Czerwieni</button></div>
 </div>
 
 <div class="buttons">
-  <button (click)="eventsManager.sendReady()" id="ready-button" class="card button-item"
+  <button class="button_white" (click)="eventsManager.sendReady()" id="ready-button"
           [ngClass]="{
         'ready': !isPlayerReady(),
         'unready': isPlayerReady()

@@ -50,25 +50,47 @@
 .value_column{
     width:55%;
     float:left;
-    text-align: left;
+  margin-top: 10px;
+  /*  text-align: left;*/
+  /*!*height: auto;*!*/
+  /*height: 100%;*/
+  /*vertical-align: middle;*/
+
+  /*margin-bottom: auto;*/
+  /*margin-top:auto;*/
+  /*!*margin: 0.5em;*!*/
 }
 
 .button_column{
   float:right;
     width: 20%;
+  /*!*height: auto;*!*/
 }
 
 .name_column{
   float:left;
   padding-right: 10px;
   width: auto;
+  margin-top: 10px;
+  /*background: #ffdb91;*/
+
+  /*margin-bottom: auto;*/
+  /*margin-top:auto;*/
+
+  /*height: 100%;*/
 }
 
 .form_row{
     width: 100%;
-    height: 1em;
-    display: block;
-    align-items: center;
+  /*height: 10%;*/
+    /*height: 2.5em;*/
+  /*height: auto;*/
+    /*display: block;*/
+    /*align-items: center;*/
+  /*vertical-align: middle;*/
+  /*display: flex;*/
+  overflow: auto;
+  /*background: red;*/
 }
 
 #menu_entries{
@@ -95,4 +117,34 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 50px;
+}
+
+.ready-div{
+  width: 20%;
+  /*background: royalblue;*/
+  margin: auto;
+  height: 250px;
+  padding-top: 20%;
+}
+
+.table-container{
+  background: radial-gradient(at bottom, #ffb77f, #b44c00);
+  transform: rotateX(35deg);
+  transform-style: preserve-3d;
+  width: 50%;
+  margin:auto;
+  border-radius: 12px;
+}
+
+#table{
+  /*background: #ffdb91;*/
+  perspective: 400px;
+  padding-top: 17%;
+}
+
+.card:hover{
+  transition:.6s;
+  transform: translateZ(25px) rotateX(-35deg);
+  box-shadow: 0 0 20px black;
+  cursor: pointer;
 }

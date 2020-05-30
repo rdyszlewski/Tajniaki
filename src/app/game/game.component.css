@@ -33,7 +33,8 @@ span.gamer_column{
 .table-container{
   transform-style: preserve-3d;
   transform: rotateX(35deg);
-  background: #bd0000;
+  background: radial-gradient(at bottom, #ffb77f, #b44c00);
+  border-radius: 12px;
 }
 
 #table{

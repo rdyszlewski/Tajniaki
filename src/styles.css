@@ -20,7 +20,7 @@
   color: white;
   font-size: 20px;
   text-shadow: 2px 2px 5px black;
-  width: 5em;
+  width: 6em;
 }
 
 .card:hover{
@@ -94,6 +94,64 @@ h3{
   width: 70%;
   padding: 10px;
 }
+
+/*.button_white{*/
+/*  background-color: white;*/
+/*  !*color: black;*!*/
+/*  border: 2px solid white;*/
+/*}*/
+
+.button_white {
+  border-radius: 12px;
+  background: none;
+  border: white 3px solid;
+  /*margin: 3px;*/
+  /*height: 29px;*/
+
+  color: white;
+  font-size: 23px;
+  text-shadow: 2px 2px 5px black;
+
+  /*box-shadow: 2px 2px 5px grey;*/
+
+  font: inherit;
+  line-height: 1;
+  margin-top: 0.5em;
+  /*margin: 0.5em;*/
+  padding: 0.5em 1em;
+}
+
+.button_white:hover, .button_white:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em grey;
+  transform: translateY(-0.25em);
+}
+
+/*.table-container{*/
+/*  transform-style: preserve-3d;*/
+/*  transform: rotateX(35deg);*/
+/*  background: #bd0000;*/
+/*  border-radius: 12px;*/
+/*}*/
+
+/*#table{*/
+/*  align-items: center;*/
+/*  text-align: center;*/
+/*  margin-left: 10%;*/
+/*  margin-right:10%;*/
+/*  perspective: 800px;*/
+/*  width:80%;*/
+/*  position: center;*/
+/*  margin:auto;*/
+
+/*}*/
+
+/*.card:hover{*/
+/*  transition:.6s;*/
+/*  transform: translateZ(25px) rotateX(-35deg);*/
+/*  box-shadow: 0 0 20px black;*/
+/*  cursor: pointer;*/
+/*}*/
+
 
 /* MENU */
 

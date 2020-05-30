@@ -51,6 +51,9 @@
   display: block;
   align-items: center;
   background: blueviolet;
+
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .vote_table_row{
@@ -60,6 +63,9 @@
   display: block;
   align-items: center;
   background: violet;
+
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .gamer_column{
