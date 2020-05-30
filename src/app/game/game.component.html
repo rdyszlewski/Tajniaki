@@ -1,18 +1,18 @@
 <div class="game_head_row">
   <div class="gamer_column">
     <span class="gamer_column">{{"game.player_name"|translate}}: {{getNickname()}}</span>
-    <span class="gamer_column">{{"game.team"|translate}}: {{getTeam()=="BLUE"?"Zieleni":"Czerwieni"}}</span>
-    <span class="gamer_column">{{"game.role"|translate}}: {{getRole()=="BOSS"?"Szeff":"Zgadywacz"}}</span>
+    <span class="gamer_column">{{"game.team"|translate}}: {{getTeam()=="BLUE"?"game.blue_team":"game.red_team"|translate}}</span>
+    <span class="gamer_column">{{"game.role"|translate}}: {{getRole()=="BOSS"?"game.boss":"game.player"|translate}}</span>
   </div>
 
   <div class="round_information_column">
     <div class="current_state">
       {{"game.turn"|translate}}
-      <span id="current_stage" class="state_element" translate>
-        {{model.currentStage==role.BOSS? "game.turn_boss": "game.turn_player"}}
+      <span id="current_stage" class="state_element">
+        {{model.currentStage==role.BOSS? "game.turn_boss": "game.turn_player"|translate}}
       </span>
-      <span id="current_team" class="state_element" translate>
-        {{model.currentTeam==team.BLUE?"game.turn_blue":"game.turn_red"}}
+      <span id="current_team" class="state_element">
+        {{model.currentTeam==team.BLUE?"game.turn_blue":"game.turn_red"|translate}}
       </span>
     </div>
 
@@ -32,7 +32,7 @@
           'current_team':  model.currentTeam == getClientTeam(),
           'blue_team': getClientTeam()==team.BLUE,
           'red_team':getClientTeam()==team.RED
-          }" translate>{{getClientTeam()==team.BLUE ? "game.blue_team" : 'game.red_team'}}</div>
+          }" >{{getClientTeam()==team.BLUE ? "game.blue_team" : 'game.red_team'|translate}}</div>
         <div class="points">
             {{getClientTeam()==team.BLUE ? model.remainingBlue: model.remainingRed}}
         </div>
