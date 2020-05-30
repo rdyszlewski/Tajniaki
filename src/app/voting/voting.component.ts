@@ -46,6 +46,10 @@ export class BossComponent extends View implements OnInit {
     return false;
   }
 
+  getNickname(){
+    return PlayerService.getNickname();
+  }
+
   continue(): void {
     //TODO:przejście do gry po kliknięciu przycisku
   }

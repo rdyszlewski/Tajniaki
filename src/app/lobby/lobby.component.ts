@@ -6,6 +6,7 @@ import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
 import { Router } from '@angular/router';
 import { View as ViewComponent } from '../shared/view';
+import {PlayerService} from "../playerService";
 
 @Component({
   selector: 'app-lobby',
@@ -19,7 +20,7 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   eventsManager: LobbyEventsManager;
 
   constructor(private router:Router, private injector: Injector) {
-    super(); 
+    super();
     this.eventsManager = new LobbyEventsManager(router, injector);
   }
 
@@ -47,7 +48,7 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   countBlue(){
-    return this.model.getPlayers(Team.BLUE).length; 
+    return this.model.getPlayers(Team.BLUE).length;
   }
 
   countRed(){
@@ -76,5 +77,13 @@ export class LobbyComponent extends ViewComponent implements OnInit {
 
   canSetReady(){
     return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
+  }
+
+  getNickname(){
+    return PlayerService.getNickname();
+  }
+
+  getTeam(){
+    return PlayerService.getTeam();
   }
 }
