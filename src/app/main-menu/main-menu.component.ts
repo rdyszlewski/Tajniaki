@@ -31,12 +31,14 @@ export class MainMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.infoDialog = this.injector.get(DialogService);
+
     this.setPlayerNickname();
     if(!ConnectionService.isConnected()){
       this.connect();
     }
-    // this.testSubscribeIdEvent();
+    // this.testSubscribeIdEvent(); 
   }
+  
 
   private testSubscribeIdEvent(){
     ConnectionService.subscribe("/user/queue/lobby/id", message => {

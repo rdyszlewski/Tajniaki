@@ -9,8 +9,8 @@
              "hidden": model.mode == dialogMode.INFO,
              "buttons": true 
          }'>
-            <input (click)='model.onCancelEvent()' type="submit" value="anuluj" id="cancel-button" [hidden]='model.mode != dialogMode.ALERT'>
-            <input (click)='model.onOkEvent()' type='submit' value="ok" id="ok-button">
+            <input class="dialog-button" (click)='model.onCancelEvent()' type="submit" value="anuluj" id="cancel-button" [hidden]='model.mode != dialogMode.ALERT'>
+            <input class="dialog-button" (click)='model.onOkEvent()' type='submit' value="ok" id="ok-button">
         </div>
     </div>
 </div>>
