@@ -26,7 +26,6 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Lobby - onInit');
     AppService.setCurrentStep(GameStep.LOBBY);
     this.eventsManager.init(this.model);
     this.eventsManager.sendJoinToLobby();

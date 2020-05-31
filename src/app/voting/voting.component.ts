@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, HostListener } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { VotingPlayer } from './voting_player';
 import { Router } from '@angular/router';
 import { PlayerService } from '../playerService';
@@ -17,7 +17,6 @@ export class BossComponent extends View implements OnInit {
   model: VotingModel;
   eventManager: VotingEventManager;
 
-
   constructor(private router: Router, private injector:Injector) {
     super();
     this.model = new VotingModel();
@@ -25,7 +24,6 @@ export class BossComponent extends View implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("VOTING - onInit");
     AppService.setCurrentStep(GameStep.VOTING);
     this.eventManager.init(this.model, this.router, this.injector);
     this.eventManager.sendStartMessage();

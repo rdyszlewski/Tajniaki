@@ -59,15 +59,15 @@
     display: flex;
 }
 
-.right{
+.dialog-right{
     justify-content: right;
 }
 
-.center{
+.dialog-center{
     justify-content: center;
 }
 
-.hidden{
+.dialog-hidden{
     display: none;
 }
 

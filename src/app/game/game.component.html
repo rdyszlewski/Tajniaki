@@ -1,32 +1,28 @@
 <div class="game_head_row">
   <div class="gamer_column">
-    <span class="gamer_column">Gracz: {{getNickname()}}</span>
-    <span class="gamer_column">Drużyna: {{getTeam()=="BLUE"?"Zieleni":"Czerwieni"}}</span>
-    <span class="gamer_column">Funkcja: {{getRole()=="BOSS"?"Szeff":"Zgadywacz"}}</span>
+    <span class="gamer_column">{{"game.player_name"|translate}}: {{getNickname()}}</span>
+    <span class="gamer_column">{{"game.team"|translate}}: {{getTeam()=="BLUE"?"game.blue_team":"game.red_team"|translate}}</span>
+    <span class="gamer_column">{{"game.role"|translate}}: {{getRole()=="BOSS"?"game.boss":"game.player"|translate}}</span>
   </div>
 
   <div class="round_information_column">
-
     <div class="current_state">
-      Tura
+      {{"game.turn"|translate}}
       <span id="current_stage" class="state_element">
-        {{model.currentStage==role.BOSS?"Szeffa":"Zgadywacza"}}
+        {{model.currentStage==role.BOSS? "game.turn_boss": "game.turn_player"|translate}}
       </span>
       <span id="current_team" class="state_element">
-        {{model.currentTeam==team.BLUE?"Zielenich":"Czerwienich"}}
+        {{model.currentTeam==team.BLUE?"game.turn_blue":"game.turn_red"|translate}}
       </span>
     </div>
 
-    <div id="word_sign">Hasło:</div>
+    <div id="word_sign">{{"game.word"|translate}}:</div>
     <div class="word_container">
       <span id="word" class="word_element">{{model.currentWord}} </span>
       <span id="number" class="word_element">{{model.remainingAnswers}}</span>
     </div>
   </div>
-
 </div>
-
-
 
 <div id="table">
   <div class="table-container">
@@ -36,13 +32,13 @@
           'current_team':  model.currentTeam == getClientTeam(),
           'blue_team': getClientTeam()==team.BLUE,
           'red_team':getClientTeam()==team.RED
-          }">{{getClientTeam()==team.BLUE ?'Zieleni' : 'Czerwieni'}}</div>
+          }" >{{getClientTeam()==team.BLUE ? "game.blue_team" : 'game.red_team'|translate}}</div>
         <div class="points">
             {{getClientTeam()==team.BLUE ? model.remainingBlue: model.remainingRed}}
         </div>
 
         <div class="first-team-players">
-            Gracze
+            {{"game.players"|translate}}
             <div *ngFor="let player of this.getFirstTeamPlayers()" class="players"
               [ngClass] = "{
                 'current-player': isCurrentPlayer(player),
@@ -90,7 +86,7 @@
           'current_team':  model.currentTeam == getClientTeam(),
           'blue_team': getClientTeam()==team.BLUE,
           'red_team':getClientTeam()==team.RED
-          }">{{getClientTeam()==team.BLUE ? 'Czerwieni' : 'Zieleni'}}</div>
+          }" translate>{{getClientTeam()==team.BLUE ? "game.red_team" : "game.blue_team"}}</div>
         <div class="points">
           {{getClientTeam()==team.BLUE ? model.remainingRed: model.remainingBlue}}
         </div>
@@ -115,7 +111,7 @@
     <div *ngIf="isBoss()">
       <input id="wordInput" (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()' (keyup.enter)="eventsManager.sendBossMessage()"/>
       <input id="numberInput" type="number" value=1 min=1 max="{{getRemainingWordsInPlayerTeam()}}" [disabled]='!isPlayerTurn() ' (keyup.enter)="eventsManager.sendBossMessage()"/>
-      <input (click)="eventsManager.sendBossMessage()" type="submit" value="Wyślij hasło" [disabled]='!isPlayerTurn()'/>
+      <button (click)="eventsManager.sendBossMessage()" [disabled]='!isPlayerTurn()'>{{"game.send_word"|translate}}</button>
     </div>
     <div *ngIf="!isBoss()">
       <!-- Dla uproszczenia deklarujemy zmienną. Do tego celu korzystamy z ngId -->
@@ -129,17 +125,9 @@
               class="click_amount" id="answers"
               tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
             </span>
-            <span class="word"> Pomiń </span>
+            <span class="word"> {{"game.pass"|translate}} </span>
           </div>
     </div>
-    <div id="player_info">
-      <span> {{getNickname()}} </span>
-      <span> {{getClientTeam()==team.BLUE?"Zieleni":"Czerwieni"}} </span>
-      <span> {{getClientRole()==role.BOSS?"Szeff":"Zgadywacz"}} </span>
-    </div>
   </div>
-
-
-
 </div>
 

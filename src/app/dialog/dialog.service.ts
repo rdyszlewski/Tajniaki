@@ -3,6 +3,8 @@ import { DialogComponent } from './dialog.component';
 import { DialogMode } from './dialogMode';
 import { DOCUMENT } from '@angular/common';
 import { DialogModel } from './dialogModel';
+import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 
 export type Content<T> = string | TemplateRef<T> | Type<T>
 
@@ -14,16 +16,27 @@ export class DialogService {
 
   private component: DialogComponent;
   private componentRef: ComponentRef<DialogComponent>;
+  private observableMessage: Observable<string>;
 
   constructor(private resolver: ComponentFactoryResolver,
     private injector: Injector,
     private applicationRef: ApplicationRef,
+    private translate: TranslateService,
     @Inject(DOCUMENT) private document: Document
   ) { }
   
   model: DialogModel = new DialogModel;
 
   open<T>(content: Content<T>) {
+    if(this.observableMessage){
+      this.observableMessage.subscribe(value=>{
+        this.model.message = value;
+        this.openDialog(content);
+      })
+    }
+  }
+
+  private openDialog<T>(content: Content<T>){
     const factory = this.resolver.resolveComponentFactory(DialogComponent);
     const ngContent = this.resolveNgContent(content);
     const componentRef = factory.create(this.injector, ngContent);
@@ -37,7 +50,7 @@ export class DialogService {
 
     this.componentRef = componentRef;
   }
-
+  
   resolveNgContent<T>(content: Content<T>) {
     if (typeof content === 'string') {
       const element = this.document.createTextNode(content);
@@ -75,7 +88,7 @@ export class DialogService {
   }
 
   public setMessage(message:string){
-    this.model.message = message;
+    this.observableMessage = this.translate.get(message);
     return this;
   }
 
@@ -93,57 +106,4 @@ export class DialogService {
     this.model.onCancelEvent = event;
     return this;
   }
-
-  // dialogComponentRef: ComponentRef<DialogComponent>
-
-  
-  // constructor(
-  //   private componentFactoryResolver: ComponentFactoryResolver,
-  //   private appRef: ApplicationRef,
-  //   private injector: Injector
-  // ) {
-  //     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
-  //     const componentRef = componentFactory.create(this.injector);
-  //     this.dialogComponentRef = componentRef;
-  //  }
-
-  // appendDialogComponentToBody(){
-  //   this.dialogComponentRef.hostView.detectChanges();
-  //   this.appRef.attachView(this.dialogComponentRef.hostView);
-  //   const domElem = (this.dialogComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-  //   document.body.appendChild(domElem);
-  // }
-
-  // private removeDialogComponentFromBody(){
-  //   this.appRef.detachView(this.dialogComponentRef.hostView);
-  //   this.dialogComponentRef.destroy();
-  // }
-
-  // public addMessage(message:string){
-  //   this.dialogComponentRef.instance.addMessage(message);
-  //   return this;
-  // }
-
-  // public setMode(mode: DialogMode){
-  //   this.dialogComponentRef.instance.setMode(mode);
-  //   return this;
-  // }
-
-  // public setOnOkClickEvent(event){
-  //   this.dialogComponentRef.instance.setOnOkClick(event);
-  //   return this;
-  // }
-
-  // public setOnCancelClickEvent(event){
-  //   this.dialogComponentRef.instance.setOnCancelClick(event);
-  //   return this;
-  // }
-
-  // public show(){
-  //   this.appendDialogComponentToBody();
-  // }
-
-  // public close(){
-  //   this.removeDialogComponentFromBody();
-  // }
 }

@@ -33,7 +33,6 @@ export class GameComponent extends View implements OnInit  {
    }
 
   ngOnInit(): void {
-    console.log("Game - onInit");
     AppService.setCurrentStep(GameStep.GAME);
     this.preventRightClickMenu();
     this.eventsManager.init(this.model, this.router, this.injector);
@@ -45,6 +44,7 @@ export class GameComponent extends View implements OnInit  {
   onBeforeunload(event){
     // sprawdzamy, czy połączenie jest aktywne. Nie chcemy, aby komunikat wyskakiwał w przypadku rozłączenia z siecią
     if(ConnectionService.isConnected()){
+      // TODO: sprawdzić, czy to się rzeczywiście wyświetla. Jesli tak, wstawić tutaj lokalizacje
       event.returnValue = "Czy na pewno wyjść?";
     } else {
       event.returnValue = false;
@@ -52,7 +52,6 @@ export class GameComponent extends View implements OnInit  {
   }
 
   private onLeaveEvent(){
-    console.log("WYSZJFAJK FJASJDLFJASKLJFL:AJFjsdhjf sd");
     this.eventsManager.unsubscribeAll();
     this.eventsManager.closeDialog();
   }
@@ -64,12 +63,6 @@ export class GameComponent extends View implements OnInit  {
   private sendStartMessage() {
     ConnectionService.send("START", ConnectionPath.GAME_START);
   }
-
-  // TODO: przenieść to do oddzielnej klasy
-
-
-  // TODO: wymyślić fajniejszą nazwę
-
 
   isBoss(){
     return PlayerService.getRole()==Role.BOSS;
