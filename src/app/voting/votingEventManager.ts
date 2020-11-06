@@ -8,6 +8,9 @@ import { Injector } from '@angular/core';
 import { DialogService } from '../dialog/dialog.service';
 import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
+import { GameService } from '../gameService';
+import { IdParam } from '../shared/parameters/id.param';
+import { NumberParam } from '../shared/parameters/number.param';
 
 export class VotingEventManager{
 
@@ -98,11 +101,15 @@ export class VotingEventManager{
     }
 
     public sendStartMessage(){
-        ConnectionService.send("Siema", ConnectionPath.START_VOTING);
+        let param = new IdParam(GameService.getId());
+        let json = JSON.stringify(param);
+        ConnectionService.send(json, ConnectionPath.START_VOTING);
     }
 
     public sendVote(player:VotingPlayer){
-        ConnectionService.send(player.id, ConnectionPath.VOTE);
+      let param = new NumberParam(GameService.getId(), player.id);
+      let json = JSON.stringify(param);
+        ConnectionService.send(json, ConnectionPath.VOTE);
     }
 
     public unsubscribeAll(){
