@@ -8,6 +8,8 @@ import { CauseGetter, WinnerCause } from './winnerCause';
 import { Router } from '@angular/router';
 import { View } from '../shared/view';
 import { AppService, GameStep } from '../shared/appService';
+import { IdParam } from '../shared/parameters/id.param';
+import { GameService } from '../gameService';
 
 @Component({
   selector: 'app-summary',
@@ -37,7 +39,14 @@ export class SummaryComponent extends View implements OnInit {
       this.model.cards = this.getCards(data['cards']);
     });
 
-    ConnectionService.send("SUMMARY", ConnectionPath.SUMMARY);
+    this.sendSummaryMessage();
+
+  }
+
+  private sendSummaryMessage(){
+    let param = new IdParam(GameService.getId());
+    let json = JSON.stringify(param);
+    ConnectionService.send(json, ConnectionPath.SUMMARY);
   }
 
   private getProcess(summary){
