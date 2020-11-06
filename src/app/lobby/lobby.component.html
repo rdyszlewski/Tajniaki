@@ -63,7 +63,7 @@
 
 <div class="buttons">
   <div class="single_button"><button class="button_white" (click)="eventsManager.sendJoinBlue()"  [hidden]="!canJoinToBlue()">Zieleni</button></div>
-  <div class="single_button"><button class="button_white" (click)="autoJoinToTeam()"  [disabled]="!canJoinToBlue() && !canJoinToRed()">Automatycznie</button></div>
+  <div class="single_button"><button class="button_white" (click)="eventsManager.sendAutoJoinToTeam()"  [disabled]="!canJoinToBlue() && !canJoinToRed()">Automatycznie</button></div>
   <div class="single_button"><button class="button_white" (click)="eventsManager.sendJoinRed()"  [hidden]="!canJoinToRed()">Czerwieni</button></div>
 </div>
 

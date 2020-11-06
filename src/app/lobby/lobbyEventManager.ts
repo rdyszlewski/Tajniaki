@@ -2,7 +2,6 @@ import { ConnectionService } from '../connection.service';
 import { LobbyModel } from './lobbyModel';
 import { PlayerService } from '../playerService';
 import { ConnectionPath } from '../shared/connectionPath';
-import { Player } from './lobby_player';
 import { Team, TeamAdapter } from './team';
 import { GameService } from '../gameService';
 import { Router } from '@angular/router';
@@ -11,132 +10,163 @@ import { DialogService } from '../dialog/dialog.service';
 import { Injector } from '@angular/core';
 import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
+import { StringParam } from '../shared/parameters/string.param';
+import { IdParam } from '../shared/parameters/id.param';
+import { BoolParam } from '../shared/parameters/bool.param';
 
-export class LobbyEventsManager{
-    
-    private model: LobbyModel;
-    private dialog: DialogService;
+export class LobbyEventsManager {
+  private model: LobbyModel;
+  private dialog: DialogService;
 
-    public constructor(private router:Router, private injector:Injector){
+  public constructor(private router: Router, private injector: Injector) {}
 
-    }
+  public init(model: LobbyModel) {
+    this.model = model;
+    this.dialog = this.injector.get(DialogService);
 
-    public init(model:LobbyModel){
-        this.model = model;
-        this.dialog = this.injector.get(DialogService);
-        
-        this.subscribeJoinToLobbyResponse();
-        this.subscribePlayerConnect();
-        this.subscribeChangeTeam();
-        this.subscribeReady();
-        this.subscribeEndLobby();
-        this.subscribeDisconnect();
-        this.subscribeOnCloseEvent();
-    }
+    this.subscribeJoinToLobbyResponse();
+    this.subscribePlayerConnect();
+    this.subscribeChangeTeam();
+    this.subscribeReady();
+    this.subscribeEndLobby();
+    this.subscribeDisconnect();
+    this.subscribeOnCloseEvent();
+  }
 
-    private subscribeOnCloseEvent(){
-        ConnectionService.setOnCloseEvent(()=>{
-            this.unsubscribeAll();
-            this.dialog.setMessage("dialog.disconnected").setMode(DialogMode.WARNING).setOnOkClick(()=>{
-                this.unsubscribeAll();
-                this.dialog.close();
-                this.router.navigate(['mainmenu']); 
-            }).open(DialogComponent);
-        });
-    }
+  private subscribeOnCloseEvent() {
+    ConnectionService.setOnCloseEvent(() => {
+      this.unsubscribeAll();
+      this.dialog
+        .setMessage('dialog.disconnected')
+        .setMode(DialogMode.WARNING)
+        .setOnOkClick(() => {
+          this.unsubscribeAll();
+          this.dialog.close();
+          this.router.navigate(['mainmenu']);
+        })
+        .open(DialogComponent);
+    });
+  }
 
-    private subscribeDisconnect(){
-        ConnectionService.subscribe(ConnectionPath.DISCONNECT_RESPONSE, message=>{
-            let data = JSON.parse(message.body);
-            let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
-            this.model.removePlayer(this.model.getPlayerById(player.id));
-        });
-    }
+  private subscribeDisconnect() {
+    ConnectionService.subscribe(
+      ConnectionPath.DISCONNECT_RESPONSE,
+      (message) => {
+        let data = JSON.parse(message.body);
+        let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
+        this.model.removePlayer(this.model.getPlayerById(player.id));
+      }
+    );
+  }
 
-    private subscribeEndLobby() {
-        ConnectionService.subscribe(ConnectionPath.LOBBY_END_RESPONSE, message => {
-            this.router.navigate(['voting']);
-        });
-    }
+  private subscribeEndLobby() {
+    ConnectionService.subscribe(
+      ConnectionPath.LOBBY_END_RESPONSE,
+      (message) => {
+        this.router.navigate(['voting']);
+      }
+    );
+  }
 
-    private subscribeReady() {
-        ConnectionService.subscribe(ConnectionPath.READY_RESPONSE, message => this.setPlayerReady(message));
-    }
+  private subscribeReady() {
+    ConnectionService.subscribe(ConnectionPath.READY_RESPONSE, (message) =>
+      this.setPlayerReady(message)
+    );
+  }
 
-    private setPlayerReady(message: any) {
-        var data = JSON.parse(message.body);
-        let player = this.model.getPlayerById(data["playerId"]);
-        player.ready = data['ready'];
-    }
+  private setPlayerReady(message: any) {
+    var data = JSON.parse(message.body);
+    let player = this.model.getPlayerById(data['playerId']);
+    player.ready = data['ready'];
+  }
 
-    private subscribeChangeTeam() {
-        ConnectionService.subscribe(ConnectionPath.CHANGE_TEAM_REPONSE, message => this.setPlayerTeam(message));
-    }
+  private subscribeChangeTeam() {
+    ConnectionService.subscribe(ConnectionPath.CHANGE_TEAM_REPONSE, (message) =>
+      this.setPlayerTeam(message)
+    );
+  }
 
-    private setPlayerTeam(message: any) {
-        var json = JSON.parse(message.body);
-        var player = this.model.getPlayerById(json['id']);
-        player.team = TeamAdapter.getTeam(json['team']);
-    }
+  private setPlayerTeam(message: any) {
+    var json = JSON.parse(message.body);
+    var player = this.model.getPlayerById(json['id']);
+    player.team = TeamAdapter.getTeam(json['team']);
+  }
 
-    private subscribePlayerConnect() {
-        ConnectionService.subscribe(ConnectionPath.CONNECT_RESPONSE, message => {
-            let data = JSON.parse(message.body);
-            let newPlayer = PlayerAdapter.createPlayer(data);
-            this.model.addPlayer(newPlayer);
-        });
-    }
+  private subscribePlayerConnect() {
+    ConnectionService.subscribe(ConnectionPath.CONNECT_RESPONSE, (message) => {
+      let data = JSON.parse(message.body);
+      let newPlayer = PlayerAdapter.createPlayer(data);
+      this.model.addPlayer(newPlayer);
+    });
+  }
 
-    private subscribeJoinToLobbyResponse() {
-        ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (message) => {
-            var data = JSON.parse(message.body);
-            PlayerService.setId(data['playerId']);
-            this.setSettings(data['settings']);
-            this.setPlayers(data['players']);
-            this.model.setMinPlayersInTeam(data['minPlayersInTeam']);
-            this.model.setMaxPlayersInTeam(data['maxPlayersInTeam']);
-        });
-    }
+  private subscribeJoinToLobbyResponse() {
+    ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (message) => {
+      var data = JSON.parse(message.body);
+      GameService.setId(data['gameId']);
+      PlayerService.setId(data['playerId']);
+      this.setSettings(data['settings']);
+      this.setPlayers(data['players']);
+      this.model.setMinPlayersInTeam(data['minPlayersInTeam']);
+      this.model.setMaxPlayersInTeam(data['maxPlayersInTeam']);
+    });
+  }
 
+  private setSettings(settings): void {
+    let maxTeamSize = settings['maxTeamSize'];
+    GameService.setMaxTeamSize(maxTeamSize);
+  }
 
-    private setSettings(settings): void {
-        let maxTeamSize = settings['maxTeamSize'];
-        GameService.setMaxTeamSize(maxTeamSize);
-    }
+  private setPlayers(players): void {
+    players.forEach((playerElement) => {
+      var player = PlayerAdapter.createPlayer(playerElement);
+      this.model.addPlayer(player);
+    });
+  }
 
-    private setPlayers(players):void{
-        players.forEach(playerElement => {
-            var player = PlayerAdapter.createPlayer(playerElement);
-            this.model.addPlayer(player);
-        });
-    }
+  public sendReady() {
+    let param = new BoolParam(
+      GameService.getId(),
+      !this.model.getClientPlayer().ready
+    );
+    let json = JSON.stringify(param);
+    ConnectionService.send(json, ConnectionPath.READY);
+  }
 
-    public sendReady(){
-        ConnectionService.send(!this.model.getClientPlayer().ready, ConnectionPath.READY);
-    }
+  public sendJoinBlue() {
+    this.sendJoinToTeam(Team.BLUE);
+  }
 
-    public sendJoinBlue(){
-        ConnectionService.send(Team.BLUE, ConnectionPath.CHANGE_TEAM);
-    }
+  private sendJoinToTeam(team: Team) {
+    let param = new StringParam(GameService.getId(), team.toString());
+    let json = JSON.stringify(param);
+    ConnectionService.send(json, ConnectionPath.CHANGE_TEAM);
+  }
 
-    public sendJoinRed(){
-        ConnectionService.send(Team.RED, ConnectionPath.CHANGE_TEAM);
-    }
+  public sendJoinRed() {
+    this.sendJoinToTeam(Team.RED);
+  }
 
-    public sendJoinToLobby(){
-        ConnectionService.send(PlayerService.getNickname(), ConnectionPath.CONNECT);
-    }
+  public sendJoinToLobby() {
+    ConnectionService.send(PlayerService.getNickname(), ConnectionPath.CONNECT);
+  }
 
-    public unsubscribeAll(){
-        ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
-        ConnectionService.unsubscribe(ConnectionPath.LOBBY_END_RESPONSE);
-        ConnectionService.unsubscribe(ConnectionPath.READY_RESPONSE);
-        ConnectionService.unsubscribe(ConnectionPath.CHANGE_TEAM_REPONSE);
-        ConnectionService.unsubscribe(ConnectionPath.CONNECT_RESPONSE);
-        ConnectionService.unsubscribe(ConnectionPath.PLAYERS_RESPONSE);
-    }
+  public sendAutoJoinToTeam() {
+    let param = new IdParam(GameService.getId());
+    let json = JSON.stringify(param);
+    ConnectionService.send(json, ConnectionPath.AUTO_TEAM);
+  }
 
-    public closeDialog(){
-        this.dialog.close();
-    }
+  public unsubscribeAll() {
+    ConnectionService.unsubscribe(ConnectionPath.DISCONNECT_RESPONSE);
+    ConnectionService.unsubscribe(ConnectionPath.LOBBY_END_RESPONSE);
+    ConnectionService.unsubscribe(ConnectionPath.READY_RESPONSE);
+    ConnectionService.unsubscribe(ConnectionPath.CHANGE_TEAM_REPONSE);
+    ConnectionService.unsubscribe(ConnectionPath.CONNECT_RESPONSE);
+    ConnectionService.unsubscribe(ConnectionPath.PLAYERS_RESPONSE);
+  }
+
+  public closeDialog() {
+    this.dialog.close();
+  }
 }

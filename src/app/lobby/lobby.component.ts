@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { View as ViewComponent } from '../shared/view';
 import {PlayerService} from "../playerService";
 import { AppService, GameStep } from '../shared/appService';
+import { GameService } from '../gameService';
+import { IdParam } from '../shared/parameters/id.param';
 
 @Component({
   selector: 'app-lobby',
@@ -59,10 +61,6 @@ export class LobbyComponent extends ViewComponent implements OnInit {
 
   countObserver(){
     return this.model.getPlayers(Team.LACK).length;
-  }
-
-  autoJoinToTeam(){
-    ConnectionService.send("AUTO", ConnectionPath.AUTO_TEAM);
   }
 
   isPlayerReady(){

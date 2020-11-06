@@ -76,6 +76,10 @@ export class GameComponent extends View implements OnInit  {
     return PlayerService.getTeam();
   }
 
+  getOppositeTeam(team:Team){
+    return team==Team.BLUE? Team.RED : Team.BLUE;
+  }
+
   getClientRole(){
     return PlayerService.getRole();
   }
@@ -151,6 +155,18 @@ export class GameComponent extends View implements OnInit  {
 
   getRemainingWordsInPlayerTeam(){
     return PlayerService.getTeam() == Team.BLUE? this.model.remainingBlue : this.model.remainingRed;
+  }
+
+  getRemainingsCollection(number:number){
+    let result = [];
+    for(let i=0; i<number; i++){
+      result.push(i);
+    }
+    return result;
+  }
+
+  getRemainings(team:Team){
+    return team==Team.BLUE ? this.model.remainingBlue: this.model.remainingRed;
   }
 
 }

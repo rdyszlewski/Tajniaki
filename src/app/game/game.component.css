@@ -35,13 +35,14 @@ span.gamer_column{
   transform: rotateX(35deg);
   background: radial-gradient(at bottom, #ffb77f, #b44c00);
   border-radius: 12px;
+  padding: 2vh;
 }
 
 #table{
   align-items: center;
   text-align: center;
-  margin-left: 10%;
-  margin-right:10%;
+  /* margin-left: 10%;
+  margin-right:10%; */
   perspective: 800px;
   width:80%;
   position: center;
@@ -55,11 +56,93 @@ span.gamer_column{
     transform-style: preserve-3d;
 }
 
+.board{
+  width: 100%;
+  padding: 2vh;
+}
+
+.card{
+  border: 1px solid black;
+  border-radius: 12px;
+  /* border:solid 4px black; */
+  /* border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; */
+  /* border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%; */
+  border-width: 1px 1.5px 2px 1px;
+  /* border-radius:95% 4% 92% 5%/4% 95% 6% 95%; */
+  /* height: 3em; */
+  text-align: center;
+  display: flex;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  transition: 0.25s ease-in-out;
+  box-shadow: 0 0 5px black;
+
+  color: white;
+  font-size: 20px;
+  text-shadow: 2px 2px 5px black;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  
+
+  /* width: 6em; */
+}
+
+.card::after {
+  display: block;
+  content: '';
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 180%;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.4) 35%, rgba(255, 255, 255, 0.2) 42%, rgba(255, 255, 255, 0) 60%);
+  border-radius: inherit;
+  transform: translateY(0%);
+  will-change: transform;
+  transition: inherit;
+  overflow: hidden;
+}
+
 .card:hover{
   transition:.6s;
-  transform: translateZ(25px) rotateX(-35deg);
-  box-shadow: 0 0 20px black;
+  transform: translateZ(35px) rotateX(-35deg);
+  box-shadow: 0 -5px 20px black;
   cursor: pointer;
+}
+
+.card:hover::after{
+  transform: translateY(-40%);
+}
+
+.remaining-card{
+  position: absolute;
+  padding: 0 16px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px black;
+  border-radius: 6px;
+  transition: inherit;
+  z-index: 5;
+  --offset-multiplier: 4px;
+  width: 10%;
+  height:20%;
+}
+
+.left-stack{
+  --translate: calc(var(--offset) * var(--offset-multiplier));
+  transform: translate(var(--translate), var(--translate));
+}
+
+.right-stack{
+  --translate: calc(var(--offset) * var(--offset-multiplier) * (-1));
+  transform: translate(var(--translate), var(--translateY));
+  --translateY: calc(-1* var(--offset) * var(--offset-multiplier) * (-1));
+}
+
+.points:nth-child(n){
+  --offset: n;
 }
 
 .my_answer{
@@ -97,38 +180,32 @@ span.gamer_column{
   margin-right: auto;
 }
 
-.board{
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 40px;
-  margin-bottom: 40px;
+
+
+.team-info{
+  width: 18%;
+  margin-top: 5%;
+  align-items: stretch;
+  font-size: 1vw;
+  align-self: stretch;
 }
 
-
-#first_team{
-  width:18%;
-  margin-top:3em;
-  align-items: stretch;
-}
-
-#second_team{
-  width:18%;
-  margin-top: 3em;
-  align-items: stretch;
+.team-players{
+  margin-top: 20%;
 }
 
 
 .game_container{
   display: flex;
-  margin-top: 5vw;
-  margin-bottom: 5vw;
   transform-style: preserve-3d;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .points{
   width: 5vw;
   height: 5vw;
-  border: black 1px solid;
   margin-top: 2vw;
   margin-left: auto;
   margin-right: auto;
@@ -137,6 +214,7 @@ span.gamer_column{
   align-items: center;
   display: flex;
   font-size: 3em;
+  --offset-multiplier: 4px;
 }
 
 .word_container{
@@ -176,4 +254,11 @@ span.gamer_column{
 
 .pass-button{
   width: 200px;
+}
+
+.table-background{
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  position: absolute;
 }

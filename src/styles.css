@@ -68,7 +68,8 @@ body, html {
   margin: 0;
 
   color: white;
-  font-size: 23px;
+  /* font-size: 23px; */
+  font-size: 1.5vw;
   text-shadow: 2px 2px 5px black;
 }
 
@@ -79,9 +80,9 @@ h3{
 
 .background{
   position: fixed;
-  background-image: url("backgroung.jpg");
   width: 100%;
   height: 100%;
+  background-image: url("backgroung.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -91,7 +92,7 @@ h3{
   background: rgba(240, 224, 255, 0.5);
   height: 100%;
   margin: auto;
-  width: 70%;
+  /* width: 70%; */
   padding: 10px;
 }
 

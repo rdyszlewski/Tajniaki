@@ -27,17 +27,25 @@
 <div id="table">
   <div class="table-container">
     <div class="game_container">
-      <span id="first_team">
-        <div [ngClass]="{
+      <div id="first_team" class="team-info" *ngIf="this.getRemainings(this.getClientTeam()) as remainings" >
+        <div 
+        [ngClass]="{
           'current_team':  model.currentTeam == getClientTeam(),
           'blue_team': getClientTeam()==team.BLUE,
           'red_team':getClientTeam()==team.RED
           }" >{{getClientTeam()==team.BLUE ? "game.blue_team" : 'game.red_team'|translate}}</div>
         <div class="points">
-            {{getClientTeam()==team.BLUE ? model.remainingBlue: model.remainingRed}}
+          <div 
+            *ngFor="let i of this.getRemainingsCollection(remainings)" class="remaining-card left-stack" [style.--offset]=i [style.z-index]=remainings-i 
+            [ngClass]="{
+              'red': getClientTeam()==team.RED,
+              'blue': getClientTeam()==team.BLUE
+            }">
+            {{remainings}}
+          </div>
         </div>
 
-        <div class="first-team-players">
+        <div class="team-players">
             {{"game.players"|translate}}
             <div *ngFor="let player of this.getFirstTeamPlayers()" class="players"
               [ngClass] = "{
@@ -51,7 +59,7 @@
               <span></span>
             </div>
         </div>
-      </span>
+      </div>
 
       <div class="board grid">
 
@@ -81,14 +89,21 @@
       </div>
 
 
-      <span id="second_team">
+      <div id="second_team" class="team-info" *ngIf="this.getRemainings(this.getOppositeTeam(this.getClientTeam())) as remainings">
         <div [ngClass]="{
           'current_team':  model.currentTeam == getClientTeam(),
           'blue_team': getClientTeam()==team.BLUE,
           'red_team':getClientTeam()==team.RED
           }" translate>{{getClientTeam()==team.BLUE ? "game.red_team" : "game.blue_team"}}</div>
-        <div class="points">
-          {{getClientTeam()==team.BLUE ? model.remainingRed: model.remainingBlue}}
+        <div class="points" >
+          <div 
+            *ngFor="let i of this.getRemainingsCollection(remainings)" class="remaining-card right-stack" [style.--offset]=i [style.z-index]=remainings-i 
+            [ngClass]="{
+              'red': getClientTeam()==team.BLUE,
+              'blue': getClientTeam()==team.RED
+            }">
+            {{remainings}}
+          </div>
         </div>
 
         <div class="team-players">
@@ -104,7 +119,7 @@
             <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
           </div>
       </div>
-      </span>
+      </div>
     </div>
 
 
@@ -114,7 +129,6 @@
       <button (click)="eventsManager.sendBossMessage()" [disabled]='!isPlayerTurn()'>{{"game.send_word"|translate}}</button>
     </div>
     <div *ngIf="!isBoss()">
-      <!-- Dla uproszczenia deklarujemy zmienną. Do tego celu korzystamy z ngId -->
       <div  *ngIf="model.getPassCard() as card"
           [ngClass]="{
             'my_answer': isAnswerByClient(card),
@@ -129,5 +143,8 @@
           </div>
     </div>
   </div>
+</div>
+<div class="table-background">
+  
 </div>
 

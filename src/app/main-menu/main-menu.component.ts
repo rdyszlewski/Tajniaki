@@ -9,7 +9,8 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { CookieService } from 'ngx-cookie-service';
 import { ConnectionPath } from '../shared/connectionPath';
 import { TranslateService } from '@ngx-translate/core';
-
+import { TestClass } from './test.class';
+import * as uuid from 'uuid'
 (window as any).global = window;
 
 @Component({
@@ -26,7 +27,7 @@ export class MainMenuComponent implements OnInit {
   infoDialog: DialogService;
 
   constructor(private router: Router, private injector:Injector, private cookieService: CookieService, private translate: TranslateService ) {
-    
+
   }
 
   ngOnInit(): void {
@@ -36,9 +37,19 @@ export class MainMenuComponent implements OnInit {
     if(!ConnectionService.isConnected()){
       this.connect();
     }
-    // this.testSubscribeIdEvent(); 
+    // this.testSubscribeIdEvent();
   }
-  
+
+  public test(){
+    console.log("Testowanko");
+    let model = new TestClass();
+    model.first = "Jeden";
+    model.second = "Dwa";
+    model.uuid = uuid.v4();
+    ConnectionService.send(JSON.stringify(model), "/app/test/uuid")
+  }
+
+
 
   private testSubscribeIdEvent(){
     ConnectionService.subscribe("/user/queue/lobby/id", message => {
