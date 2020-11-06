@@ -7,7 +7,6 @@ import { DialogService } from '../dialog/dialog.service';
 import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
 import { CookieService } from 'ngx-cookie-service';
-import { ConnectionPath } from '../shared/connectionPath';
 import { TranslateService } from '@ngx-translate/core';
 import { TestClass } from './test.class';
 import * as uuid from 'uuid'
@@ -77,7 +76,6 @@ export class MainMenuComponent implements OnInit {
     this.infoDialog.setMessage("dialog.connecting").setMode(DialogMode.INFO).open(DialogComponent);
     ConnectionService.connect('localhost', 8080, ()=>{
       this.testSubscribeIdEvent();
-      this.subscribeCheckPossibleGame();
       setTimeout(() => this.infoDialog.close(), this.CONNECTION_DIALOG_DELAY);
     });
     this.startConnectionTimeout();
@@ -98,16 +96,6 @@ export class MainMenuComponent implements OnInit {
         .open(DialogComponent);
   }
 
-  private subscribeCheckPossibleGame(){
-    ConnectionService.subscribe(ConnectionPath.POSSIBLE_GAME_RESPONSE, message=>{
-      console.log(message.body);
-      if(message.body =='true'){
-        this.router.navigate(['lobby']);
-      } else {
-        this.infoDialog.setMode(DialogMode.WARNING).setMessage("dialog.no_game").setOnOkClick(()=>this.infoDialog.close()).open(DialogComponent);
-      }
-    });
-  }
 
   isConnected():boolean{
     return ConnectionService.isConnected();
@@ -163,7 +151,4 @@ export class MainMenuComponent implements OnInit {
     }
   }
 
-  sendCheckPossibleGame(){
-    ConnectionService.send("?", ConnectionPath.FREE_GAME);
-  }
 }

@@ -36,7 +36,7 @@ export class GameComponent extends View implements OnInit  {
     AppService.setCurrentStep(GameStep.GAME);
     this.preventRightClickMenu();
     this.eventsManager.init(this.model, this.router, this.injector);
-    this.sendStartMessage();
+    this.eventsManager.sendStartMessage();
     this.setOnLeave(this.onLeaveEvent);
   }
 
@@ -58,10 +58,6 @@ export class GameComponent extends View implements OnInit  {
 
   private preventRightClickMenu() {
     document.addEventListener('contextmenu', event => event.preventDefault());
-  }
-
-  private sendStartMessage() {
-    ConnectionService.send("START", ConnectionPath.GAME_START);
   }
 
   isBoss(){

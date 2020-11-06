@@ -14,11 +14,16 @@ import { Injector } from '@angular/core';
 import { DialogService } from '../dialog/dialog.service';
 import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
+import { StringParam } from '../shared/parameters/string.param';
+import { GameService } from '../gameService';
+import { IdParam } from '../shared/parameters/id.param';
+import { NumberParam } from '../shared/parameters/number.param';
+import { QuestionParam } from './parameters/question.param';
 
 export class GameEventsManager{
 
     // TODO: przenieść wszystkie tworzneia obiektów do adapterów
-  
+
     private model:GameState;
     private playerRole:Role;
     private router: Router;
@@ -29,7 +34,7 @@ export class GameEventsManager{
         this.playerRole = PlayerService.getRole();
         this.router = router;
         this.dialog = injector.get(DialogService);
-        
+
         this.subscribeEvents();
     }
 
@@ -51,7 +56,7 @@ export class GameEventsManager{
     private subscribeEndEvent() {
         this.endGame();
       }
-    
+
     private endGame() {
         ConnectionService.subscribe(ConnectionPath.END_GAME_RESPONSE, message => {
             this.router.navigate(['summary']);
@@ -63,7 +68,7 @@ export class GameEventsManager{
           this.updateStateAfterReceiveQuestion(message);
         });
       }
-    
+
     private updateStateAfterReceiveQuestion(message: any) {
         let data = JSON.parse(message.body);
         this.updateGameState(data["gameState"]);
@@ -74,7 +79,7 @@ export class GameEventsManager{
           this.updateStateAfterClick(message);
         });
       }
-    
+
     private updateStateAfterClick(message: any) {
         var data = JSON.parse(message.body);
         let editedCards = data['editedCards'];
@@ -87,7 +92,7 @@ export class GameEventsManager{
           this.updateStateAfterReceiveAnswer(message);
         });
       }
-    
+
     private updateStateAfterReceiveAnswer(message: any) {
         var data = JSON.parse(message.body);
         let editedCards = data['cardsToUpdate'];
@@ -173,20 +178,25 @@ export class GameEventsManager{
     }
 
     public sendFlag(cardId:number){
-        ConnectionService.send(cardId, ConnectionPath.FLAG);
+      let param = new NumberParam(GameService.getId(), cardId);
+      let json = JSON.stringify(param)
+        ConnectionService.send(json, ConnectionPath.FLAG);
     }
 
     public sendBossMessage(){
-      let wordInput = $("#wordInput");
-      let numberInput = $("#numberInput");
-      let message = new BossMessage(wordInput.val() as string, numberInput.val() as number);
-      ConnectionService.send(JSON.stringify(message),ConnectionPath.QUESTION);
-      wordInput.val("");
-      numberInput.val(1);
+      // TODO: rozwiązać to bez jquery
+      let word = $("#wordInput").val().toString();
+      let number = $("#numberInput").val() as number;
+      let param = new QuestionParam(GameService.getId(), word, number);
+      let json = JSON.stringify(param);
+      ConnectionService.send(json, ConnectionPath.QUESTION);
+      // TODO: dodać resetowanie pól. Zrobić to za pomocą Angualra, nie jquery
     }
 
     public sendClick(cardId:number){
-        ConnectionService.send(cardId, ConnectionPath.CLICK);
+      let param = new NumberParam(GameService.getId(), cardId);
+      let json = JSON.stringify(param);
+      ConnectionService.send(json, ConnectionPath.CLICK);
     }
 
     public sendPass(){
@@ -194,7 +204,9 @@ export class GameEventsManager{
     }
 
     public sendStartMessage() {
-        ConnectionService.send("START", ConnectionPath.GAME_START);
+      let param = new IdParam(GameService.getId());
+      let json = JSON.stringify(param)
+        ConnectionService.send(json, ConnectionPath.GAME_START);
     }
 
     private setOnCloseEvent(){
@@ -218,7 +230,7 @@ export class GameEventsManager{
             this.exit('lobby');
           }).open(DialogComponent);
         }
-        
+
         let playersText = data['players'];
         if(playersText != null){
           // TODO: można wysłać informacje do nowego szefa

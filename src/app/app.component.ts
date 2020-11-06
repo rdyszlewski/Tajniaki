@@ -7,6 +7,8 @@ import { DialogMode } from './dialog/dialogMode';
 import { DialogComponent } from './dialog/dialog.component';
 import { ConnectionService } from './connection.service';
 import {TranslateService} from '@ngx-translate/core'
+import { IdParam } from './shared/parameters/id.param';
+import { GameService } from './gameService';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +17,7 @@ import {TranslateService} from '@ngx-translate/core'
 })
 export class AppComponent {
   title = 'Tajniaki';
-  
+
   private dialog: DialogService;
 
   // TODO: można to przenieść do AppService
@@ -25,7 +27,7 @@ export class AppComponent {
   constructor (private router:Router, private injector: Injector, private translate:TranslateService){
     this.dialog = injector.get(DialogService);
     translate.setDefaultLang('pl');
-    
+
   }
 
   openMenu(){
@@ -35,7 +37,7 @@ export class AppComponent {
 
   areMenuItemHidden(){
     return !this.menuShow;
-  } 
+  }
 
   isMenuHidden(){
     return AppService.getCurrentStep() == GameStep.MAIN;
@@ -44,7 +46,9 @@ export class AppComponent {
   goToMenu(){
     this.menuShow = false;
     this.dialog.setMessage("dialog.sure_quit").setMode(DialogMode.ALERT).setOnOkClick(()=>{
-      ConnectionService.send("PAPA", '/app/game/quit');
+      let param = new IdParam(GameService.getId());
+      let json = JSON.stringify(param);
+      ConnectionService.send(json, '/app/game/quit');
       this.dialog.close();
       this.menuShow = false;
       AppService.setCurrentStep(GameStep.MAIN);
