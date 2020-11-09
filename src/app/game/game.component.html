@@ -1,134 +1,155 @@
-<div class="game_head_row">
-  <div class="gamer_column">
-    <span class="gamer_column">{{"game.player_name"|translate}}: {{getNickname()}}</span>
-    <span class="gamer_column">{{"game.team"|translate}}: {{getTeam()=="BLUE"?"game.blue_team":"game.red_team"|translate}}</span>
-    <span class="gamer_column">{{"game.role"|translate}}: {{getRole()=="BOSS"?"game.boss":"game.player"|translate}}</span>
-  </div>
+<div class="game-container">
 
-  <div class="round_information_column">
-    <div class="current_state">
-      {{"game.turn"|translate}}
-      <span id="current_stage" class="state_element">
-        {{model.currentStage==role.BOSS? "game.turn_boss": "game.turn_player"|translate}}
-      </span>
-      <span id="current_team" class="state_element">
-        {{model.currentTeam==team.BLUE?"game.turn_blue":"game.turn_red"|translate}}
-      </span>
+  <ng-container [ngTemplateOutlet]="game_info"></ng-container>
+
+  <div id="table">
+    <div class="table-container">
+
+      <ng-container [ngTemplateOutlet]="left_team"></ng-container>
+      <ng-container [ngTemplateOutlet]="board"></ng-container>
+      <ng-container [ngTemplateOutlet]="right_team"></ng-container>
+
+      </div>
     </div>
 
-    <div id="word_sign">{{"game.word"|translate}}:</div>
-    <div class="word_container">
-      <span id="word" class="word_element">{{model.currentWord}} </span>
-      <span id="number" class="word_element">{{model.remainingAnswers}}</span>
-    </div>
-  </div>
 </div>
 
-<div id="table">
-  <div class="table-container">
-    <div class="game_container">
-      <div id="first_team" class="team-info" *ngIf="this.getRemainings(this.getClientTeam()) as remainings" >
-        <div 
+<div class="table-background"></div>
+
+<ng-template #game_info>
+  <div class="game_head_row">
+    <div class="gamer_column">
+      <span class="gamer_column">{{"game.player_name"|translate}}: {{getNickname()}}</span>
+      <span class="gamer_column">{{"game.team"|translate}}: {{getTeam()=="BLUE"?"game.blue_team":"game.red_team"|translate}}</span>
+      <span class="gamer_column">{{"game.role"|translate}}: {{getRole()=="BOSS"?"game.boss":"game.player"|translate}}</span>
+    </div>
+
+    <div class="round_information_column">
+      <div class="current_state">
+        {{"game.turn"|translate}}
+        <span id="current_stage" class="state_element">
+          {{model.currentStage==role.BOSS? "game.turn_boss": "game.turn_player"|translate}}
+        </span>
+        <span id="current_team" class="state_element">
+          {{model.currentTeam==team.BLUE?"game.turn_blue":"game.turn_red"|translate}}
+        </span>
+      </div>
+
+      <div id="word_sign">{{"game.word"|translate}}:</div>
+      <div class="word_container">
+        <span id="word" class="word_element">{{model.currentWord}} </span>
+        <span id="number" class="word_element">{{model.remainingAnswers}}</span>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #left_team>
+  <div id="first_team" class="team-info" *ngIf="this.getRemainings(this.getClientTeam()) as remainings" >
+    <div
+    [ngClass]="{
+      'current_team':  model.currentTeam == getClientTeam(),
+      'blue_team': getClientTeam()==team.BLUE,
+      'red_team':getClientTeam()==team.RED,
+      'team-name': true
+      }" >{{getClientTeam()==team.BLUE ? "game.blue_team" : 'game.Added test gamered_team'|translate}}</div>
+    <div class="points">
+      <div
+        *ngFor="let i of this.getRemainingsCollection(remainings)" class="remaining-card left-stack" [style.--offset]=i [style.z-index]=remainings-i
         [ngClass]="{
-          'current_team':  model.currentTeam == getClientTeam(),
-          'blue_team': getClientTeam()==team.BLUE,
-          'red_team':getClientTeam()==team.RED
-          }" >{{getClientTeam()==team.BLUE ? "game.blue_team" : 'game.red_team'|translate}}</div>
-        <div class="points">
-          <div 
-            *ngFor="let i of this.getRemainingsCollection(remainings)" class="remaining-card left-stack" [style.--offset]=i [style.z-index]=remainings-i 
-            [ngClass]="{
-              'red': getClientTeam()==team.RED,
-              'blue': getClientTeam()==team.BLUE
-            }">
-            {{remainings}}
-          </div>
-        </div>
-
-        <div class="team-players">
-            {{"game.players"|translate}}
-            <div *ngFor="let player of this.getFirstTeamPlayers()" class="players"
-              [ngClass] = "{
-                'current-player': isCurrentPlayer(player),
-                'players': true
-              }"
-            >
-              <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
-              <div class="player-name">{{player.nickname}}</div>
-              <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
-              <span></span>
-            </div>
-        </div>
-      </div>
-
-      <div class="board grid">
-
-          <div *ngFor='let card of model.getCards()'
-          [ngClass]="{
-            'my_answer': isAnswerByClient(card),
-            'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
-            'blue': card.color.toString()=='BLUE',
-            'red': card.color.toString()=='RED',
-            'neutral': card.color.toString()=='NEUTRAL',
-            'killer':card.color.toString()=='KILLER',
-            'lack': card.color.toString()=='LACK',
-            'card ' :true}"
-            (click)="eventsManager.sendClick(card.id)" (contextmenu)="eventsManager.sendFlag(card.id)">
-            <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'"
-              class="click_amount" id="answers"
-              tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
-            </span>
-            <span [hidden]="isWordHidden(card)" class="word"> {{card.word}} </span>
-
-            <span [style.visibility]="card.flags.length == 0 ? 'hidden':'visible'"
-              class="click_amount" id="flags"
-              tooltip={{tooltip.getTooltipText(card.flags)}} [options]="tooltip.getTooltipOptions(card.flags)">{{card.flags.length}}
-            </span>
-          </div>
-
-      </div>
-
-
-      <div id="second_team" class="team-info" *ngIf="this.getRemainings(this.getOppositeTeam(this.getClientTeam())) as remainings">
-        <div [ngClass]="{
-          'current_team':  model.currentTeam == getClientTeam(),
-          'blue_team': getClientTeam()==team.BLUE,
-          'red_team':getClientTeam()==team.RED
-          }" translate>{{getClientTeam()==team.BLUE ? "game.red_team" : "game.blue_team"}}</div>
-        <div class="points" >
-          <div 
-            *ngFor="let i of this.getRemainingsCollection(remainings)" class="remaining-card right-stack" [style.--offset]=i [style.z-index]=remainings-i 
-            [ngClass]="{
-              'red': getClientTeam()==team.BLUE,
-              'blue': getClientTeam()==team.RED
-            }">
-            {{remainings}}
-          </div>
-        </div>
-
-        <div class="team-players">
-          Gracze
-          <div *ngFor="let player of this.getSecondTeamPlayers()" class="players"
-            [ngClass] = "{
-              'current-player': isCurrentPlayer(player),
-              'players': true
-            }"
-          >
-            <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
-            <div class="player-name">{{player.nickname}}</div>
-            <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
-          </div>
-      </div>
+          'red': getClientTeam()==team.RED,
+          'blue': getClientTeam()==team.BLUE
+        }">
+        {{remainings}}
       </div>
     </div>
 
+    <div class="team-players">
+        {{"game.players"|translate}}
+        <div *ngFor="let player of this.getFirstTeamPlayers()" class="players"
+          [ngClass] = "{
+            'current-player': isCurrentPlayer(player),
+            'players': true
+          }"
+        >
+          <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
+          <div class="player-name">{{player.nickname}}</div>
+          <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
+          <span></span>
+        </div>
+    </div>
+  </div>
+</ng-template>
 
-    <div *ngIf="isBoss()">
+<ng-template #right_team>
+  <div id="second_team" class="team-info" *ngIf="this.getRemainings(this.getOppositeTeam(this.getClientTeam())) as remainings">
+    <div [ngClass]="{
+      'current_team':  model.currentTeam == getClientTeam(),
+      'blue_team': getClientTeam()==team.BLUE,
+      'red_team':getClientTeam()==team.RED,
+      'team-name': true
+      }" translate>{{getClientTeam()==team.BLUE ? "game.red_team" : "game.blue_team"}}</div>
+    <div class="points" >
+      <div
+        *ngFor="let i of this.getRemainingsCollection(remainings)" class="remaining-card right-stack" [style.--offset]=i [style.z-index]=remainings-i
+        [ngClass]="{
+          'red': getClientTeam()==team.BLUE,
+          'blue': getClientTeam()==team.RED
+        }">
+        {{remainings}}
+      </div>
+    </div>
+
+    <div class="team-players">
+      Gracze
+      <div *ngFor="let player of this.getSecondTeamPlayers()" class="players"
+        [ngClass] = "{
+          'current-player': isCurrentPlayer(player),
+          'players': true
+        }"
+      >
+        <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
+        <div class="player-name">{{player.nickname}}</div>
+        <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
+      </div>
+  </div>
+  </div>
+</ng-template>
+
+<ng-template #board>
+  <div class="board">
+    <div class="grid">
+      <div *ngFor='let card of model.getCards()'
+      [ngClass]="{
+        'my_answer': isAnswerByClient(card),
+        'my_flag':isFlagByClient(card) && !isAnswerByClient(card),
+        'blue': card.color.toString()=='BLUE',
+        'red': card.color.toString()=='RED',
+        'neutral': card.color.toString()=='NEUTRAL',
+        'killer':card.color.toString()=='KILLER',
+        'lack': card.color.toString()=='LACK',
+        'card ' :true}"
+        (click)="eventsManager.sendClick(card.id)" (contextmenu)="eventsManager.sendFlag(card.id)">
+        <span [style.visibility]="card.answers.length == 0 ? 'hidden':'visible'"
+          class="click_amount" id="answers"
+          tooltip={{tooltip.getTooltipText(card.answers)}} [options]="tooltip.getTooltipOptions(card.answers)">{{card.answers.length}}
+        </span>
+        <span [hidden]="isWordHidden(card)" class="word"> {{card.word}} </span>
+
+        <span [style.visibility]="card.flags.length == 0 ? 'hidden':'visible'"
+          class="click_amount" id="flags"
+          tooltip={{tooltip.getTooltipText(card.flags)}} [options]="tooltip.getTooltipOptions(card.flags)">{{card.flags.length}}
+        </span>
+      </div>
+    </div>
+
+    <div *ngIf="isBoss()" class="board-extra">
       <input id="wordInput" (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()' (keyup.enter)="eventsManager.sendBossMessage()"/>
       <input id="numberInput" type="number" value=1 min=1 max="{{getRemainingWordsInPlayerTeam()}}" [disabled]='!isPlayerTurn() ' (keyup.enter)="eventsManager.sendBossMessage()"/>
       <button (click)="eventsManager.sendBossMessage()" [disabled]='!isPlayerTurn()'>{{"game.send_word"|translate}}</button>
     </div>
-    <div *ngIf="!isBoss()">
+    <div *ngIf="!isBoss()" class="board-extra">
       <div  *ngIf="model.getPassCard() as card"
           [ngClass]="{
             'my_answer': isAnswerByClient(card),
@@ -143,8 +164,4 @@
           </div>
     </div>
   </div>
-</div>
-<div class="table-background">
-  
-</div>
-
+</ng-template>
