@@ -10,6 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { TranslateService } from '@ngx-translate/core';
 import { TestClass } from './test.class';
 import * as uuid from 'uuid'
+import { GameService } from '../gameService';
 (window as any).global = window;
 
 @Component({
@@ -36,7 +37,6 @@ export class MainMenuComponent implements OnInit {
     if(!ConnectionService.isConnected()){
       this.connect();
     }
-    // this.testSubscribeIdEvent();
   }
 
   public test(){
@@ -46,15 +46,6 @@ export class MainMenuComponent implements OnInit {
     model.second = "Dwa";
     model.uuid = uuid.v4();
     ConnectionService.send(JSON.stringify(model), "/app/test/uuid")
-  }
-
-
-
-  private testSubscribeIdEvent(){
-    ConnectionService.subscribe("/user/queue/lobby/id", message => {
-      PlayerService.setId(parseInt(message.body));
-    });
-    ConnectionService.send("DAJ","/app/test/getid");
   }
 
   private setPlayerNickname(){
@@ -130,8 +121,25 @@ export class MainMenuComponent implements OnInit {
   }
 
   startGame(){
-    this.router.navigate(["game"]);
+    ConnectionService.send("siema", "/app/test/start");
   }
+
+
+  private testSubscribeIdEvent(){
+    ConnectionService.subscribe('/user/queue/test/start', message=>{
+      console.log("Otrzymałem id gry");
+      var data = JSON.parse(message.body);
+      GameService.setId(data['gameId']);
+      console.log(GameService.getId());
+      PlayerService.setId(data['playerId']);
+    });
+
+    ConnectionService.subscribe("/user/queue/test/startGame", message=>{
+      console.log("Odbieram to")
+      this.router.navigate(["game"]);
+    });
+  }
+
 
   startVoting(){
     this.router.navigate(['voting']);
