@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { TestClass } from './test.class';
 import * as uuid from 'uuid'
 import { GameService } from '../gameService';
+import { IdParam } from '../shared/parameters/id.param';
 (window as any).global = window;
 
 @Component({
@@ -121,10 +122,15 @@ export class MainMenuComponent implements OnInit {
     return PlayerService.getNickname();
   }
 
-  startGame(){
-    ConnectionService.send("siema", "/app/test/start");
+  readyStartGame(){
+    ConnectionService.send("siema", "/app/test/start_ready");
   }
 
+  startGame(){
+    let param = new IdParam(GameService.getId());
+    let json = JSON.stringify(param);
+    ConnectionService.send(json, '/app/test/start')
+  }
 
   private testSubscribeIdEvent(){
     ConnectionService.subscribe('/user/queue/test/start', message=>{
