@@ -146,7 +146,8 @@ export class GameComponent extends View implements OnInit  {
   }
 
   isPlayerTurn(){
-    return PlayerService.getTeam() == this.model.currentTeam && PlayerService.getRole() == this.model.currentStage;
+    return PlayerService.getTeam() == this.model.currentTeam
+      && PlayerService.getRole() == this.model.currentStage;
   }
 
   getRemainingWordsInPlayerTeam(){

@@ -51,7 +51,9 @@ export class GameState{
     public replaceCard(word: string, card:Card){
         let index = this.getCardId(word);
         if(index != null){
+          console.log("Zastąpiono kartę");
             this.cards[index] = card;
+            console.log(this.cards);
         }
     }
 

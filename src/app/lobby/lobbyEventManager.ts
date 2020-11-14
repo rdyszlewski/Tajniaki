@@ -107,6 +107,7 @@ export class LobbyEventsManager {
       PlayerService.setId(data['playerId']);
       this.setSettings(data['settings']);
       this.setPlayers(data['players']);
+      console.log(data["players"]);
       this.model.setMinPlayersInTeam(data['minPlayersInTeam']);
       this.model.setMaxPlayersInTeam(data['maxPlayersInTeam']);
     });
@@ -119,6 +120,7 @@ export class LobbyEventsManager {
 
   private setPlayers(players): void {
     players.forEach((playerElement) => {
+      console.log("Player");
       var player = PlayerAdapter.createPlayer(playerElement);
       this.model.addPlayer(player);
     });

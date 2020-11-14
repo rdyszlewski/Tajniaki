@@ -64,7 +64,10 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   isPlayerReady(){
-    return this.model.getClientPlayer().ready;
+    if(this.model.getClientPlayer()){
+      return this.model.getClientPlayer().ready;
+    }
+    return false;
   }
 
   canJoinToBlue(){
@@ -76,7 +79,10 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   canSetReady(){
-    return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
+    if(this.model.getClientPlayer()){
+      return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
+    }
+    return false;
   }
 
   getNickname(){

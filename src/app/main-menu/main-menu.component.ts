@@ -66,6 +66,7 @@ export class MainMenuComponent implements OnInit {
     console.log(message);
     this.infoDialog.setMessage("dialog.connecting").setMode(DialogMode.INFO).open(DialogComponent);
     ConnectionService.connect('localhost', 8080, ()=>{
+      // ConnectionService.connect("172.17.0.2", 8080, ()=>{
       this.testSubscribeIdEvent();
       setTimeout(() => this.infoDialog.close(), this.CONNECTION_DIALOG_DELAY);
     });

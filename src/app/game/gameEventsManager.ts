@@ -1,11 +1,10 @@
-import { Team, TeamAdapter } from '../lobby/team';
+import { TeamAdapter } from '../lobby/team';
 import { ConnectionService } from '../connection.service';
 import { GameState } from './models/gameState';
 import { Role } from './role';
 import { CardCreator, Card } from './models/card';
 import { PlayerService } from '../playerService';
 import { ConnectionPath } from '../shared/connectionPath';
-import { BossMessage } from './bossMessage';
 import * as $ from 'jquery';
 import { GamePlayer } from './models/gamePlayer';
 import { Router } from '@angular/router';
@@ -14,7 +13,6 @@ import { Injector } from '@angular/core';
 import { DialogService } from '../dialog/dialog.service';
 import { DialogMode } from '../dialog/dialogMode';
 import { DialogComponent } from '../dialog/dialog.component';
-import { StringParam } from '../shared/parameters/string.param';
 import { GameService } from '../gameService';
 import { IdParam } from '../shared/parameters/id.param';
 import { NumberParam } from '../shared/parameters/number.param';
@@ -145,7 +143,7 @@ export class GameEventsManager{
 
     private updateGameState(data){
         this.model.currentTeam = TeamAdapter.getTeam(data["currentTeam"]);
-        this.model.currentStage = this.getRole(data["currentStage"]);
+        this.model.currentStage = this.getRole(data["currentRole"]);
         this.model.remainingBlue = data["remainingBlue"];
         this.model.remainingRed = data["remainingRed"];
         this.model.currentWord = data["currentWord"];
@@ -159,6 +157,8 @@ export class GameEventsManager{
 
     private updateCards(cards){
         cards.forEach(card => {
+          console.log("UpdateCards");
+          console.log(card);
             this.model.replaceCard(card.word, card);
         });
     }
@@ -167,6 +167,7 @@ export class GameEventsManager{
         let cards= []
         cardsTextList.forEach(element => {
             let card  = CardCreator.createCard(element);
+            console.log(card);
             cards.push(card);
         });
         cards = cards.sort((x1,x2)=>x1.id-x2.id);
