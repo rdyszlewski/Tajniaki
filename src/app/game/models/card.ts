@@ -1,4 +1,4 @@
-import { WordColor } from './word_color';
+import { WordColor } from './word-color';
 
 export class Card{
     id:number;
@@ -15,26 +15,5 @@ export class Card{
         this.checked = checked;
         this.answers = [];
         this.flags = [];
-    }
-}
-
-export class CardCreator{
-
-    public static createCard(data):Card{
-        let id = data['id'];
-        let word = data["word"];
-        let color = data['color'];
-        let checked = data['checked'];
-        let card = new Card(id, word, color, checked);
-        let answers = data['answers'];
-        if(answers!=null){
-            card.answers = answers;
-        }
-        let flags = data['flags'];
-        if(flags !=null){
-            card.flags = flags;
-        }
-
-        return card;
     }
 }

@@ -1,4 +1,4 @@
-import { Player } from './lobby_player';
+import { LobbyPlayer } from './lobby_player';
 import { Team } from './team';
 import { PlayerService } from '../playerService';
 import { Injectable } from '@angular/core';
@@ -10,7 +10,7 @@ export class LobbyModel{
 
     private minPlayersInTeam: number;
     private maxPlayerInTeam: number;
-    private players: Player[] = [];
+    private players: LobbyPlayer[] = [];
 
     constructor(private playerService: PlayerService){
 
@@ -32,13 +32,13 @@ export class LobbyModel{
         this.maxPlayerInTeam = number;
     }
 
-    public addPlayer(player:Player){
+    public addPlayer(player:LobbyPlayer){
         if(!this.existsPlayer(player)){
             this.players.push(player);
         }
     }
 
-    private existsPlayer(player:Player){
+    private existsPlayer(player:LobbyPlayer){
         return this.players.some(p=>p.id==player.id);
     }
 
@@ -50,11 +50,11 @@ export class LobbyModel{
         return this.players.find(player=>player.nickname===nick);
     }
 
-    public getPlayerById(id:number):Player{
+    public getPlayerById(id:number):LobbyPlayer{
         return this.players.find(player=>player.id === id);
     }
 
-    public getPlayers(team:Team):Player[]{
+    public getPlayers(team:Team):LobbyPlayer[]{
         return this.players.filter(x=>x.team == team);
     }
 
@@ -67,7 +67,7 @@ export class LobbyModel{
         }
     }
 
-    public isClientPlayer(player:Player):boolean{
+    public isClientPlayer(player:LobbyPlayer):boolean{
         return player.id == this.playerService.getId();
     }
 }

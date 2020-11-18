@@ -1,7 +1,7 @@
 import { Team } from "./team"
 
 
-export class Player{
+export class LobbyPlayer{
     public id: number;
     public nickname: string;
     public ready: boolean;

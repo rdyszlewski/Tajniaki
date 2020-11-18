@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Team } from './lobby/team';
-import { Role } from './game/role';
+import { Role } from './game/models/role';
 
 @Injectable({
   providedIn: 'root',

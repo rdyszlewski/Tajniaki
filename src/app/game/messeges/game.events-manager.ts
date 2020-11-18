@@ -1,22 +1,23 @@
-import { TeamAdapter } from '../lobby/team';
-import { ConnectionService } from '../connection.service';
-import { GameState } from './models/gameState';
-import { Role } from './role';
-import { CardCreator, Card } from './models/card';
-import { PlayerService } from '../playerService';
-import { ConnectionPath } from '../shared/connectionPath';
-import * as $ from 'jquery';
-import { GamePlayer } from './models/gamePlayer';
+import { ConnectionService } from '../../connection.service';
+import { GameState } from '../models/game-state';
+import { Role } from '../models/role';
+import { PlayerService } from '../../playerService';
+import { ConnectionPath } from '../../shared/connectionPath';
 import { Router } from '@angular/router';
-import { PlayerAdapter } from '../shared/adapters/playerAdapter';
 import { Injector } from '@angular/core';
-import { DialogService } from '../dialog/dialog.service';
-import { DialogMode } from '../dialog/dialogMode';
-import { DialogComponent } from '../dialog/dialog.component';
-import { GameService } from '../gameService';
-import { IdParam } from '../shared/parameters/id.param';
-import { NumberParam } from '../shared/parameters/number.param';
-import { QuestionParam } from './parameters/question.param';
+import { DialogService } from '../../dialog/dialog.service';
+import { DialogMode } from '../../dialog/dialogMode';
+import { DialogComponent } from '../../dialog/dialog.component';
+import { GameService } from '../../gameService';
+import { IdParam } from '../../shared/parameters/id.param';
+import { NumberParam } from '../../shared/parameters/number.param';
+import { QuestionParam } from '../parameters/question.param';
+import { StateUpdateAdapter } from './state-update-adapter';
+import { CardAdapter } from './cards-adapter';
+import { RoleAdapter } from '../../shared/messages/role-adapter';
+import { GamePlayerAdapter } from './player-adapter';
+import { TeamAdapter } from 'src/app/shared/messages/team-adapter';
+import { PlayerAdapter } from 'src/app/shared/messages/player-adapter';
 
 export class GameEventsManager {
   private playerRole: Role;
@@ -71,7 +72,7 @@ export class GameEventsManager {
 
   private updateStateAfterReceiveQuestion(message: any) {
     let data = JSON.parse(message.body);
-    this.updateGameState(data['gameState']);
+    StateUpdateAdapter.update(data['gameState'], this.state);
   }
 
   private subscribeClickEvent() {
@@ -82,9 +83,7 @@ export class GameEventsManager {
 
   private updateStateAfterClick(message: any) {
     var data = JSON.parse(message.body);
-    let editedCards = data['editedCards'];
-    let cards = this.createCards(editedCards);
-    this.updateCards(cards);
+    CardAdapter.updateCatrds(data["editedCards"], this.state);
   }
 
   private subscribeAnswerEvent() {
@@ -95,10 +94,8 @@ export class GameEventsManager {
 
   private updateStateAfterReceiveAnswer(message: any) {
     var data = JSON.parse(message.body);
-    let editedCards = data['cardsToUpdate'];
-    let cards = this.createCards(editedCards);
-    this.updateCards(cards);
-    this.updateGameState(data['gameState']);
+    CardAdapter.updateCatrds(data["cardsToUpdate"], this.state);
+    StateUpdateAdapter.update(data['gameState'], this.state);
     if (!data['active']) {
       this.endGame();
     }
@@ -113,71 +110,28 @@ export class GameEventsManager {
   private subscribeNewBossEvent() {
     ConnectionService.subscribe(ConnectionPath.NEW_BOSS_RESPONSE, (message) => {
       this.startGame(message);
-      this.dialog
-        .setMode(DialogMode.ALERT)
-        .setMessage('dialog.you_are_new_boss')
-        .setOnOkClick(() => {
-          this.dialog.close();
-        })
-        .open(DialogComponent);
+      this.openNewBossMessage();
     });
+  }
+
+  private openNewBossMessage() {
+    this.dialog
+      .setMode(DialogMode.ALERT)
+      .setMessage('dialog.you_are_new_boss')
+      .setOnOkClick(() => {
+        this.dialog.close();
+      })
+      .open(DialogComponent);
   }
 
   private startGame(message: any) {
     var data = JSON.parse(message.body);
     this.playerService.setNickname(data['nickname']);
-    this.playerService.setRole(this.getRole(data['playerRole']));
+    this.playerService.setRole(RoleAdapter.getRole(data['playerRole']));
     this.playerService.setTeam(TeamAdapter.getTeam(data['playerTeam']));
-    this.updateGameState(data['gameState']);
-    this.state.setCards(this.createCards(data['cards']));
-    let playersList = this.getPlayersList(data['players']);
-    playersList.forEach((x) => this.state.addPlayer(x));
-  }
-
-  private getPlayersList(playersList) {
-    let playersResult = [];
-    playersList.forEach((x) => {
-      let player = new GamePlayer();
-      player.id = x['id'];
-      player.nickname = x['nickname'];
-      player.role = this.getRole(x['role']);
-      player.team = TeamAdapter.getTeam(x['team']);
-      playersResult.push(player);
-    });
-    return playersResult;
-  }
-
-  private updateGameState(data) {
-    this.state.currentTeam = TeamAdapter.getTeam(data['currentTeam']);
-    this.state.currentStage = this.getRole(data['currentRole']);
-    this.state.remainingBlue = data['remainingBlue'];
-    this.state.remainingRed = data['remainingRed'];
-    this.state.currentWord = data['currentWord'];
-    this.state.remainingAnswers = data['remainingAnswers'];
-  }
-
-  private getRole(roleText) {
-    return roleText == 'BOSS' ? Role.BOSS : Role.PLAYER;
-  }
-
-  private updateCards(cards) {
-    cards.forEach((card) => {
-      this.state.replaceCard(card.word, card);
-    });
-  }
-
-  private createCards(cardsTextList) {
-    let cards = [];
-    cardsTextList.forEach((element) => {
-      let card = CardCreator.createCard(element);
-      cards.push(card);
-    });
-    cards = cards.sort((x1, x2) => x1.id - x2.id);
-    return cards;
-  }
-
-  private isPassCard(card: Card) {
-    return card.id == -1;
+    StateUpdateAdapter.update(data['gameState'], this.state);
+    this.state.setCards(CardAdapter.createCards(data['cards']));
+    GamePlayerAdapter.addPlayers(data['players'], this.state);
   }
 
   public sendFlag(cardId: number) {
@@ -242,7 +196,7 @@ export class GameEventsManager {
 
         let playersText = data['players'];
         if (playersText != null) {
-          let players = this.getPlayersList(playersText);
+          let players = GamePlayerAdapter.createPlayers(playersText);
           this.state.removeAllPlayers();
           players.forEach((x) => this.state.addPlayer(x));
         }

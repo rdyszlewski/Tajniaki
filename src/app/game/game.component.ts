@@ -1,14 +1,14 @@
 import { Component, OnInit, Injector, HostListener } from '@angular/core';
 import { ConnectionService } from '../connection.service';
-import { Role } from './role';
+import { Role } from './models/role';
 import { PlayerService } from '../playerService';
-import { GameState } from './models/gameState';
+import { GameState } from './models/game-state';
 import { Card } from './models/card';
 import { TooltipCreator } from './tooltip_creator';
-import { GameEventsManager } from './gameEventsManager';
+import { GameEventsManager } from './messeges/game.events-manager';
 import { Team } from '../lobby/team';
-import { Player } from '../lobby/lobby_player';
-import { GamePlayer } from './models/gamePlayer';
+import { LobbyPlayer } from '../lobby/lobby_player';
+import { GamePlayer } from './models/game-player';
 import { Router } from '@angular/router';
 import { View } from '../shared/view';
 import { GameService } from '../gameService';
@@ -25,8 +25,8 @@ export class GameComponent extends View implements OnInit  {
   role = Role;
   private _tooltip: TooltipCreator = new TooltipCreator();
   private _eventsManager: GameEventsManager;
-  private _bluePlayers: Player[];
-  private _redPlayers: Player[];
+  private _bluePlayers: LobbyPlayer[];
+  private _redPlayers: LobbyPlayer[];
   private _bossWord: BossWord = new BossWord();
 
   public get state(){return this._state;}

@@ -1,3 +1,6 @@
+/**
+ * Class used to send message to server with word and number choosen by boss player
+ */
 export class QuestionParam{
 
   public gameId: string;

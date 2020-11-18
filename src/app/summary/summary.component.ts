@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { SummaryModel, SummaryEntry, SummaryWord, SummaryCard } from './summaryModel';
-import { Team, TeamAdapter } from '../lobby/team';
 import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
-import { WordColor } from '../game/models/word_color';
+import { WordColor } from '../game/models/word-color';
 import { CauseGetter, WinnerCause } from './winnerCause';
 import { Router } from '@angular/router';
 import { View } from '../shared/view';
 import { IdParam } from '../shared/parameters/id.param';
 import { GameService } from '../gameService';
+import { Team } from '../lobby/team';
+import { TeamAdapter } from '../shared/messages/team-adapter';
 
 @Component({
   selector: 'app-summary',

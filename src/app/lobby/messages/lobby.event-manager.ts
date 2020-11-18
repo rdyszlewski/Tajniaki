@@ -1,18 +1,21 @@
-import { ConnectionService } from '../connection.service';
-import { LobbyModel } from './lobbyModel';
-import { PlayerService } from '../playerService';
-import { ConnectionPath } from '../shared/connectionPath';
-import { Team, TeamAdapter } from './team';
-import { GameService } from '../gameService';
+import { ConnectionService } from '../../connection.service';
+import { PlayerService } from '../../playerService';
+import { ConnectionPath } from '../../shared/connectionPath';
+import { GameService } from '../../gameService';
 import { Router } from '@angular/router';
-import { PlayerAdapter } from '../shared/adapters/playerAdapter';
-import { DialogService } from '../dialog/dialog.service';
+import { DialogService } from '../../dialog/dialog.service';
 import { Injector } from '@angular/core';
-import { DialogMode } from '../dialog/dialogMode';
-import { DialogComponent } from '../dialog/dialog.component';
-import { StringParam } from '../shared/parameters/string.param';
-import { IdParam } from '../shared/parameters/id.param';
-import { BoolParam } from '../shared/parameters/bool.param';
+import { DialogMode } from '../../dialog/dialogMode';
+import { DialogComponent } from '../../dialog/dialog.component';
+import { StringParam } from '../../shared/parameters/string.param';
+import { IdParam } from '../../shared/parameters/id.param';
+import { BoolParam } from '../../shared/parameters/bool.param';
+import { LobbyModel } from '../lobby.model';
+import { TeamAdapter } from 'src/app/shared/messages/team-adapter';
+import { PlayerAdapter } from 'src/app/shared/messages/player-adapter';
+import { Team } from '../team';
+import { LobbyPlayer } from '../lobby_player';
+import { LobbyPlayerAdapter } from './player-adapter';
 
 export class LobbyEventsManager {
   private dialog: DialogService;
@@ -76,8 +79,7 @@ export class LobbyEventsManager {
 
   private setPlayerReady(message: any) {
     var data = JSON.parse(message.body);
-    let player = this.model.getPlayerById(data['playerId']);
-    player.ready = data['ready'];
+    LobbyPlayerAdapter.setPlayerReady(data, this.model);
   }
 
   private subscribeChangeTeam() {
@@ -95,7 +97,7 @@ export class LobbyEventsManager {
   private subscribePlayerConnect() {
     ConnectionService.subscribe(ConnectionPath.CONNECT_RESPONSE, (message) => {
       let data = JSON.parse(message.body);
-      let newPlayer = PlayerAdapter.createPlayer(data);
+      let newPlayer = LobbyPlayerAdapter.create(data);
       this.model.addPlayer(newPlayer);
     });
   }
@@ -106,8 +108,7 @@ export class LobbyEventsManager {
       this.gameService.setId(data['gameId']);
       this.playerService.setId(data['playerId']);
       this.setSettings(data['settings']);
-      this.setPlayers(data['players']);
-      console.log(data["players"]);
+      LobbyPlayerAdapter.addPlayers(data["players"], this.model);
       this.model.setMinPlayersInTeam(data['minPlayersInTeam']);
       this.model.setMaxPlayersInTeam(data['maxPlayersInTeam']);
     });
@@ -116,14 +117,6 @@ export class LobbyEventsManager {
   private setSettings(settings): void {
     let maxTeamSize = settings['maxTeamSize'];
     this.gameService.setMaxTeamSize(maxTeamSize);
-  }
-
-  private setPlayers(players): void {
-    players.forEach((playerElement) => {
-      console.log("Player");
-      var player = PlayerAdapter.createPlayer(playerElement);
-      this.model.addPlayer(player);
-    });
   }
 
   public sendReady() {

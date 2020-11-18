@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector} from '@angular/core';
 import {Team} from './team';
-import { LobbyModel } from './lobbyModel';
-import { LobbyEventsManager } from './lobbyEventManager';
+import { LobbyModel } from './lobby.model';
+import { LobbyEventsManager } from './messages/lobby.event-manager';
 import { Router } from '@angular/router';
 import { View as ViewComponent } from '../shared/view';
 import {PlayerService} from "../playerService";

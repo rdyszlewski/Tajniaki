@@ -3,7 +3,6 @@ import { ConnectionService } from '../connection.service';
 import { ConnectionPath } from '../shared/connectionPath';
 import { VotingPlayer } from './voting_player';
 import { Router } from '@angular/router';
-import { PlayerAdapter } from '../shared/adapters/playerAdapter';
 import { Injector } from '@angular/core';
 import { DialogService } from '../dialog/dialog.service';
 import { DialogMode } from '../dialog/dialogMode';
@@ -11,6 +10,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { GameService } from '../gameService';
 import { IdParam } from '../shared/parameters/id.param';
 import { NumberParam } from '../shared/parameters/number.param';
+import { PlayerAdapter } from '../shared/messages/player-adapter';
 
 export class VotingEventManager{
 

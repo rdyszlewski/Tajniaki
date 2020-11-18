@@ -1,5 +1,5 @@
 import { Team } from '../lobby/team';
-import { WordColor as CardColor } from '../game/models/word_color';
+import { WordColor as CardColor } from '../game/models/word-color';
 import { WinnerCause } from './winnerCause';
 
 export class SummaryModel{
