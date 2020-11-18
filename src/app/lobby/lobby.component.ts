@@ -16,20 +16,21 @@ import { GameService } from '../gameService';
 export class LobbyComponent extends ViewComponent implements OnInit {
 
   team = Team;
-  private _model: LobbyModel;
   public get model():LobbyModel{return this._model;}
   private _eventsManager: LobbyEventsManager;
   public get eventsManager():LobbyEventsManager{return this._eventsManager;}
 
 
-  constructor(private router:Router, private injector: Injector, private gameService: GameService, private playerService: PlayerService) {
+  constructor(private router:Router, private injector: Injector,
+    private gameService: GameService, private playerService: PlayerService,
+    private _model: LobbyModel) {
     super();
     this._model = new LobbyModel(playerService);
-    this._eventsManager = new LobbyEventsManager(router, injector, gameService, playerService);
+    this._eventsManager = new LobbyEventsManager(router, injector, gameService, playerService, _model);
   }
 
   ngOnInit(): void {
-    this._eventsManager.init(this._model);
+    this._eventsManager.init();
     this._eventsManager.sendJoinToLobby();
     this.setOnLeave(this.onLeaveEvent);
   }

@@ -1,7 +1,11 @@
 import { Player } from './lobby_player';
 import { Team } from './team';
 import { PlayerService } from '../playerService';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class LobbyModel{
 
     private minPlayersInTeam: number;

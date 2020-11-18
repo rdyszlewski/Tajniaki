@@ -11,8 +11,6 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 })
 export class DialogComponent implements AfterViewInit, OnDestroy {
 
- // TODO: zrobić ustawianie ikonki
-
   dialogMode = DialogMode;
   model:DialogModel = new DialogModel();
 

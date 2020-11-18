@@ -19,7 +19,6 @@ export class BossComponent extends View implements OnInit {
 
   constructor(private router: Router, private injector:Injector, private gameService: GameService, private playerService: PlayerService) {
     super();
-    // TODO: może modele warto poprzenosić do serwisów
     this.model = new VotingModel();
     this.eventManager = new VotingEventManager(gameService);
   }
@@ -52,6 +51,6 @@ export class BossComponent extends View implements OnInit {
   }
 
   continue(): void {
-    //TODO:przejście do gry po kliknięciu przycisku
+
   }
 }

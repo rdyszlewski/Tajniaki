@@ -15,13 +15,13 @@ import { IdParam } from '../shared/parameters/id.param';
 import { BoolParam } from '../shared/parameters/bool.param';
 
 export class LobbyEventsManager {
-  private model: LobbyModel;
   private dialog: DialogService;
 
-  public constructor(private router: Router, private injector: Injector, private gameService: GameService, private playerService: PlayerService) {}
+  public constructor(private router: Router, private injector: Injector, private gameService: GameService, private playerService: PlayerService,
+    private model: LobbyModel) {
+    }
 
-  public init(model: LobbyModel) {
-    this.model = model;
+  public init() {
     this.dialog = this.injector.get(DialogService);
 
     this.subscribeJoinToLobbyResponse();

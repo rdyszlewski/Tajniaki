@@ -51,7 +51,6 @@ export class VotingEventManager{
     }
 
     private updateList(playersList){
-        // TODO: na razie listy są zastępowane, a nie tylo aktualizowane. Później można to naprawić
         playersList.forEach(element => {
         let player = this.createVotingPlayer(element);
         this.model.addPlayer(player);

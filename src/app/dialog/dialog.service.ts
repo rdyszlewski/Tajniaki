@@ -12,7 +12,6 @@ export type Content<T> = string | TemplateRef<T> | Type<T>
   providedIn: 'root'
 })
 export class DialogService {
-  // TODO: zrobić, aby open nie wymagało podawania parametru
 
   private component: DialogComponent;
   private componentRef: ComponentRef<DialogComponent>;
@@ -24,7 +23,7 @@ export class DialogService {
     private translate: TranslateService,
     @Inject(DOCUMENT) private document: Document
   ) { }
-  
+
   model: DialogModel = new DialogModel;
 
   open<T>(content: Content<T>) {
@@ -50,7 +49,7 @@ export class DialogService {
 
     this.componentRef = componentRef;
   }
-  
+
   resolveNgContent<T>(content: Content<T>) {
     if (typeof content === 'string') {
       const element = this.document.createTextNode(content);
@@ -62,7 +61,7 @@ export class DialogService {
       const viewRef = content.createEmbeddedView(null);
       this.applicationRef.attachView(viewRef);
       return [viewRef.rootNodes];
-      
+
       } else if (content instanceof Type) {
       // Component
       const factory = this.resolver.resolveComponentFactory(content);
@@ -79,7 +78,7 @@ export class DialogService {
   public close(){
     this.component.close();
     this.removeDialogComponentFromBody();
-    
+
   }
 
   private removeDialogComponentFromBody(){

@@ -4,7 +4,7 @@ import { WinnerCause } from './winnerCause';
 
 export class SummaryModel{
     public winner: Team;
-    public cause:WinnerCause; // TODO: dorobić powód wygranej
+    public cause:WinnerCause;
     public blueRemaining: number;
     public redRemaining: number;
     public processEntries: SummaryEntry[];

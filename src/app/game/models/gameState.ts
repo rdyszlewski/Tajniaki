@@ -1,8 +1,12 @@
+import { Injectable } from '@angular/core';
 import { Team } from '../../lobby/team';
 import { Role } from '../role';
 import { Card } from './card';
 import { GamePlayer } from './gamePlayer';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class GameState{
 
     // zawiera karty słów oraz kartę pominięcia

@@ -14,10 +14,9 @@ export class ConnectionService {
       console.log("Otworzenie połączenia");
     });
     this._connection.setOnCloseEvent(()=>{
-      // TODO: tutaj prawdopodobnie będzie można wyśietlić jakiś komunikat
       console.log("Zamknięcie połączenia");
     })
-    this._connection.connect(host, port, on_connected_event); // TODO: sprawdzić, czy to tak powinno wyglądać
+    this._connection.connect(host, port, on_connected_event);
   }
 
   public static send(message, path){
