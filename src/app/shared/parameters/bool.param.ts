@@ -1,7 +1,7 @@
 export class BoolParam{
 
-  public gameId: string;
-  public value: boolean;
+  public readonly gameId: string;
+  public readonly value: boolean;
 
   constructor(gameId: string, value: boolean){
     this.gameId = gameId;

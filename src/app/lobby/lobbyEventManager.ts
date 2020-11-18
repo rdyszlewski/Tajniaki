@@ -18,7 +18,7 @@ export class LobbyEventsManager {
   private model: LobbyModel;
   private dialog: DialogService;
 
-  public constructor(private router: Router, private injector: Injector) {}
+  public constructor(private router: Router, private injector: Injector, private gameService: GameService, private playerService: PlayerService) {}
 
   public init(model: LobbyModel) {
     this.model = model;
@@ -103,8 +103,8 @@ export class LobbyEventsManager {
   private subscribeJoinToLobbyResponse() {
     ConnectionService.subscribe(ConnectionPath.PLAYERS_RESPONSE, (message) => {
       var data = JSON.parse(message.body);
-      GameService.setId(data['gameId']);
-      PlayerService.setId(data['playerId']);
+      this.gameService.setId(data['gameId']);
+      this.playerService.setId(data['playerId']);
       this.setSettings(data['settings']);
       this.setPlayers(data['players']);
       console.log(data["players"]);
@@ -115,7 +115,7 @@ export class LobbyEventsManager {
 
   private setSettings(settings): void {
     let maxTeamSize = settings['maxTeamSize'];
-    GameService.setMaxTeamSize(maxTeamSize);
+    this.gameService.setMaxTeamSize(maxTeamSize);
   }
 
   private setPlayers(players): void {
@@ -128,7 +128,7 @@ export class LobbyEventsManager {
 
   public sendReady() {
     let param = new BoolParam(
-      GameService.getId(),
+      this.gameService.getId(),
       !this.model.getClientPlayer().ready
     );
     let json = JSON.stringify(param);
@@ -140,7 +140,7 @@ export class LobbyEventsManager {
   }
 
   private sendJoinToTeam(team: Team) {
-    let param = new StringParam(GameService.getId(), team.toString());
+    let param = new StringParam(this.gameService.getId(), team.toString());
     let json = JSON.stringify(param);
     ConnectionService.send(json, ConnectionPath.CHANGE_TEAM);
   }
@@ -150,11 +150,11 @@ export class LobbyEventsManager {
   }
 
   public sendJoinToLobby() {
-    ConnectionService.send(PlayerService.getNickname(), ConnectionPath.CONNECT);
+    ConnectionService.send(this.playerService.getNickname(), ConnectionPath.CONNECT);
   }
 
   public sendAutoJoinToTeam() {
-    let param = new IdParam(GameService.getId());
+    let param = new IdParam(this.gameService.getId());
     let json = JSON.stringify(param);
     ConnectionService.send(json, ConnectionPath.AUTO_TEAM);
   }

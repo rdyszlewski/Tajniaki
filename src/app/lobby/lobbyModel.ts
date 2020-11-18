@@ -8,6 +8,10 @@ export class LobbyModel{
     private maxPlayerInTeam: number;
     private players: Player[] = [];
 
+    constructor(private playerService: PlayerService){
+
+    }
+
     public getMinPlayersInTeam(){
         return this.minPlayersInTeam;
     }
@@ -33,7 +37,7 @@ export class LobbyModel{
     private existsPlayer(player:Player){
         return this.players.some(p=>p.id==player.id);
     }
-    
+
     public removePlayer(player){
         this.players = this.players.filter(p => p !== player);
     }
@@ -53,13 +57,13 @@ export class LobbyModel{
     public getClientPlayer(){
         for(let i=0; i < this.players.length; i++){
             let player = this.players[i];
-            if(player.id == PlayerService.getId()){
+            if(player.id == this.playerService.getId()){
                 return player;
             }
         }
     }
 
     public isClientPlayer(player:Player):boolean{
-        return player.id == PlayerService.getId();
+        return player.id == this.playerService.getId();
     }
 }

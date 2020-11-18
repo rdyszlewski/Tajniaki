@@ -27,9 +27,13 @@ export class GameEventsManager{
     private router: Router;
     private dialog: DialogService;
 
+  constructor(private gameService: GameService, private playerService: PlayerService){
+
+  }
+
     public init( model:GameState, router:Router, injector: Injector){
         this.model = model;
-        this.playerRole = PlayerService.getRole();
+        this.playerRole = this.playerService.getRole();
         this.router = router;
         this.dialog = injector.get(DialogService);
 
@@ -119,9 +123,9 @@ export class GameEventsManager{
 
     private startGame(message: any) {
         var data = JSON.parse(message.body);
-        PlayerService.setNickname(data['nickname']);
-        PlayerService.setRole(this.getRole(data["playerRole"]));
-        PlayerService.setTeam(TeamAdapter.getTeam(data['playerTeam']));
+        this.playerService.setNickname(data['nickname']);
+        this.playerService.setRole(this.getRole(data["playerRole"]));
+        this.playerService.setTeam(TeamAdapter.getTeam(data['playerTeam']));
         this.updateGameState(data["gameState"]);
         this.model.setCards(this.createCards(data["cards"]));
         let playersList = this.getPlayersList(data['players']);
@@ -179,7 +183,7 @@ export class GameEventsManager{
     }
 
     public sendFlag(cardId:number){
-      let param = new NumberParam(GameService.getId(), cardId);
+      let param = new NumberParam(this.gameService.getId(), cardId);
       let json = JSON.stringify(param)
         ConnectionService.send(json, ConnectionPath.FLAG);
     }
@@ -188,14 +192,14 @@ export class GameEventsManager{
       // TODO: rozwiązać to bez jquery
       let word = $("#wordInput").val().toString();
       let number = $("#numberInput").val() as number;
-      let param = new QuestionParam(GameService.getId(), word, number);
+      let param = new QuestionParam(this.gameService.getId(), word, number);
       let json = JSON.stringify(param);
       ConnectionService.send(json, ConnectionPath.QUESTION);
       // TODO: dodać resetowanie pól. Zrobić to za pomocą Angualra, nie jquery
     }
 
     public sendClick(cardId:number){
-      let param = new NumberParam(GameService.getId(), cardId);
+      let param = new NumberParam(this.gameService.getId(), cardId);
       let json = JSON.stringify(param);
       ConnectionService.send(json, ConnectionPath.CLICK);
     }
@@ -205,7 +209,7 @@ export class GameEventsManager{
     }
 
     public sendStartMessage() {
-      let param = new IdParam(GameService.getId());
+      let param = new IdParam(this.gameService.getId());
       let json = JSON.stringify(param)
         ConnectionService.send(json, ConnectionPath.GAME_START);
     }

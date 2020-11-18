@@ -1,7 +1,5 @@
 import { Component, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { MainMenuComponent } from './main-menu/main-menu.component';
-import { AppService, GameStep } from './shared/appService';
 import { DialogService } from './dialog/dialog.service';
 import { DialogMode } from './dialog/dialogMode';
 import { DialogComponent } from './dialog/dialog.component';
@@ -16,48 +14,51 @@ import { GameService } from './gameService';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Tajniaki';
+  private readonly title = 'Tajniaki';
 
   private dialog: DialogService;
 
-  // TODO: można to przenieść do AppService
   private  menuShow = false;
 
-
-  constructor (private router:Router, private injector: Injector, private translate:TranslateService){
+  constructor (private router:Router, private injector: Injector, private translate:TranslateService, private gameService: GameService){
     this.dialog = injector.get(DialogService);
     translate.setDefaultLang('pl');
 
   }
 
-  openMenu(){
-    console.log("Otwarto menu");
+  public openMenu(){
     this.menuShow = !this.menuShow;
   }
 
-  areMenuItemHidden(){
+  public areMenuItemHidden(){
     return !this.menuShow;
   }
 
-  isMenuHidden(){
-    return AppService.getCurrentStep() == GameStep.MAIN;
+  public isMenuHidden(){
+    // only in main menu menu is hidden
+    return this.router.url.includes("mainmenu");
   }
 
-  goToMenu(){
+  public goToMenu(){
     this.menuShow = false;
-    this.dialog.setMessage("dialog.sure_quit").setMode(DialogMode.ALERT).setOnOkClick(()=>{
-      let param = new IdParam(GameService.getId());
-      let json = JSON.stringify(param);
-      ConnectionService.send(json, '/app/game/quit');
-      this.dialog.close();
-      this.menuShow = false;
-      AppService.setCurrentStep(GameStep.MAIN);
-      this.router.navigate(['mainmenu']);
-    }).setOnCancelClick(()=>{
-      this.dialog.close();
-    }).open(DialogComponent);
+    this.dialog.setMessage("dialog.sure_quit").setMode(DialogMode.ALERT)
+    .setOnOkClick(()=>this.onOkClick())
+    .setOnCancelClick(()=>this.onCancelClick())
+    .open(DialogComponent);
   }
 
+  private onOkClick(){
+    let param = new IdParam(this.gameService.getId());
+    let json = JSON.stringify(param);
+    ConnectionService.send(json, '/app/game/quit');
+    this.dialog.close();
+    this.menuShow = false;
+    this.router.navigate(['mainmenu']);
+  }
+
+  private onCancelClick(){
+    this.dialog.close();
+  }
 }
 
 

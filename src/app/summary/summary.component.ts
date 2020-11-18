@@ -7,7 +7,6 @@ import { WordColor } from '../game/models/word_color';
 import { CauseGetter, WinnerCause } from './winnerCause';
 import { Router } from '@angular/router';
 import { View } from '../shared/view';
-import { AppService, GameStep } from '../shared/appService';
 import { IdParam } from '../shared/parameters/id.param';
 import { GameService } from '../gameService';
 
@@ -23,12 +22,11 @@ export class SummaryComponent extends View implements OnInit {
   color = WordColor;
   model: SummaryModel = new SummaryModel();
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private gameService: GameService) {
     super();
    }
 
   ngOnInit(): void {
-    AppService.setCurrentStep(GameStep.SUMMARY);
     ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
       let data = JSON.parse(message.body);
       this.model.winner = TeamAdapter.getTeam(data['winner']);
@@ -44,7 +42,7 @@ export class SummaryComponent extends View implements OnInit {
   }
 
   private sendSummaryMessage(){
-    let param = new IdParam(GameService.getId());
+    let param = new IdParam(this.gameService.getId());
     let json = JSON.stringify(param);
     ConnectionService.send(json, ConnectionPath.SUMMARY);
   }

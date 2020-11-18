@@ -6,13 +6,12 @@ import { GameState } from './models/gameState';
 import { Card } from './models/card';
 import { TooltipCreator } from './tooltip_creator';
 import { GameEventsManager } from './gameEventsManager';
-import { ConnectionPath } from '../shared/connectionPath';
 import { Team } from '../lobby/team';
 import { Player } from '../lobby/lobby_player';
 import { GamePlayer } from './models/gamePlayer';
 import { Router } from '@angular/router';
 import { View } from '../shared/view';
-import { AppService, GameStep } from '../shared/appService';
+import { GameService } from '../gameService';
 
 @Component({
   selector: 'app-game',
@@ -23,20 +22,27 @@ export class GameComponent extends View implements OnInit  {
 
   team = Team;
   role = Role;
-  model: GameState = new GameState();
-  tooltip: TooltipCreator = new TooltipCreator();
-  eventsManager: GameEventsManager = new GameEventsManager();
-  bluePlayers: Player[];
-  redPlayers: Player[];
-  constructor(private router:Router, private injector: Injector) {
+  private _model: GameState = new GameState();
+  private _tooltip: TooltipCreator = new TooltipCreator();
+  private _eventsManager: GameEventsManager;
+  private _bluePlayers: Player[];
+  private _redPlayers: Player[];
+
+  public get model(){return this._model;}
+  public get tooltip() {return this._tooltip;}
+  public get eventsManager(){return this.eventsManager;}
+  public get bluePlayers(){return this._bluePlayers;}
+  public get redPlayers(){return this._redPlayers;}
+
+  constructor(private router:Router, private injector: Injector, private gameService: GameService, private playerService: PlayerService) {
     super();
+    this._eventsManager = new GameEventsManager(gameService, playerService);
    }
 
   ngOnInit(): void {
-    AppService.setCurrentStep(GameStep.GAME);
     this.preventRightClickMenu();
-    this.eventsManager.init(this.model, this.router, this.injector);
-    this.eventsManager.sendStartMessage();
+    this._eventsManager.init(this._model, this.router, this.injector);
+    this._eventsManager.sendStartMessage();
     this.setOnLeave(this.onLeaveEvent);
   }
 
@@ -52,8 +58,8 @@ export class GameComponent extends View implements OnInit  {
   }
 
   private onLeaveEvent(){
-    this.eventsManager.unsubscribeAll();
-    this.eventsManager.closeDialog();
+    this._eventsManager.unsubscribeAll();
+    this._eventsManager.closeDialog();
   }
 
   private preventRightClickMenu() {
@@ -61,7 +67,7 @@ export class GameComponent extends View implements OnInit  {
   }
 
   isBoss(){
-    return PlayerService.getRole()==Role.BOSS;
+    return this.playerService.getRole()==Role.BOSS;
   }
 
   isPlayerBoss(player:GamePlayer){
@@ -69,7 +75,7 @@ export class GameComponent extends View implements OnInit  {
   }
 
   getClientTeam(){
-    return PlayerService.getTeam();
+    return this.playerService.getTeam();
   }
 
   getOppositeTeam(team:Team){
@@ -77,7 +83,7 @@ export class GameComponent extends View implements OnInit  {
   }
 
   getClientRole(){
-    return PlayerService.getRole();
+    return this.playerService.getRole();
   }
 
   preventWhispace(event)
@@ -88,47 +94,47 @@ export class GameComponent extends View implements OnInit  {
   }
 
   isAnswerByClient(card:Card){
-    return card.answers.includes(PlayerService.getId());
+    return card.answers.includes(this.playerService.getId());
   }
 
   isFlagByClient(card: Card){
-    return card.flags.includes(PlayerService.getId());
+    return card.flags.includes(this.playerService.getId());
   }
 
   isWordHidden(card: Card){
-    return card.checked && PlayerService.getRole() == Role.BOSS;
+    return card.checked && this.playerService.getRole() == Role.BOSS;
   }
 
   getNickname(){
-    return PlayerService.getNickname();
+    return this.playerService.getNickname();
   }
 
   getRole(){
-    return PlayerService.getRole();
+    return this.playerService.getRole();
   }
 
   getTeam(){
-    return PlayerService.getTeam();
+    return this.playerService.getTeam();
   }
 
   getFirstTeamPlayers(){
-    if(PlayerService.getTeam() == Team.BLUE){
-      return this.model.bluePlayers;
-    } else if (PlayerService.getTeam()==Team.RED){
-      return this.model.redPlayers;
+    if(this.playerService.getTeam() == Team.BLUE){
+      return this._model.bluePlayers;
+    } else if (this.playerService.getTeam()==Team.RED){
+      return this._model.redPlayers;
     }
   }
 
   getSecondTeamPlayers(){
-    if(PlayerService.getTeam() == Team.RED){
-      return this.model.bluePlayers;
-    } else if (PlayerService.getTeam()==Team.BLUE){
-      return this.model.redPlayers;
+    if(this.playerService.getTeam() == Team.RED){
+      return this._model.bluePlayers;
+    } else if (this.playerService.getTeam()==Team.BLUE){
+      return this._model.redPlayers;
     }
   }
 
   isPlayerAnswer(player:GamePlayer){
-    let cards: Card[] = this.model.getCardsWithPassCard();
+    let cards: Card[] = this._model.getCardsWithPassCard();
     for(let i=0; i< cards.length; i++){
       let card = cards[i];
       for(let j=0; j< card.answers.length; j++){
@@ -142,16 +148,16 @@ export class GameComponent extends View implements OnInit  {
   }
 
   isCurrentPlayer(player:GamePlayer){
-    return player.team == this.model.currentTeam && player.role == this.model.currentStage;
+    return player.team == this._model.currentTeam && player.role == this._model.currentStage;
   }
 
   isPlayerTurn(){
-    return PlayerService.getTeam() == this.model.currentTeam
-      && PlayerService.getRole() == this.model.currentStage;
+    return this.playerService.getTeam() == this._model.currentTeam
+      && this.playerService.getRole() == this._model.currentStage;
   }
 
   getRemainingWordsInPlayerTeam(){
-    return PlayerService.getTeam() == Team.BLUE? this.model.remainingBlue : this.model.remainingRed;
+    return this.playerService.getTeam() == Team.BLUE? this._model.remainingBlue : this._model.remainingRed;
   }
 
   getRemainingsCollection(number:number){
@@ -163,7 +169,7 @@ export class GameComponent extends View implements OnInit  {
   }
 
   getRemainings(team:Team){
-    return team==Team.BLUE ? this.model.remainingBlue: this.model.remainingRed;
+    return team==Team.BLUE ? this._model.remainingBlue: this._model.remainingRed;
   }
 
 }

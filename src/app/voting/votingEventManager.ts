@@ -19,6 +19,10 @@ export class VotingEventManager{
 
     private dialog: DialogService;
 
+    constructor(private gameService: GameService){
+
+    }
+
     public init(model:VotingModel, router:Router, injector:Injector):void{
         this.model = model;
         this.router = router;
@@ -101,13 +105,13 @@ export class VotingEventManager{
     }
 
     public sendStartMessage(){
-        let param = new IdParam(GameService.getId());
+        let param = new IdParam(this.gameService.getId());
         let json = JSON.stringify(param);
         ConnectionService.send(json, ConnectionPath.START_VOTING);
     }
 
     public sendVote(player:VotingPlayer){
-      let param = new NumberParam(GameService.getId(), player.id);
+      let param = new NumberParam(this.gameService.getId(), player.id);
       let json = JSON.stringify(param);
         ConnectionService.send(json, ConnectionPath.VOTE);
     }

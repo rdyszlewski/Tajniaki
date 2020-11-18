@@ -5,7 +5,7 @@ import { PlayerService } from '../playerService';
 import { VotingModel } from './votingModel';
 import { VotingEventManager } from './votingEventManager';
 import { View } from '../shared/view';
-import { AppService, GameStep } from '../shared/appService';
+import { GameService } from '../gameService';
 
 @Component({
   selector: 'app-boss',
@@ -17,14 +17,14 @@ export class BossComponent extends View implements OnInit {
   model: VotingModel;
   eventManager: VotingEventManager;
 
-  constructor(private router: Router, private injector:Injector) {
+  constructor(private router: Router, private injector:Injector, private gameService: GameService, private playerService: PlayerService) {
     super();
+    // TODO: może modele warto poprzenosić do serwisów
     this.model = new VotingModel();
-    this.eventManager = new VotingEventManager();
+    this.eventManager = new VotingEventManager(gameService);
   }
 
   ngOnInit(): void {
-    AppService.setCurrentStep(GameStep.VOTING);
     this.eventManager.init(this.model, this.router, this.injector);
     this.eventManager.sendStartMessage();
     this.setOnLeave(this.onLeaveEvent);
@@ -39,8 +39,8 @@ export class BossComponent extends View implements OnInit {
     for(let i =0; i < player.votes.length; i++){
       let id = player.votes[i];
       let votingPlayer = this.model.getPlayer(id);
-      PlayerService.getNickname
-      if(votingPlayer.id == PlayerService.getId()){
+      this.playerService.getNickname
+      if(votingPlayer.id == this.playerService.getId()){
         return true;
       }
     }
@@ -48,7 +48,7 @@ export class BossComponent extends View implements OnInit {
   }
 
   getNickname(){
-    return PlayerService.getNickname();
+    return this.playerService.getNickname();
   }
 
   continue(): void {

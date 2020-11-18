@@ -27,7 +27,9 @@ export class MainMenuComponent implements OnInit {
   nickname_editing:boolean;
   infoDialog: DialogService;
 
-  constructor(private router: Router, private injector:Injector, private cookieService: CookieService, private translate: TranslateService ) {
+  constructor(private router: Router, private injector:Injector,
+    private cookieService: CookieService, private translate: TranslateService,
+    private gameService: GameService, private playerService: PlayerService ) {
 
   }
 
@@ -52,9 +54,9 @@ export class MainMenuComponent implements OnInit {
   private setPlayerNickname(){
     const nickname = this.readNickname();
     if(nickname){
-      PlayerService.setNickname(nickname);
+      this.playerService.setNickname(nickname);
     } else {
-      PlayerService.setNickname("Player");
+      this.playerService.setNickname("Player");
     }
   }
 
@@ -100,12 +102,12 @@ export class MainMenuComponent implements OnInit {
 
   setChangeNicknameState(){
     this.nickname_editing = true;
-    $("#nickname_input").val(PlayerService.getNickname());
+    $("#nickname_input").val(this.playerService.getNickname());
   }
 
   confirmNickname(){
     let nickname = $("#nickname_input").val();
-    PlayerService.setNickname(nickname as string);
+    this.playerService.setNickname(nickname as string);
     this.nickname_editing = false;
     this.saveNickname(nickname as string);
   }
@@ -119,7 +121,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   getNickname(){
-    return PlayerService.getNickname();
+    return this.playerService.getNickname();
   }
 
   readyStartGame(){
@@ -127,7 +129,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   startGame(){
-    let param = new IdParam(GameService.getId());
+    let param = new IdParam(this.gameService.getId());
     let json = JSON.stringify(param);
     ConnectionService.send(json, '/app/test/start')
   }
@@ -136,9 +138,8 @@ export class MainMenuComponent implements OnInit {
     ConnectionService.subscribe('/user/queue/test/start', message=>{
       console.log("Otrzymałem id gry");
       var data = JSON.parse(message.body);
-      GameService.setId(data['gameId']);
-      console.log(GameService.getId());
-      PlayerService.setId(data['playerId']);
+      this.gameService.setId(data['gameId']);
+      this.playerService.setId(data['playerId']);
     });
 
     ConnectionService.subscribe("/user/queue/test/startGame", message=>{

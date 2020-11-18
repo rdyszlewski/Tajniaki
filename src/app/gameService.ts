@@ -1,32 +1,26 @@
 import { Injectable } from '@angular/core';
-import * as uuid from 'uuid'
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
-export class GameService{
+export class GameService {
 
-  // TODO: czy istnieje sposób, żeby ustawić tutaj typ ?
-  // TODO: zlikwidować statyczność
-  private static id:string;
+  private id: string;
+  private maxTeamSize: number;
 
-  public static getId():string{
+  public getId(): string {
     return this.id;
   }
 
-  public static setId(id:string){
+  public setId(id: string) {
     this.id = id;
   }
 
-    // TODO: to nie musi być statyczne
-    // TODO: wstawić tutaj ifnormacje dotyczące gry
-    private static maxTeamSize: number;
+  public getMaxTeamSize(): number {
+    return this.maxTeamSize;
+  }
 
-    public static getMaxTeamSize():number{
-        return this.maxTeamSize;
-    }
-
-    public static setMaxTeamSize(size: number){
-        this.maxTeamSize = size;
-    }
+  public setMaxTeamSize(size: number) {
+    this.maxTeamSize = size;
+  }
 }

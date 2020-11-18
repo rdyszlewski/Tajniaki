@@ -2,14 +2,11 @@ import { Component, OnInit, Injector} from '@angular/core';
 import {Team} from './team';
 import { LobbyModel } from './lobbyModel';
 import { LobbyEventsManager } from './lobbyEventManager';
-import { ConnectionService } from '../connection.service';
-import { ConnectionPath } from '../shared/connectionPath';
 import { Router } from '@angular/router';
 import { View as ViewComponent } from '../shared/view';
 import {PlayerService} from "../playerService";
-import { AppService, GameStep } from '../shared/appService';
 import { GameService } from '../gameService';
-import { IdParam } from '../shared/parameters/id.param';
+
 
 @Component({
   selector: 'app-lobby',
@@ -19,24 +16,27 @@ import { IdParam } from '../shared/parameters/id.param';
 export class LobbyComponent extends ViewComponent implements OnInit {
 
   team = Team;
-  model: LobbyModel = new LobbyModel();
-  eventsManager: LobbyEventsManager;
+  private _model: LobbyModel;
+  public get model():LobbyModel{return this._model;}
+  private _eventsManager: LobbyEventsManager;
+  public get eventsManager():LobbyEventsManager{return this._eventsManager;}
 
-  constructor(private router:Router, private injector: Injector) {
+
+  constructor(private router:Router, private injector: Injector, private gameService: GameService, private playerService: PlayerService) {
     super();
-    this.eventsManager = new LobbyEventsManager(router, injector);
+    this._model = new LobbyModel(playerService);
+    this._eventsManager = new LobbyEventsManager(router, injector, gameService, playerService);
   }
 
   ngOnInit(): void {
-    AppService.setCurrentStep(GameStep.LOBBY);
-    this.eventsManager.init(this.model);
-    this.eventsManager.sendJoinToLobby();
+    this._eventsManager.init(this._model);
+    this._eventsManager.sendJoinToLobby();
     this.setOnLeave(this.onLeaveEvent);
   }
 
   private onLeaveEvent(){
-    this.eventsManager.unsubscribeAll();
-    this.eventsManager.closeDialog();
+    this._eventsManager.unsubscribeAll();
+    this._eventsManager.closeDialog();
   }
 
   isBlue(player){
@@ -52,44 +52,44 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   countBlue(){
-    return this.model.getPlayers(Team.BLUE).length;
+    return this._model.getPlayers(Team.BLUE).length;
   }
 
   countRed(){
-    return this.model.getPlayers(Team.RED).length;
+    return this._model.getPlayers(Team.RED).length;
   }
 
   countObserver(){
-    return this.model.getPlayers(Team.LACK).length;
+    return this._model.getPlayers(Team.LACK).length;
   }
 
   isPlayerReady(){
-    if(this.model.getClientPlayer()){
-      return this.model.getClientPlayer().ready;
+    if(this._model.getClientPlayer()){
+      return this._model.getClientPlayer().ready;
     }
     return false;
   }
 
   canJoinToBlue(){
-    return this.countBlue() < this.model.getMaxPlayersInTeam();
+    return this.countBlue() < this._model.getMaxPlayersInTeam();
   }
 
   canJoinToRed(){
-    return this.countRed() < this.model.getMaxPlayersInTeam();
+    return this.countRed() < this._model.getMaxPlayersInTeam();
   }
 
   canSetReady(){
-    if(this.model.getClientPlayer()){
-      return this.model.getClientPlayer().team == Team.BLUE || this.model.getClientPlayer().team == Team.RED;
+    if(this._model.getClientPlayer()){
+      return this._model.getClientPlayer().team == Team.BLUE || this._model.getClientPlayer().team == Team.RED;
     }
     return false;
   }
 
   getNickname(){
-    return PlayerService.getNickname();
+    return this.playerService.getNickname();
   }
 
   getTeam(){
-    return PlayerService.getTeam();
+    return this.playerService.getTeam();
   }
 }
