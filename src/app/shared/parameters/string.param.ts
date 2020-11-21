@@ -1,10 +1,11 @@
-export class StringParam{
+import { IdParam } from './id.param';
 
-  public gameId:string;
+export class StringParam extends IdParam{
+
   public value: string;
 
   constructor(gameId:string, value:string){
-    this.gameId = gameId;
+    super(gameId);
     this.value = value;
   }
 }

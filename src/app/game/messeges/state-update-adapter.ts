@@ -4,8 +4,8 @@ import { Role } from '../models/role';
 
 export class StateUpdateAdapter{
 
-  public static update(dataText: string, state: GameState){
-    let data = JSON.parse(dataText);
+  public static update(data: string, state: GameState){
+    // let data = JSON.parse(dataText);
     state.currentTeam = TeamAdapter.getTeam(data['currentTeam']);
     state.currentStage = this.getRole(data['currentRole']);
     state.remainingBlue = data['remainingBlue'];

@@ -10,6 +10,7 @@ import { IdParam } from '../shared/parameters/id.param';
 import { GameService } from '../gameService';
 import { Team } from '../lobby/team';
 import { TeamAdapter } from '../shared/messages/team-adapter';
+import { SummaryEventManager } from './messages/summary.event-manager';
 
 @Component({
   selector: 'app-summary',
@@ -23,80 +24,18 @@ export class SummaryComponent extends View implements OnInit {
   color = WordColor;
   model: SummaryModel = new SummaryModel();
 
-  constructor(private router: Router, private gameService: GameService) {
+  private eventManager;
+
+  constructor(private router: Router, private gameService: GameService, private connectionService: ConnectionService) {
     super();
+    this.eventManager = new SummaryEventManager(connectionService, gameService, this.model);
+    this.eventManager.init();
    }
 
   ngOnInit(): void {
-    ConnectionService.subscribe(ConnectionPath.SUMMARY_RESPONSE, message=>{
-      let data = JSON.parse(message.body);
-      this.model.winner = TeamAdapter.getTeam(data['winner']);
-      this.model.blueRemaining = data['blueRemaining'];
-      this.model.redRemaining = data['redRemaining'];
-      this.model.cause = CauseGetter.get(data['cause']);
-      this.model.processEntries = this.getProcess(data['process']);
-      this.model.cards = this.getCards(data['cards']);
-    });
-
-    this.sendSummaryMessage();
+    this.eventManager.sendSummary();
 
   }
-
-  private sendSummaryMessage(){
-    let param = new IdParam(this.gameService.getId());
-    let json = JSON.stringify(param);
-    ConnectionService.send(json, ConnectionPath.SUMMARY);
-  }
-
-  private getProcess(summary){
-    let entries: SummaryEntry[] = [];
-    summary.forEach(element => {
-      let entry = new SummaryEntry();
-      entry.question = element['question'];
-      entry.number = element['number'];
-      entry.team = TeamAdapter.getTeam(element['team']);
-      entry.answers = [];
-      element['answers'].forEach(x=>{
-        let answer = new SummaryWord();
-        answer.word = x['word'];
-        answer.color = this.getColor(x['color']);
-        entry.answers.push(answer);
-      });
-      entries.push(entry);
-    });
-    return entries;
-  }
-
-  private getCards(summary){
-    console.log(summary);
-    let cards: SummaryCard[] = [];
-    summary.forEach(element=>{
-      let card = new SummaryCard();
-      card.id = element['id'];
-      card.word = element['word'];
-      card.color = this.getColor(element['color']);
-      card.team = TeamAdapter.getTeam(element['team']);
-      console.log(card.team);
-
-      card.question = element['question'];
-      cards.push(card);
-    })
-    return cards;
-  }
-
-  private getColor(colorText:string):WordColor{
-    switch(colorText){
-      case "BLUE":
-        return WordColor.BLUE;
-      case "RED":
-        return WordColor.RED;
-      case "NEUTRAL":
-        return WordColor.NEUTRAL;
-      case "KILLER":
-        return WordColor.KILLER;
-    }
-  }
-
 
   isBlue(entry){
     return entry.team == Team.BLUE;

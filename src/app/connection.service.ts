@@ -6,9 +6,9 @@ import { Client } from './shared/client';
 })
 export class ConnectionService {
 
-  private static _connection:Client;
+  private _connection:Client;
 
-  public static connect(host, port, on_connected_event){
+  public  connect(host, port, on_connected_event){
     this._connection = new Client();
     this._connection.setOnConnectedEvent(()=>{
       console.log("Otworzenie połączenia");
@@ -19,27 +19,27 @@ export class ConnectionService {
     this._connection.connect(host, port, on_connected_event);
   }
 
-  public static send(message, path){
+  public send(message, path){
     this._connection.write(message, path);
   }
 
-  public static subscribe(path, method){
+  public subscribe(path, method){
     console.log(path);
     this._connection.getSocket().subscribe(path, method, {id: path});
   }
 
-  public static unsubscribe(path){
+  public unsubscribe(path){
     this._connection.getSocket().unsubscribe(path);
   }
 
-  public static isConnected():boolean{
+  public isConnected():boolean{
     if(this._connection != undefined){
       return this._connection.isConnected();
     }
     return false;
   }
 
-  public static setOnCloseEvent(event){
+  public setOnCloseEvent(event){
     this._connection.setOnCloseEvent(event);
   }
 }

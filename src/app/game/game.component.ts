@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { View } from '../shared/view';
 import { GameService } from '../gameService';
 import { BossWord } from './models/boss-word';
+import { DialogService } from '../dialog/dialog.service';
 
 @Component({
   selector: 'app-game',
@@ -31,29 +32,29 @@ export class GameComponent extends View implements OnInit  {
 
   public get state(){return this._state;}
   public get tooltip() {return this._tooltip;}
-  public get eventsManager(){return this.eventsManager;}
+  public get eventsManager(){return this._eventsManager;}
   public get bluePlayers(){return this._bluePlayers;}
   public get redPlayers(){return this._redPlayers;}
   public get bossWord():BossWord {return this._bossWord;}
 
 
-  constructor(private router:Router, private injector: Injector,
+  constructor(private router:Router,
     private gameService: GameService, private playerService: PlayerService,
-    private _state: GameState) {
+    private _state: GameState, private connectionService: ConnectionService, dialog: DialogService) {
     super();
-    this._eventsManager = new GameEventsManager(gameService, playerService, this.state);
+    this._eventsManager = new GameEventsManager(connectionService, gameService, playerService, this.state, router, dialog);
    }
 
   ngOnInit(): void {
     this.preventRightClickMenu();
-    this._eventsManager.init(this._state, this.router, this.injector);
+    this._eventsManager.init();
     this._eventsManager.sendStartMessage();
     this.setOnLeave(this.onLeaveEvent);
   }
 
   @HostListener('window:beforeunload', ['$event'])
   onBeforeunload(event){
-    if(ConnectionService.isConnected()){
+    if(this.connectionService.isConnected()){
       event.returnValue = "Czy na pewno wyjść?";
     } else {
       event.returnValue = false;

@@ -3,9 +3,12 @@ import { VotingPlayer } from './voting_player';
 import { Router } from '@angular/router';
 import { PlayerService } from '../playerService';
 import { VotingModel } from './votingModel';
-import { VotingEventManager } from './votingEventManager';
+import { VotingEventManager } from './messages/voting.event-manager';
 import { View } from '../shared/view';
 import { GameService } from '../gameService';
+import { ConnectionService } from '../connection.service';
+import { inject } from '@angular/core/testing';
+import { DialogService } from '../dialog/dialog.service';
 
 @Component({
   selector: 'app-boss',
@@ -17,14 +20,15 @@ export class BossComponent extends View implements OnInit {
   model: VotingModel;
   eventManager: VotingEventManager;
 
-  constructor(private router: Router, private injector:Injector, private gameService: GameService, private playerService: PlayerService) {
+  constructor(private router: Router, private injector:Injector, private gameService: GameService, private playerService: PlayerService,
+    private connectionService: ConnectionService, private dialog: DialogService) {
     super();
-    this.model = new VotingModel();
-    this.eventManager = new VotingEventManager(gameService);
+    this.model = new VotingModel(); // TODO: przerobić na serwis
+    this.eventManager = new VotingEventManager(connectionService, gameService, this.model, router, dialog);
   }
 
   ngOnInit(): void {
-    this.eventManager.init(this.model, this.router, this.injector);
+    this.eventManager.init();
     this.eventManager.sendStartMessage();
     this.setOnLeave(this.onLeaveEvent);
   }

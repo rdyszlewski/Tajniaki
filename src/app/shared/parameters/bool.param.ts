@@ -1,10 +1,11 @@
-export class BoolParam{
+import { IdParam } from './id.param';
 
-  public readonly gameId: string;
+export class BoolParam extends IdParam{
+
   public readonly value: boolean;
 
   constructor(gameId: string, value: boolean){
-    this.gameId = gameId;
+    super(gameId);
     this.value = value;
   }
 }

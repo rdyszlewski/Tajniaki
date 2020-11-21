@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { View as ViewComponent } from '../shared/view';
 import {PlayerService} from "../playerService";
 import { GameService } from '../gameService';
+import { ConnectionService } from '../connection.service';
+import { DialogService } from '../dialog/dialog.service';
 
 
 @Component({
@@ -21,12 +23,12 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   public get eventsManager():LobbyEventsManager{return this._eventsManager;}
 
 
-  constructor(private router:Router, private injector: Injector,
+  constructor(private router:Router, private connectionService: ConnectionService, private dialog:DialogService,
     private gameService: GameService, private playerService: PlayerService,
     private _model: LobbyModel) {
     super();
     this._model = new LobbyModel(playerService);
-    this._eventsManager = new LobbyEventsManager(router, injector, gameService, playerService, _model);
+    this._eventsManager = new LobbyEventsManager(connectionService, gameService, router, dialog, playerService, this.model);
   }
 
   ngOnInit(): void {

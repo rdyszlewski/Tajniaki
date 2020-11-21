@@ -1,10 +1,11 @@
-export class NumberParam{
+import { IdParam } from './id.param';
 
-  public gameId: string;
+export class NumberParam extends IdParam{
+
   public value: number;
 
   constructor(gameId: string, value: number){
-    this.gameId = gameId;
+    super(gameId);
     this.value = value;
   }
 }

@@ -148,8 +148,8 @@
       <input id="wordInput" [ngModel]="bossWord.word" (ngModelChange)="bossWord.word=$event"
       (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()' (keyup.enter)="sendBossMessage()"/>
       <input id="numberInput" [ngModel]="bossWord.number" (ngModelChange)="bossWord.number=$event"
-      type="number" value=1 min=1 max="{{getRemainingWordsInPlayerTeam()}}" [disabled]='!isPlayerTurn() ' (keyup.enter)="eventsManager.sendBossMessage()"/>
-      <button (click)="eventsManager.sendBossMessage()" [disabled]='!isPlayerTurn()'>{{"game.send_word"|translate}}</button>
+      type="number" value=1 min=1 max="{{getRemainingWordsInPlayerTeam()}}" [disabled]='!isPlayerTurn() ' (keyup.enter)="sendBossMessage()"/>
+      <button (click)="sendBossMessage()" [disabled]='!isPlayerTurn()'>{{"game.send_word"|translate}}</button>
     </div>
     <div *ngIf="!isBoss()" class="board-extra">
       <div  *ngIf="state.getPassCard() as card"

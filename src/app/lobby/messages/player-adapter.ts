@@ -13,10 +13,11 @@ export class LobbyPlayerAdapter{
   }
 
   public static create(playerText: any): LobbyPlayer{
+    console.log(playerText);
     let id = playerText['id'];
     let nickname = playerText['nickname'];
     let team = TeamAdapter.getTeam(playerText['team']);
-    let ready = playerText['ready'] == "true";
+    let ready = playerText['ready'];
     let player = new LobbyPlayer(id,nickname, team, ready);
 
     return player

@@ -20,7 +20,7 @@ export class AppComponent {
 
   private  menuShow = false;
 
-  constructor (private router:Router, private injector: Injector, private translate:TranslateService, private gameService: GameService){
+  constructor (private router:Router, private injector: Injector, private translate:TranslateService, private gameService: GameService, private ConnectionService: ConnectionService){
     this.dialog = injector.get(DialogService);
     translate.setDefaultLang('pl');
 
@@ -42,15 +42,15 @@ export class AppComponent {
   public goToMenu(){
     this.menuShow = false;
     this.dialog.setMessage("dialog.sure_quit").setMode(DialogMode.ALERT)
-    .setOnOkClick(()=>this.onOkClick())
+    .setOnOkClick(()=>this.onOkExitClick())
     .setOnCancelClick(()=>this.onCancelClick())
     .open(DialogComponent);
   }
 
-  private onOkClick(){
+  private onOkExitClick(){
     let param = new IdParam(this.gameService.getId());
     let json = JSON.stringify(param);
-    ConnectionService.send(json, '/app/game/quit');
+    this.ConnectionService.send(json, '/app/game/quit');
     this.dialog.close();
     this.menuShow = false;
     this.router.navigate(['mainmenu']);
