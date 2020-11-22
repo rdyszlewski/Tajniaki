@@ -46,6 +46,18 @@
     width: 50%;
 }
 
+.start-button{
+  background-color: green;
+  font-weight: 700;
+  font-size: 2em;
+}
+
+.connect-button{
+  background-color: darkred;
+  font-weight: 700;
+  font-size: 2em;
+}
+
 .value_column{
     width:55%;
     float:left;

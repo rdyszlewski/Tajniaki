@@ -18,14 +18,18 @@
       type="submit"
       (click)="start()"
       *ngIf="isConnected()"
-      class="card lack table-button"
+      class="card start-button table-button"
     >
-      {{ "menu.start" | translate }}
+      <div class="card-container">
+        {{ "menu.start" | translate }}
+      </div>
     </button>
 
-    <button class="card lack table-button" type="submit" (click)="connect()"
+    <button class="card connect-button table-button" type="submit" (click)="connect()"
     *ngIf="!isConnected()">
-      {{ "menu.connect" | translate }}
+      <div class="card-container">
+        {{ "menu.connect" | translate }}
+      </div>
     </button>
       <div class="ready-div">
 
