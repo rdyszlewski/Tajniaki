@@ -6,13 +6,13 @@
     "menu.connect": "Połącz",
     "menu.connected": "Połączono",
     "menu.not_connected": "Nie połączono",
-    
+
     "common.change": "Zmień",
     "common.ok":"OK",
     "common.cancel": "Anuluj",
     "common.close": "Zamknij",
     "menu.menu_exit":"Wyjdź do menu",
-    
+
     "voting.title":"Wybór kapitana",
     "voting.player": "Gracz",
     "voting.player_name": "Nazwa gracza",
@@ -55,4 +55,4 @@
     "dialog.not_enough_players": "Zbyt mała liczba graczy. Powrót do lobby",
     "dialog.you_are_new_boss": "Straciliśmy kontakt z poprzednim szeffem. Zostajesz nowym szeffem",
     "dialog.sure_quit": "Czy na pewno wyjść?"
-}   
+}

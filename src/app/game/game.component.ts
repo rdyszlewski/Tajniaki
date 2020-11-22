@@ -114,6 +114,7 @@ export class GameComponent extends View implements OnInit  {
   }
 
   getRole(){
+    console.log(this.playerService.getRole());
     return this.playerService.getRole();
   }
 

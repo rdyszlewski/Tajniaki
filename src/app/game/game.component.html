@@ -20,18 +20,18 @@
   <div class="game_head_row">
     <div class="gamer_column">
       <span class="gamer_column">{{"game.player_name"|translate}}: {{getNickname()}}</span>
-      <span class="gamer_column">{{"game.team"|translate}}: {{getTeam()=="BLUE"?"game.blue_team":"game.red_team"|translate}}</span>
-      <span class="gamer_column">{{"game.role"|translate}}: {{getRole()=="BOSS"?"game.boss":"game.player"|translate}}</span>
+      <span class="gamer_column">{{"game.team"|translate}}: {{(getTeam()==team.BLUE?"game.blue_team":"game.red_team")|translate}}</span>
+      <span class="gamer_column">{{"game.role"|translate}}: {{(getRole()==role.BOSS?"game.boss":"game.player")|translate}}</span>
     </div>
 
     <div class="round_information_column">
       <div class="current_state">
         {{"game.turn"|translate}}
         <span id="current_stage" class="state_element">
-          {{state.currentStage==role.BOSS? "game.turn_boss": "game.turn_player"|translate}}
+          {{(state.currentStage==role.BOSS ? "game.turn_boss": "game.turn_player")|translate}}
         </span>
         <span id="current_team" class="state_element">
-          {{state.currentTeam==team.BLUE?"game.turn_blue":"game.turn_red"|translate}}
+          {{(state.currentTeam==team.BLUE ?"game.turn_blue":"game.turn_red")|translate}}
         </span>
       </div>
 
@@ -53,7 +53,7 @@
       'blue_team': getClientTeam()==team.BLUE,
       'red_team':getClientTeam()==team.RED,
       'team-name': true
-      }" >{{getClientTeam()==team.BLUE ? "game.blue_team" : 'game.Added test gamered_team'|translate}}</div>
+      }" >{{(getClientTeam()==team.BLUE ? "game.blue_team" : 'game.red_team')|translate}}</div>
     <div class="points">
       <div
         *ngFor="let i of this.getRemainingsCollection(remainings)" class="remaining-card left-stack" [style.--offset]=i [style.z-index]=remainings-i
