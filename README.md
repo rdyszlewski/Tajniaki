@@ -1,30 +1,71 @@
 # Tajniaki
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.0.
+Tajniaki it’s digital version of board game named Codenames. 
 
-## Development server
+## Rules of game
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Two teams take part in the game, blue and red. In each team must be at least two people. One person from each team plays the role spymaster,   the rest are ordinary players.
+On the board are placed 25 randomly selected words. The task of teams will have to guess all theirs words, before the opposing team does it. Spymasters of the team knows, whose words belong to which team, but ordinary players don’t know it. The spymaster’s job is give the words, which may connote witch specific number of words located on the board. Spymaster give also this number. The ordinary player’s job is guess words belong to their team. Players in one turn can guess at most as many words as the number given by the spymaster. Players guess one word at a time. If players revealed the word correctly  and guess less words than spymaster gave, they can guess further, but they don’t have to.  In case of wrong answer, the team ends its turn, and opposing team’s turn begins. On the board located on killer’s card. If any of teams will reveals this card, they lose and the winner becomes opposing team. On the board are located words of blue teams, red teams, one killer card, and neutral cards.
 
-## Code scaffolding
+## Gameplay
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Main menu
 
-## Build
+After pressing the Game button, the player is taken to the lobby. In this view you can change nick, that will be visible in the later stages of the game.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Lobby
 
-## Running unit tests
+The players choose which  team they want to be. After choosing should press Ready button. If all players press Ready buttons,  the countdown to the end of the team’s choosing will begin.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Voting
 
-## Running end-to-end tests
+On this screen players vote for the player to become the spymaster of their team. The player with the most votes becomes the spymaster. In case of tie, the spymaster is chosen randomly.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### Game
+#### Ordinary player
+- right mouse button – select a card. Selecting is visible only in ordinary players in the team.
+- left mouse button – answer. The asnwer will be accept, if all players answer the same card
 
-## Further help
+#### Spymaster
+- entering the word. The word can’t be empty. A number must be entered.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Requirements
 
+nodejs
 
-npm install --save-dev uuid
+Installing
+
+```bash
+sudo apt install nodejs
+```
+
+npm
+```bash
+sudo apt install npm
+```
+
+## Usage
+
+Initialization of project
+```bash
+npm init
+```
+
+Install electron for project
+```bash
+npm install –save-dev electron
+```
+
+Runing electron application
+```bash
+npm start
+```
+
+Running in browser
+```bash
+ng serve
+```
+
+## Server
+You need a running server to play:
+https://github.com/Parabbits/TajniakiServer2
