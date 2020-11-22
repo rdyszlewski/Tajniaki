@@ -3,10 +3,6 @@ import { GameService } from 'src/app/gameService';
 import { ParamFactory } from './param-factory';
 import { IResponseEvent } from './response-event';
 
-export enum MessageType{
-
-}
-
 export abstract class EventManager{
 
   private _subscribtions: Map<string, IResponseEvent> = new Map();

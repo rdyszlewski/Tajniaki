@@ -1,6 +1,6 @@
 import { TeamAdapter } from 'src/app/shared/messages/team-adapter';
-import { GameState } from '../models/game-state';
-import { Role } from '../models/role';
+import { GameState } from '../../models/game-state';
+import { Role } from '../../models/role';
 
 export class StateUpdateAdapter{
 

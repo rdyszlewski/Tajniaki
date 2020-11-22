@@ -1,6 +1,5 @@
 import { ConnectionService } from '../../connection.service';
 import { GameState } from '../models/game-state';
-import { Role } from '../models/role';
 import { PlayerService } from '../../playerService';
 import { ConnectionPath } from '../../shared/connectionPath';
 import { Router } from '@angular/router';
@@ -10,7 +9,13 @@ import { DialogComponent } from '../../dialog/dialog.component';
 import { GameService } from '../../gameService';
 import { QuestionParam } from '../parameters/question.param';
 import { EventManager } from 'src/app/shared/messages/events-manager';
-import { AnswerEvent, ClickEvent, EndGameEvent, GameDisconnectEvetn as GameDisconnectEvent, NewBossEvent, QuestionEvent, StartGameEvent } from './response-event';
+import { AnswerEvent } from './events/game.answer-event';
+import { ClickEvent } from './events/game.click-event';
+import { EndGameEvent } from './events/game.end-event';
+import { NewBossEvent } from './events/game.new-boss-event';
+import { QuestionEvent } from './events/game.question-event';
+import { StartGameEvent } from './events/game.start-game-event';
+import { GameDisconnectEvent } from './events/game.disconnect-event';
 
 export class GameEventsManager extends EventManager {
 

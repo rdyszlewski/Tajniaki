@@ -1,5 +1,6 @@
-import { Card } from '../models/card';
-import { GameState } from '../models/game-state';
+import { Card } from '../../models/card';
+import { GameState } from '../../models/game-state';
+
 
 export class CardAdapter{
 

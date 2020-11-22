@@ -10,7 +10,12 @@ import { DialogComponent } from '../../dialog/dialog.component';
 import { LobbyModel } from '../lobby.model';
 import { Team } from '../team';
 import { EventManager } from 'src/app/shared/messages/events-manager';
-import { ChangeTeamEvent, EndLobbyEvent, JointToLobbyEvent, LobbyDisconnectEvent, LobbyReadyEvent, PlayerConnectEvent } from './response-event';
+import { ChangeTeamEvent } from './events/lobby.change-team-event';
+import { PlayerConnectEvent } from './events/lobby.connect-event';
+import { LobbyDisconnectEvent } from './events/lobby.disconnect-event';
+import { EndLobbyEvent } from './events/lobby.end-event';
+import { JointToLobbyEvent } from './events/lobby.join-event';
+import { LobbyReadyEvent } from './events/lobby.ready-event';
 
 export class LobbyEventsManager extends EventManager {
 

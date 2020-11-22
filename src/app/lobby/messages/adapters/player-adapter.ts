@@ -1,6 +1,6 @@
 import { TeamAdapter } from 'src/app/shared/messages/team-adapter';
-import { LobbyModel } from '../lobby.model';
-import { LobbyPlayer } from '../lobby_player';
+import { LobbyModel } from '../../lobby.model';
+import { LobbyPlayer } from '../../lobby_player';
 
 export class LobbyPlayerAdapter{
 

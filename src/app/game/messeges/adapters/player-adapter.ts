@@ -1,6 +1,7 @@
 import { PlayerAdapter } from 'src/app/shared/messages/player-adapter';
-import { GamePlayer } from '../models/game-player';
-import { GameState } from '../models/game-state';
+import { GamePlayer } from '../../models/game-player';
+import { GameState } from '../../models/game-state';
+
 
 export class GamePlayerAdapter{
 
