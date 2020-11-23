@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { DialogComponent } from 'src/app/dialog/dialog.component';
 import { DialogService } from 'src/app/dialog/dialog.service';
 import { DialogMode } from 'src/app/dialog/dialogMode';
+import { IStateEvent } from 'src/app/shared/change-state';
 import { PlayerAdapter } from 'src/app/shared/messages/player-adapter';
 import { IResponseEvent } from 'src/app/shared/messages/response-event';
 import { VotingModel } from '../votingModel';
@@ -42,14 +43,12 @@ export class StartTimerEvent implements IResponseEvent {
 
 export class VotingDisconnectEvent implements IResponseEvent {
   constructor(
-    private router: Router,
     private dialog: DialogService,
     private model: VotingModel,
-    private unsuscribeMethod: () => void
+    private stateEvent: IStateEvent
   ) {}
 
   public execute(data: any) {
-    // let data = JSON.parse(message.body);
     let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
     this.model.removePlayerById(player.id);
     let currentStep = data['currentStep'];
@@ -58,9 +57,8 @@ export class VotingDisconnectEvent implements IResponseEvent {
         .setMessage('dialog.not_enough_players')
         .setMode(DialogMode.WARNING)
         .setOnOkClick(() => {
-          this.unsuscribeMethod();
+          this.stateEvent.goToMain();
           this.dialog.close();
-          this.router.navigate(['mainmenu']);
         })
         .open(DialogComponent);
     }
@@ -71,7 +69,6 @@ export class VoteEvent implements IResponseEvent {
   constructor(private model: VotingModel) {}
 
   public execute(data: any) {
-    // let data = JSON.parse(message.body);
     data.forEach((element) => {
       let player = this.model.getPlayer(element['id']);
       player.votes = element['votes'];
@@ -80,9 +77,10 @@ export class VoteEvent implements IResponseEvent {
 }
 
 export class EndVotingEvent implements IResponseEvent {
-  constructor(private router: Router) {}
+  constructor(private event: IStateEvent) {}
 
   public execute(data: any) {
-    this.router.navigate(['game']);
+    console.log("przechodzenie do kolejnego stanu");
+    this.event.nextState();
   }
 }

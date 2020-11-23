@@ -1,10 +1,11 @@
 import { Router } from '@angular/router';
+import { IStateEvent } from 'src/app/shared/change-state';
 import { IResponseEvent } from 'src/app/shared/messages/response-event';
 
 export class EndGameEvent implements IResponseEvent {
-  constructor(private router: Router) {}
+  constructor(private stateEvent: IStateEvent) {}
 
   public execute(data: any) {
-    this.router.navigate(['summary']);
+    this.stateEvent.nextState();
   }
 }

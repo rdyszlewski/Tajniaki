@@ -4,9 +4,11 @@ import { LobbyComponent } from './app/lobby/lobby.component';
 import { BossComponent } from './app/voting/voting.component';
 import { GameComponent } from './app/game/game.component';
 import { SummaryComponent } from './app/summary/summary.component';
+import { MainComponent } from './app/main/main.component';
 
 const ROUTES: Routes = [
-    {path: '', redirectTo: 'mainmenu', pathMatch: "full"},
+    {path: '', redirectTo: 'main', pathMatch: "full"},
+    {path: "main", component: MainComponent},
     {path: 'mainmenu', component: MainMenuComponent},
     {path: 'lobby', component:LobbyComponent},
     {path: 'voting', component:BossComponent},

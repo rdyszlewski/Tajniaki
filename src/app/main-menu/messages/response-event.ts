@@ -1,6 +1,7 @@
-import { Router } from '@angular/router';
 import { GameService } from 'src/app/gameService';
+import { State } from 'src/app/main/state';
 import { PlayerService } from 'src/app/playerService';
+import { IStateEvent } from 'src/app/shared/change-state';
 import { IResponseEvent } from 'src/app/shared/messages/response-event';
 
 export class TestStartGameEvent implements IResponseEvent{
@@ -16,11 +17,11 @@ export class TestStartGameEvent implements IResponseEvent{
 
 export class TestReadyGameEvent implements IResponseEvent {
 
-  constructor(private router: Router){
+  constructor(private stateEvent: IStateEvent){
 
   }
 
   public execute(data: any) {
-    this.router.navigate(["game"]);
+    this.stateEvent.goToState(State.GAME);
   }
 }

@@ -1,6 +1,8 @@
 import { DialogComponent } from 'src/app/dialog/dialog.component';
 import { DialogService } from 'src/app/dialog/dialog.service';
 import { DialogMode } from 'src/app/dialog/dialogMode';
+import { State } from 'src/app/main/state';
+import { IStateEvent } from 'src/app/shared/change-state';
 import { PlayerAdapter } from 'src/app/shared/messages/player-adapter';
 import { IResponseEvent } from 'src/app/shared/messages/response-event';
 import { GameState } from '../../models/game-state';
@@ -10,7 +12,7 @@ export class GameDisconnectEvent implements IResponseEvent {
   constructor(
     private state: GameState,
     private dialog: DialogService,
-    private endMethod: () => void
+    private stateEvent: IStateEvent
   ) {}
 
   public execute(data: any) {
@@ -23,8 +25,7 @@ export class GameDisconnectEvent implements IResponseEvent {
         .setMessage('dialog.not_enough_players')
         .setMode(DialogMode.WARNING)
         .setOnOkClick(() => {
-          this.endMethod();
-          // this.exit('lobby');
+          this.stateEvent.goToState(State.LOBBY);
         })
         .open(DialogComponent);
     }

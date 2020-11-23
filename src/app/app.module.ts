@@ -18,6 +18,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
+import { MainComponent } from './main/main.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { FormsModule } from '@angular/forms';
     BossComponent,
     GameComponent,
     DialogComponent,
-    SummaryComponent
+    SummaryComponent,
+    MainComponent
   ],
   imports: [
     FormsModule,

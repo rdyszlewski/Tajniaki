@@ -1,23 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { SummaryModel, SummaryEntry, SummaryWord, SummaryCard } from './summaryModel';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { SummaryModel} from './summaryModel';
 import { ConnectionService } from '../connection.service';
-import { ConnectionPath } from '../shared/connectionPath';
 import { WordColor } from '../game/models/word-color';
-import { CauseGetter, WinnerCause } from './winnerCause';
-import { Router } from '@angular/router';
-import { View } from '../shared/view';
-import { IdParam } from '../shared/parameters/id.param';
+import { ViewComponent } from '../shared/view-component';
 import { GameService } from '../gameService';
 import { Team } from '../lobby/team';
-import { TeamAdapter } from '../shared/messages/team-adapter';
 import { SummaryEventManager } from './messages/summary.event-manager';
+import { WinnerCause } from './winnerCause';
 
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.css']
 })
-export class SummaryComponent extends View implements OnInit {
+export class SummaryComponent extends ViewComponent implements OnInit {
+
+  @Output() onNextStateEvent: EventEmitter<null> = new EventEmitter();
 
   team = Team;
   cause = WinnerCause;
@@ -26,14 +24,21 @@ export class SummaryComponent extends View implements OnInit {
 
   private eventManager;
 
-  constructor(private router: Router, private gameService: GameService, private connectionService: ConnectionService) {
+  constructor(private gameService: GameService, private connectionService: ConnectionService) {
     super();
     this.eventManager = new SummaryEventManager(connectionService, gameService, this.model);
+  }
+
+  public init(){
     this.eventManager.init();
+    this.eventManager.sendSummary();
+   }
+
+   public close(){
+    this.eventManager.close();
    }
 
   ngOnInit(): void {
-    this.eventManager.sendSummary();
 
   }
 
@@ -46,7 +51,7 @@ export class SummaryComponent extends View implements OnInit {
   }
 
   backToMenu(){
-    this.router.navigate(['lobby']);
+    this.onNextStateEvent.emit();
   }
 
   getLoserRemainings(){

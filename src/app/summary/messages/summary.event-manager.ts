@@ -7,7 +7,6 @@ import { SummaryEvent } from './response-event';
 
 export class SummaryEventManager extends EventManager{
 
-  // TODO: sprawdzić , czy to będzie działać 
   constructor(connectionService: ConnectionService, gameService: GameService, private model: SummaryModel){
     super(connectionService, gameService);
   }

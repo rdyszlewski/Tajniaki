@@ -16,6 +16,7 @@ import { NewBossEvent } from './events/game.new-boss-event';
 import { QuestionEvent } from './events/game.question-event';
 import { StartGameEvent } from './events/game.start-game-event';
 import { GameDisconnectEvent } from './events/game.disconnect-event';
+import { IStateEvent } from 'src/app/shared/change-state';
 
 export class GameEventsManager extends EventManager {
 
@@ -24,8 +25,8 @@ export class GameEventsManager extends EventManager {
     gameService: GameService,
     private playerService: PlayerService,
     private state: GameState,
-    private router: Router,
-    private dialog:DialogService
+    private dialog:DialogService,
+    private stateEvent: IStateEvent
   ) {
     super(connectionService, gameService);
   }
@@ -37,15 +38,12 @@ export class GameEventsManager extends EventManager {
   public init() {
     this.subscribe(ConnectionPath.START_RESPONSE, new StartGameEvent(this.playerService, this.state));
     this.subscribe(ConnectionPath.NEW_BOSS_RESPONSE, new NewBossEvent(this.playerService, this.state, this.dialog));
-    this.subscribe(ConnectionPath.END_GAME_RESPONSE, new EndGameEvent(this.router));
+    this.subscribe(ConnectionPath.END_GAME_RESPONSE, new EndGameEvent(this.stateEvent));
     this.subscribe(ConnectionPath.QUESTION_RESPONSE, new QuestionEvent(this.state));
     this.subscribe(ConnectionPath.ANSWER_RESPONSE, new AnswerEvent(this.state));
     this.subscribe(ConnectionPath.CLICK_RESPONSE, new ClickEvent(this.state));
-    this.subscribe(ConnectionPath.DISCONNECT_RESPONSE, new GameDisconnectEvent(this.state, this.dialog, ()=>this.exit("mainmenu")));
+    this.subscribe(ConnectionPath.DISCONNECT_RESPONSE, new GameDisconnectEvent(this.state, this.dialog, this.stateEvent));
     this.subscribeOnClose(()=>this.onCloseEvent());
-    // if(this.playerRole == Role.PLAYER){ // TODO: tutaj
-    //   this.subscribe(ConnectionPath.CLICK_RESPONSE, new ClickEvent(this.state));
-    // }
   }
 
   public sendFlag(cardId: number) {
@@ -75,18 +73,17 @@ export class GameEventsManager extends EventManager {
         .setMessage('dialog.disconnected')
         .setMode(DialogMode.WARNING)
         .setOnOkClick(() => {
-          this.exit('mainmenu');
+          this.stateEvent.disconnect();
         })
         .open(DialogComponent);
   }
 
-  private exit(newLocation: string) {
-    this.unsubscribeAll();
-    this.dialog.close();
-    this.router.navigate([newLocation]);
-  }
-
   public closeDialog() {
     this.dialog.close();
+  }
+
+  public close(){
+    super.close();
+    this.closeDialog();
   }
 }

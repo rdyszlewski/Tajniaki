@@ -2,9 +2,7 @@ import { ConnectionService } from '../../connection.service';
 import { PlayerService } from '../../playerService';
 import { ConnectionPath } from '../../shared/connectionPath';
 import { GameService } from '../../gameService';
-import { Router } from '@angular/router';
 import { DialogService } from '../../dialog/dialog.service';
-import { Injector } from '@angular/core';
 import { DialogMode } from '../../dialog/dialogMode';
 import { DialogComponent } from '../../dialog/dialog.component';
 import { LobbyModel } from '../lobby.model';
@@ -16,19 +14,19 @@ import { LobbyDisconnectEvent } from './events/lobby.disconnect-event';
 import { EndLobbyEvent } from './events/lobby.end-event';
 import { JointToLobbyEvent } from './events/lobby.join-event';
 import { LobbyReadyEvent } from './events/lobby.ready-event';
+import { IStateEvent } from 'src/app/shared/change-state';
 
 export class LobbyEventsManager extends EventManager {
 
   public constructor(connectionService: ConnectionService, gameService: GameService,
-    private router: Router, private dialog: DialogService,  private playerService: PlayerService,
-    private model: LobbyModel) {
+    private dialog: DialogService,  private playerService: PlayerService,
+    private model: LobbyModel, private stateEvent: IStateEvent) {
     super(connectionService, gameService);
   }
 
   public init() {
-
     this.subscribe(ConnectionPath.DISCONNECT_RESPONSE, new LobbyDisconnectEvent(this.model));
-    this.subscribe(ConnectionPath.LOBBY_END_RESPONSE, new EndLobbyEvent(this.router));
+    this.subscribe(ConnectionPath.LOBBY_END_RESPONSE, new EndLobbyEvent(this.stateEvent));
     this.subscribe(ConnectionPath.READY_RESPONSE, new LobbyReadyEvent(this.model));
     this.subscribe(ConnectionPath.CHANGE_TEAM_REPONSE, new ChangeTeamEvent(this.model));
     this.subscribe(ConnectionPath.PLAYERS_RESPONSE, new JointToLobbyEvent(this.gameService, this.playerService, this.model));
@@ -42,9 +40,7 @@ export class LobbyEventsManager extends EventManager {
       .setMessage('dialog.disconnected')
       .setMode(DialogMode.WARNING)
       .setOnOkClick(() => {
-        this.unsubscribeAll();
-        this.dialog.close();
-        this.router.navigate(['mainmenu']);
+        this.stateEvent.disconnect();
       })
       .open(DialogComponent);
   }
@@ -58,7 +54,6 @@ export class LobbyEventsManager extends EventManager {
   }
 
   private sendJoinToTeam(team: Team) {
-    // TODO: sprawdzić, czy to zadziała
     this.sendWithValue(ConnectionPath.CHANGE_TEAM, team);
   }
 
@@ -76,5 +71,10 @@ export class LobbyEventsManager extends EventManager {
 
   public closeDialog() {
     this.dialog.close();
+  }
+
+  public close(){
+    super.close();
+    this.closeDialog();
   }
 }

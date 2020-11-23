@@ -9,8 +9,7 @@ import { GameEventsManager } from './messeges/game.events-manager';
 import { Team } from '../lobby/team';
 import { LobbyPlayer } from '../lobby/lobby_player';
 import { GamePlayer } from './models/game-player';
-import { Router } from '@angular/router';
-import { View } from '../shared/view';
+import { ViewComponent } from '../shared/view-component';
 import { GameService } from '../gameService';
 import { BossWord } from './models/boss-word';
 import { DialogService } from '../dialog/dialog.service';
@@ -20,7 +19,7 @@ import { DialogService } from '../dialog/dialog.service';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css'],
 })
-export class GameComponent extends View implements OnInit  {
+export class GameComponent extends ViewComponent implements OnInit  {
 
   team = Team;
   role = Role;
@@ -38,36 +37,23 @@ export class GameComponent extends View implements OnInit  {
   public get bossWord():BossWord {return this._bossWord;}
 
 
-  constructor(private router:Router,
-    private gameService: GameService, private playerService: PlayerService,
+  constructor(private gameService: GameService, private playerService: PlayerService,
     private _state: GameState, private connectionService: ConnectionService, dialog: DialogService) {
     super();
-    this._eventsManager = new GameEventsManager(connectionService, gameService, playerService, this.state, router, dialog);
+    this._eventsManager = new GameEventsManager(connectionService, gameService, playerService, this.state, dialog, this);
+   }
+
+   public init(): void{
+    this._eventsManager.init();
+    this._eventsManager.sendStartMessage();
+   }
+
+   public close(){
+     this._eventsManager.close();
    }
 
   ngOnInit(): void {
-    this.preventRightClickMenu();
-    this._eventsManager.init();
-    this._eventsManager.sendStartMessage();
-    this.setOnLeave(this.onLeaveEvent);
-  }
 
-  @HostListener('window:beforeunload', ['$event'])
-  onBeforeunload(event){
-    if(this.connectionService.isConnected()){
-      event.returnValue = "Czy na pewno wyjść?";
-    } else {
-      event.returnValue = false;
-    }
-  }
-
-  private onLeaveEvent(){
-    this._eventsManager.unsubscribeAll();
-    this._eventsManager.closeDialog();
-  }
-
-  private preventRightClickMenu() {
-    document.addEventListener('contextmenu', event => event.preventDefault());
   }
 
   isBoss(){

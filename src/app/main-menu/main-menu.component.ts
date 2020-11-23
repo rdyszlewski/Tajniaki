@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Injector } from '@angular/core';
+import { Component, OnInit, Inject, Injector, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConnectionService } from '../connection.service';
 import { PlayerService } from '../playerService';
@@ -9,6 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { TranslateService } from '@ngx-translate/core';
 import { GameService } from '../gameService';
 import { TestMainMenuEventManager } from './messages/main-menu.event-manager';
+import { ChangeStateType, ViewComponent} from '../shared/view-component';
 (window as any).global = window;
 
 @Component({
@@ -16,7 +17,7 @@ import { TestMainMenuEventManager } from './messages/main-menu.event-manager';
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.css']
 })
-export class MainMenuComponent implements OnInit {
+export class MainMenuComponent extends ViewComponent implements OnInit {
 
   private readonly CONNECTION_DIALOG_DELAY = 500;
   private readonly CONNECTION_TIMEOUT = 5000;
@@ -29,18 +30,27 @@ export class MainMenuComponent implements OnInit {
     return this._testEventManager;
   }
 
-  constructor(private router: Router, private dialog: DialogService, private connectionService: ConnectionService,
+  constructor( private dialog: DialogService, private connectionService: ConnectionService,
     private cookieService: CookieService, private translate: TranslateService,
     private gameService: GameService, private playerService: PlayerService ) {
-      this._testEventManager = new TestMainMenuEventManager(connectionService, gameService, playerService, router);
+      super();
+      this._testEventManager = new TestMainMenuEventManager(connectionService, gameService, playerService, this);
   }
 
-  ngOnInit(): void {
-
+  public init(): void{
+    this._testEventManager.init();
     this.setPlayerNickname();
     if(!this.isConnected()){
       this.connect();
     }
+  }
+
+  public close() {
+    this._testEventManager.close()
+  }
+
+  ngOnInit(): void {
+
   }
 
   private setPlayerNickname(){
@@ -110,19 +120,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   start(){
-    this.router.navigate(['lobby']);
-  }
-
-  startVoting(){
-    this.router.navigate(['voting']);
-  }
-
-  startSummary(){
-    this.router.navigate(['summary']);
-  }
-
-  startLobby(){
-    this.router.navigate(["lobby"]);
+    this.onStateChangeEvent.emit(ChangeStateType.NEXT_STATE);
   }
 
   nicknameKeydown(event){

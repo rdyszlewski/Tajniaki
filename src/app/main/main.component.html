@@ -1,0 +1,20 @@
+<app-main-menu [hidden]="!isCurrentState(state.MAIN_MENU)"
+  (onStateChangeEvent)="onStateChange($event)"
+  (goToStateEvent)="goToState($event)">
+</app-main-menu>
+
+<app-lobby [hidden]="!isCurrentState(state.LOBBY)"
+  (onStateChangeEvent)="onStateChange($event)">
+</app-lobby>
+
+<app-boss [hidden]="!isCurrentState(state.VOTING)"
+  (onStateChangeEvent)="onStateChange($event)">
+</app-boss>
+
+<app-game [hidden]="!isCurrentState(state.GAME)"
+  (onStateChangeEvent)="onStateChange($event)"
+  (goToStateEvent)="goToState($event)">
+</app-game>
+<app-game [hidden]="!isCurrentState(state.SUMMARY)"
+  (onStateChangeEvent)="onStateChange($event)">
+</app-game>

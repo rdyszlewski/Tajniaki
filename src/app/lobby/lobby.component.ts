@@ -1,98 +1,114 @@
-import { Component, OnInit, Injector} from '@angular/core';
-import {Team} from './team';
+import { Component, OnInit } from '@angular/core';
+import { Team } from './team';
 import { LobbyModel } from './lobby.model';
 import { LobbyEventsManager } from './messages/lobby.event-manager';
-import { Router } from '@angular/router';
-import { View as ViewComponent } from '../shared/view';
-import {PlayerService} from "../playerService";
+import { ViewComponent } from '../shared/view-component';
+import { PlayerService } from '../playerService';
 import { GameService } from '../gameService';
 import { ConnectionService } from '../connection.service';
 import { DialogService } from '../dialog/dialog.service';
 
-
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
-  styleUrls: ['./lobby.component.css']
+  styleUrls: ['./lobby.component.css'],
 })
 export class LobbyComponent extends ViewComponent implements OnInit {
-
   team = Team;
-  public get model():LobbyModel{return this._model;}
+
   private _eventsManager: LobbyEventsManager;
-  public get eventsManager():LobbyEventsManager{return this._eventsManager;}
-
-
-  constructor(private router:Router, private connectionService: ConnectionService, private dialog:DialogService,
-    private gameService: GameService, private playerService: PlayerService,
-    private _model: LobbyModel) {
-    super();
-    this._model = new LobbyModel(playerService);
-    this._eventsManager = new LobbyEventsManager(connectionService, gameService, router, dialog, playerService, this.model);
+  public get eventsManager(): LobbyEventsManager {
+    return this._eventsManager;
   }
 
-  ngOnInit(): void {
+  constructor(
+    private connectionService: ConnectionService,
+    private dialog: DialogService,
+    private gameService: GameService,
+    private playerService: PlayerService,
+    private _model: LobbyModel
+  ) {
+    super();
+    // this._model = new LobbyModel(playerService);
+    this._eventsManager = new LobbyEventsManager(
+      connectionService,
+      gameService,
+      dialog,
+      playerService,
+      this.model,
+      this
+    );
+  }
+
+  public get model(): LobbyModel {
+    return this._model;
+  }
+
+  public init() {
     this._eventsManager.init();
     this._eventsManager.sendJoinToLobby();
-    this.setOnLeave(this.onLeaveEvent);
   }
 
-  private onLeaveEvent(){
-    this._eventsManager.unsubscribeAll();
-    this._eventsManager.closeDialog();
+  public close() {
+    this.eventsManager.close();
   }
 
-  isBlue(player){
-    return player.team==Team.BLUE;
+  ngOnInit(): void {}
+
+  isBlue(player) {
+    return player.team == Team.BLUE;
   }
 
-  isRed(player){
+  isRed(player) {
     return player.team == Team.RED;
   }
 
-  isObserver(player){
+  isObserver(player) {
     return player.team == Team.LACK;
   }
 
-  countBlue(){
+  countBlue() {
     return this._model.getPlayers(Team.BLUE).length;
   }
 
-  countRed(){
+  countRed() {
     return this._model.getPlayers(Team.RED).length;
   }
 
-  countObserver(){
+  countObserver() {
     return this._model.getPlayers(Team.LACK).length;
   }
 
-  isPlayerReady(){
-    if(this._model.getClientPlayer()){
+  isPlayerReady() {
+    if (this._model.getClientPlayer()) {
       return this._model.getClientPlayer().ready;
     }
     return false;
   }
 
-  canJoinToBlue(){
+  canJoinToBlue() {
     return this.countBlue() < this._model.getMaxPlayersInTeam();
   }
 
-  canJoinToRed(){
+  canJoinToRed() {
     return this.countRed() < this._model.getMaxPlayersInTeam();
   }
 
-  canSetReady(){
-    if(this._model.getClientPlayer()){
-      return this._model.getClientPlayer().team == Team.BLUE || this._model.getClientPlayer().team == Team.RED;
+  canSetReady() {
+    if (this._model.getClientPlayer()) {
+      return (
+        this._model.getClientPlayer().team == Team.BLUE ||
+        this._model.getClientPlayer().team == Team.RED
+      );
     }
     return false;
   }
 
-  getNickname(){
+  getNickname() {
     return this.playerService.getNickname();
   }
 
-  getTeam(){
+  getTeam() {
     return this.playerService.getTeam();
   }
 }

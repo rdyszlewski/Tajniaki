@@ -1,14 +1,17 @@
 import { ConnectionService } from 'src/app/connection.service';
+import { DialogService } from 'src/app/dialog/dialog.service';
 import { GameService } from 'src/app/gameService';
+import { State } from 'src/app/main/state';
 import { ParamFactory } from './param-factory';
 import { IResponseEvent } from './response-event';
+
+export type StateCallback= (state: State)=>void;
 
 export abstract class EventManager{
 
   private _subscribtions: Map<string, IResponseEvent> = new Map();
 
   constructor(protected connectionService: ConnectionService, protected gameService: GameService){
-
   }
 
   public abstract init();
@@ -54,5 +57,9 @@ export abstract class EventManager{
 
   protected getIdParam(value: any):string{
     return ParamFactory.create(value, this.gameService.getId());
+  }
+
+  public close(){
+    this.unsubscribeAll();
   }
 }
