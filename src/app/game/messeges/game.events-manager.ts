@@ -2,9 +2,6 @@ import { ConnectionService } from '../../connection.service';
 import { GameState } from '../models/game-state';
 import { PlayerService } from '../../playerService';
 import { ConnectionPath } from '../../shared/connectionPath';
-import { DialogService } from '../../dialog/dialog.service';
-import { DialogMode } from '../../dialog/dialogMode';
-import { DialogComponent } from '../../dialog/dialog.component';
 import { GameService } from '../../gameService';
 import { QuestionParam } from '../parameters/question.param';
 import { EventManager } from 'src/app/shared/messages/events-manager';
@@ -16,6 +13,9 @@ import { QuestionEvent } from './events/game.question-event';
 import { StartGameEvent } from './events/game.start-game-event';
 import { GameDisconnectEvent } from './events/game.disconnect-event';
 import { IStateEvent } from 'src/app/shared/change-state';
+import { DialogComponent } from 'src/app/widgets/dialog/dialog.component';
+import { DialogService } from 'src/app/widgets/dialog/dialog.service';
+import { DialogMode } from 'src/app/widgets/dialog/dialogMode';
 
 export class GameEventsManager extends EventManager {
 

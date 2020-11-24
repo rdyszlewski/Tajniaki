@@ -2,9 +2,6 @@ import { ConnectionService } from '../../connection.service';
 import { PlayerService } from '../../playerService';
 import { ConnectionPath } from '../../shared/connectionPath';
 import { GameService } from '../../gameService';
-import { DialogService } from '../../dialog/dialog.service';
-import { DialogMode } from '../../dialog/dialogMode';
-import { DialogComponent } from '../../dialog/dialog.component';
 import { LobbyModel } from '../lobby.model';
 import { Team } from '../team';
 import { EventManager } from 'src/app/shared/messages/events-manager';
@@ -15,6 +12,9 @@ import { EndLobbyEvent } from './events/lobby.end-event';
 import { JointToLobbyEvent } from './events/lobby.join-event';
 import { LobbyReadyEvent } from './events/lobby.ready-event';
 import { IStateEvent } from 'src/app/shared/change-state';
+import { DialogComponent } from 'src/app/widgets/dialog/dialog.component';
+import { DialogService } from 'src/app/widgets/dialog/dialog.service';
+import { DialogMode } from 'src/app/widgets/dialog/dialogMode';
 
 export class LobbyEventsManager extends EventManager {
 

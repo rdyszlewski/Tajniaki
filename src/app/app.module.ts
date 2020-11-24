@@ -9,7 +9,6 @@ import { ConnectionService } from './connection.service';
 import { VotingComponent } from './voting/voting.component';
 import { GameComponent } from './game/game.component';
 import { TooltipModule } from 'ng2-tooltip-directive';
-import { DialogComponent } from './dialog/dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SummaryComponent } from './summary/summary.component';
 import { CookieService} from "ngx-cookie-service"
@@ -18,6 +17,7 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
 import { MainComponent } from './main/main.component';
+import { DialogComponent } from './widgets/dialog/dialog.component';
 
 
 @NgModule({

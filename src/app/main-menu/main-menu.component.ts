@@ -1,15 +1,14 @@
 import { Component, OnInit, Inject, Injector, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
 import { ConnectionService } from '../connection.service';
 import { PlayerService } from '../playerService';
-import { DialogService } from '../dialog/dialog.service';
-import { DialogMode } from '../dialog/dialogMode';
-import { DialogComponent } from '../dialog/dialog.component';
 import { CookieService } from 'ngx-cookie-service';
 import { TranslateService } from '@ngx-translate/core';
 import { GameService } from '../gameService';
 import { TestMainMenuEventManager } from './messages/main-menu.event-manager';
 import { ChangeStateType, ViewComponent} from '../shared/view-component';
+import { DialogComponent } from '../widgets/dialog/dialog.component';
+import { DialogService } from '../widgets/dialog/dialog.service';
+import { DialogMode } from '../widgets/dialog/dialogMode';
 (window as any).global = window;
 
 @Component({

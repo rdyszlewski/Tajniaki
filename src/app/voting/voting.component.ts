@@ -9,7 +9,7 @@ import { VotingEventManager } from './messages/voting.event-manager';
 import { ViewComponent } from '../shared/view-component';
 import { GameService } from '../gameService';
 import { ConnectionService } from '../connection.service';
-import { DialogService } from '../dialog/dialog.service';
+import { DialogService } from '../widgets/dialog/dialog.service';
 
 @Component({
   selector: 'app-voting',

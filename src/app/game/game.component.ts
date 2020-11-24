@@ -12,7 +12,7 @@ import { GamePlayer } from './models/game-player';
 import { ViewComponent } from '../shared/view-component';
 import { GameService } from '../gameService';
 import { SpymasterWord } from './models/spymaster-word';
-import { DialogService } from '../dialog/dialog.service';
+import { DialogService } from '../widgets/dialog/dialog.service';
 
 @Component({
   selector: 'app-game',

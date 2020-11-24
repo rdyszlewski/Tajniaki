@@ -6,7 +6,7 @@ import { ViewComponent } from '../shared/view-component';
 import { PlayerService } from '../playerService';
 import { GameService } from '../gameService';
 import { ConnectionService } from '../connection.service';
-import { DialogService } from '../dialog/dialog.service';
+import { DialogService } from '../widgets/dialog/dialog.service';
 
 @Component({
   selector: 'app-lobby',

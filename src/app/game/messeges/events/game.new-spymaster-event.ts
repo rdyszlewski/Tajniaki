@@ -1,8 +1,9 @@
-import { DialogComponent } from 'src/app/dialog/dialog.component';
-import { DialogService } from 'src/app/dialog/dialog.service';
-import { DialogMode } from 'src/app/dialog/dialogMode';
+
 import { PlayerService } from 'src/app/playerService';
 import { IResponseEvent } from 'src/app/shared/messages/response-event';
+import { DialogComponent } from 'src/app/widgets/dialog/dialog.component';
+import { DialogService } from 'src/app/widgets/dialog/dialog.service';
+import { DialogMode } from 'src/app/widgets/dialog/dialogMode';
 import { GameState } from '../../models/game-state';
 import { CreateGameEvent } from './game.create-game-event';
 

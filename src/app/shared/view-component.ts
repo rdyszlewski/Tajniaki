@@ -1,5 +1,4 @@
 import { EventEmitter, HostListener, Output } from '@angular/core';
-import { ConnectionService } from '../connection.service';
 import { State } from '../main/state';
 import { IStateEvent } from './change-state';
 

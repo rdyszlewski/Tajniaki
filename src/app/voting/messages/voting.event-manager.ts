@@ -2,13 +2,13 @@ import { VotingModel } from '../votingModel';
 import { ConnectionService } from '../../connection.service';
 import { ConnectionPath } from '../../shared/connectionPath';
 import { VotingPlayer } from '../voting_player';
-import { DialogService } from '../../dialog/dialog.service';
-import { DialogMode } from '../../dialog/dialogMode';
-import { DialogComponent } from '../../dialog/dialog.component';
 import { GameService } from '../../gameService';
 import { EventManager} from 'src/app/shared/messages/events-manager';
 import { EndVotingEvent, StartTimerEvent, TimerEvent, VoteEvent, VotingDisconnectEvent } from './response-event';
 import { IStateEvent } from 'src/app/shared/change-state';
+import { DialogMode } from 'src/app/widgets/dialog/dialogMode';
+import { DialogComponent } from 'src/app/widgets/dialog/dialog.component';
+import { DialogService } from 'src/app/widgets/dialog/dialog.service';
 
 export class VotingEventManager extends EventManager{
 

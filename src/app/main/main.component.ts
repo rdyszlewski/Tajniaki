@@ -6,9 +6,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ConnectionService } from '../connection.service';
-import { DialogComponent } from '../dialog/dialog.component';
-import { DialogService } from '../dialog/dialog.service';
-import { DialogMode } from '../dialog/dialogMode';
 import { GameComponent } from '../game/game.component';
 import { GameService } from '../gameService';
 import { LobbyComponent } from '../lobby/lobby.component';
@@ -17,6 +14,9 @@ import { IdParam } from '../shared/parameters/id.param';
 import { ChangeStateType, ViewComponent } from '../shared/view-component';
 import { SummaryComponent } from '../summary/summary.component';
 import { VotingComponent } from '../voting/voting.component';
+import { DialogComponent } from '../widgets/dialog/dialog.component';
+import { DialogService } from '../widgets/dialog/dialog.service';
+import { DialogMode } from '../widgets/dialog/dialogMode';
 import { State } from './state';
 
 @Component({

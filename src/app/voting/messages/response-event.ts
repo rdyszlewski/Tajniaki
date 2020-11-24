@@ -1,9 +1,10 @@
-import { DialogComponent } from 'src/app/dialog/dialog.component';
-import { DialogService } from 'src/app/dialog/dialog.service';
-import { DialogMode } from 'src/app/dialog/dialogMode';
+
 import { IStateEvent } from 'src/app/shared/change-state';
 import { PlayerAdapter } from 'src/app/shared/messages/player-adapter';
 import { IResponseEvent } from 'src/app/shared/messages/response-event';
+import { DialogComponent } from 'src/app/widgets/dialog/dialog.component';
+import { DialogService } from 'src/app/widgets/dialog/dialog.service';
+import { DialogMode } from 'src/app/widgets/dialog/dialogMode';
 import { VotingModel } from '../votingModel';
 import { VotingPlayer } from '../voting_player';
 
