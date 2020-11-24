@@ -1,8 +1,19 @@
-import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ConnectionService } from '../connection.service';
+import { DialogComponent } from '../dialog/dialog.component';
+import { DialogService } from '../dialog/dialog.service';
+import { DialogMode } from '../dialog/dialogMode';
 import { GameComponent } from '../game/game.component';
+import { GameService } from '../gameService';
 import { LobbyComponent } from '../lobby/lobby.component';
 import { MainMenuComponent } from '../main-menu/main-menu.component';
+import { IdParam } from '../shared/parameters/id.param';
 import { ChangeStateType, ViewComponent } from '../shared/view-component';
 import { SummaryComponent } from '../summary/summary.component';
 import { VotingComponent } from '../voting/voting.component';
@@ -11,11 +22,12 @@ import { State } from './state';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  styleUrls: ['./main.component.css'],
 })
 export class MainComponent implements OnInit, AfterViewInit {
 
-  public state = State
+  public state = State;
+
   @ViewChild(MainMenuComponent)
   private mainMenuComponent: MainMenuComponent;
 
@@ -36,9 +48,9 @@ export class MainComponent implements OnInit, AfterViewInit {
   private statesOrder: State[];
   private currentStateIndex: number;
 
-  constructor(private connectionService: ConnectionService) {
+  private menuOpen = false;
 
-  }
+  constructor(private connectionService: ConnectionService, private dialog: DialogService, private gameService: GameService) {}
   ngAfterViewInit(): void {
     this._currentState = State.MAIN_MENU;
     this.componentsMap = this.initComponentsMap();
@@ -51,14 +63,10 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.preventRightClickMenu();
     this.statesOrder = this.initStatesOrder();
     this.currentStateIndex = 0;
-
-
   }
 
-  private initComponentsMap(): Map<State, ViewComponent>{
+  private initComponentsMap(): Map<State, ViewComponent> {
     let map = new Map();
-    console.log("Siema bracie");
-    console.log(this.mainMenuComponent);
     map.set(State.MAIN_MENU, this.mainMenuComponent);
     map.set(State.LOBBY, this.lobbyComponent);
     map.set(State.VOTING, this.votingComponent);
@@ -67,20 +75,26 @@ export class MainComponent implements OnInit, AfterViewInit {
     return map;
   }
 
-  private initStatesOrder(){
-    return [State.MAIN_MENU, State.LOBBY, State.VOTING, State.GAME, State.SUMMARY];
+  private initStatesOrder() {
+    return [
+      State.MAIN_MENU,
+      State.LOBBY,
+      State.VOTING,
+      State.GAME,
+      State.SUMMARY,
+    ];
   }
 
   private preventRightClickMenu() {
-    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('contextmenu', (event) => event.preventDefault());
   }
 
-  public isCurrentState(state: State){
+  public isCurrentState(state: State) {
     return this._currentState == state;
   }
 
-  public onStateChange(type: ChangeStateType){
-    switch(type){
+  public onStateChange(type: ChangeStateType) {
+    switch (type) {
       case ChangeStateType.NEXT_STATE:
         this.runNextState();
         break;
@@ -90,20 +104,22 @@ export class MainComponent implements OnInit, AfterViewInit {
       case ChangeStateType.INTERRUPT_GAME:
         this.goToState(State.MAIN_MENU);
     }
-
   }
 
-  private runNextState(){
-     let nextState = this.getNextState(this._currentState);
-     this.runState(nextState);
+  private runNextState() {
+    console.log("Następny stan");
+    let nextState = this.getNextState();
+    this.runState(nextState);
   }
 
-  public goToState(state: State){
-    this.currentStateIndex = this.statesOrder.findIndex(x=>x==state);
+  public goToState(state: State) {
+    this.menuOpen = false;
+    this.currentStateIndex = this.statesOrder.findIndex(x => x == state);
+    console.log(this.currentStateIndex);
     this.runState(state);
   }
 
-  private runState(state:State){
+  private runState(state: State) {
     let currentComponent = this.getComponent(this._currentState);
     currentComponent.close();
     let nextComponent = this.getComponent(state);
@@ -111,25 +127,51 @@ export class MainComponent implements OnInit, AfterViewInit {
     this._currentState = state;
   }
 
-  private getNextState(currentState: State):State{
+  private getNextState(): State {
     this.currentStateIndex++;
-    if(this.currentStateIndex >= this.statesOrder.length){
+    if (this.currentStateIndex >= this.statesOrder.length) {
       this.currentStateIndex = 0;
     }
     return this.statesOrder[this.currentStateIndex];
   }
 
-  private getComponent(state: State): ViewComponent{
+  private getComponent(state: State): ViewComponent {
     return this.componentsMap.get(state);
   }
 
   @HostListener('window:beforeunload', ['$event'])
-  onBeforeunload(event){
-    if(this.connectionService.isConnected()){
-      event.returnValue = "Czy na pewno wyjść?";
+  onBeforeunload(event) {
+    if (this.connectionService.isConnected()) {
+      event.returnValue = 'Czy na pewno wyjść?';
     } else {
       event.returnValue = false;
     }
   }
 
+  public isMenuOpen():boolean{
+    return this.menuOpen;
+  }
+
+  public isMenuVisible():boolean{
+    return this._currentState != State.MAIN_MENU;
+  }
+
+  public openMenu(){
+    this.menuOpen = true;
+  }
+
+  public onGoToMainMenuClick(){
+    this.dialog.setMessage("dialog.sure_quit").setMode(DialogMode.ALERT)
+    .setOnOkClick(()=>this.onOkGoToMenuClick())
+    .setOnCancelClick(()=>{this.menuOpen = false;})
+    .open(DialogComponent);
+  }
+
+  private onOkGoToMenuClick(){
+    let param = new IdParam(this.gameService.getId());
+    let json = JSON.stringify(param);
+    this.connectionService.send(json, '/app/game/quit');
+    this.dialog.close();
+    this.goToState(State.MAIN_MENU);
+  }
 }
