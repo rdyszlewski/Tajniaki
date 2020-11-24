@@ -38,12 +38,12 @@ export class VotingComponent extends ViewComponent implements OnInit {
   }
 
   public init(): void {
-    console.log("Subskrybcja Voting ");
     this.eventManager.init();
     this.eventManager.sendStartMessage();
   }
 
   public close() {
+    this.model.clear();
     this.eventManager.close();
   }
 

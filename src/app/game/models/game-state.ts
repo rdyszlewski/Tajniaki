@@ -55,7 +55,6 @@ export class GameState {
     let index = this.getCardId(word);
     if (index != null) {
       this.cards[index] = card;
-      console.log(this.cards);
     }
   }
 

@@ -16,7 +16,6 @@ export class GameDisconnectEvent implements IResponseEvent {
   ) {}
 
   public execute(data: any) {
-    console.log(data);
     let player = PlayerAdapter.createPlayer(data['disconnectedPlayer']);
     this.state.removePlayer(player.id);
 

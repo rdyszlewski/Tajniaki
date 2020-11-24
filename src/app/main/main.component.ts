@@ -55,7 +55,6 @@ export class MainComponent implements OnInit, AfterViewInit {
     this._currentState = State.MAIN_MENU;
     this.componentsMap = this.initComponentsMap();
     let component = this.getComponent(this._currentState);
-    console.log(component);
     component.init();
   }
 
@@ -107,7 +106,6 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   private runNextState() {
-    console.log("Następny stan");
     let nextState = this.getNextState();
     this.runState(nextState);
   }
@@ -115,7 +113,6 @@ export class MainComponent implements OnInit, AfterViewInit {
   public goToState(state: State) {
     this.menuOpen = false;
     this.currentStateIndex = this.statesOrder.findIndex(x => x == state);
-    console.log(this.currentStateIndex);
     this.runState(state);
   }
 

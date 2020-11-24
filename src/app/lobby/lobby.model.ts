@@ -16,6 +16,10 @@ export class LobbyModel{
 
     }
 
+    public clear(){
+      this.players = [];
+    }
+
     public getMinPlayersInTeam(){
         return this.minPlayersInTeam;
     }

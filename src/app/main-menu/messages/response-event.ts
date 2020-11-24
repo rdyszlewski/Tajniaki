@@ -4,22 +4,20 @@ import { PlayerService } from 'src/app/playerService';
 import { IStateEvent } from 'src/app/shared/change-state';
 import { IResponseEvent } from 'src/app/shared/messages/response-event';
 
-export class TestStartGameEvent implements IResponseEvent{
-
-  constructor(private gameService: GameService, private playerService: PlayerService){}
+export class TestStartGameEvent implements IResponseEvent {
+  constructor(
+    private gameService: GameService,
+    private playerService: PlayerService
+  ) {}
 
   public execute(data: any) {
-    console.log("Otrzymałem id gry");
-      this.gameService.setId(data['gameId']);
-      this.playerService.setId(data['playerId']);  }
-
+    this.gameService.setId(data['gameId']);
+    this.playerService.setId(data['playerId']);
+  }
 }
 
 export class TestReadyGameEvent implements IResponseEvent {
-
-  constructor(private stateEvent: IStateEvent){
-
-  }
+  constructor(private stateEvent: IStateEvent) {}
 
   public execute(data: any) {
     this.stateEvent.goToState(State.GAME);

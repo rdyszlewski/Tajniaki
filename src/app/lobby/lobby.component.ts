@@ -49,6 +49,7 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   }
 
   public close() {
+    this.model.clear();
     this.eventsManager.close();
   }
 

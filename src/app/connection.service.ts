@@ -11,10 +11,8 @@ export class ConnectionService {
   public  connect(host, port, on_connected_event){
     this._connection = new Client();
     this._connection.setOnConnectedEvent(()=>{
-      console.log("Otworzenie połączenia");
     });
     this._connection.setOnCloseEvent(()=>{
-      console.log("Zamknięcie połączenia");
     })
     this._connection.connect(host, port, on_connected_event);
   }
@@ -24,7 +22,6 @@ export class ConnectionService {
   }
 
   public subscribe(path, method){
-    console.log(path);
     this._connection.getSocket().subscribe(path, method, {id: path});
   }
 

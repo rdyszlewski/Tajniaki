@@ -78,7 +78,6 @@ export class EndVotingEvent implements IResponseEvent {
   constructor(private event: IStateEvent) {}
 
   public execute(data: any) {
-    console.log("przechodzenie do kolejnego stanu");
     this.event.nextState();
   }
 }

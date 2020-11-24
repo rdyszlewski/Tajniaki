@@ -41,7 +41,6 @@ export class SummaryEvent implements IResponseEvent {
   }
 
   private getCards(summary) {
-    console.log(summary);
     let cards: SummaryCard[] = [];
     summary.forEach((element) => {
       let card = new SummaryCard();
@@ -49,7 +48,6 @@ export class SummaryEvent implements IResponseEvent {
       card.word = element['word'];
       card.color = this.getColor(element['color']);
       card.team = TeamAdapter.getTeam(element['team']);
-      console.log(card.team);
 
       card.question = element['question'];
       cards.push(card);

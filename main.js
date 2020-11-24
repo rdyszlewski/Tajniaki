@@ -15,7 +15,6 @@ function createWindow() {
     // The following is optional and will open the DevTools:
     // win.webContents.openDevTools()
     win.on("closed", function () {
-        console.log("Zamknięto okno");
         win = null;
     });
     
@@ -24,7 +23,6 @@ app.on("ready", createWindow);
 // on macOS, closing the window doesn't quit the app
 app.on("window-all-closed", function () {
     if (process.platform !== "darwin") {
-        console.log("Zamknięcie wszystkich okien");
         app.quit();
     }
 });

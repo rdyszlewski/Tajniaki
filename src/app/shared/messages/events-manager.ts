@@ -18,7 +18,6 @@ export abstract class EventManager {
 
   protected subscribe(path: string, event: IResponseEvent): void {
     this.connectionService.subscribe(path, (message) => {
-      console.log(message);
       if (message) {
         let data = JSON.parse(message.body);
         event.execute(data);

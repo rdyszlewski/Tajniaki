@@ -2,8 +2,12 @@ import { VotingPlayer } from './voting_player';
 
 export class VotingModel{
 
-    private votingTime: number; // sec 
+    private votingTime: number; // sec
     private players: VotingPlayer[] = [];
+
+  public clear(){
+    this.players == [];
+  }
 
     public addPlayer(player:VotingPlayer):void{
         this.players.push(player);
@@ -35,5 +39,5 @@ export class VotingModel{
         const zeroPad = (num, places) => String(num).padStart(places, '0')
         return zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2);
     }
-    
+
 }
