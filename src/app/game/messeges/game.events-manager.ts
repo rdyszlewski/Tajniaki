@@ -19,6 +19,18 @@ import { DialogMode } from 'src/app/widgets/dialog/dialogMode';
 
 export class GameEventsManager extends EventManager {
 
+  private readonly END_GAME_RESPONSE  = "/user/queue/game/end_game";
+  private readonly QUESTION_RESPONSE = "/user/queue/game/question";
+  private readonly CLICK_RESPONSE = "/user/queue/game/click";
+  private readonly ANSWER_RESPONSE = "/user/queue/game/answer";
+  private readonly START_RESPONSE = "/user/queue/game/start";
+  private readonly NEW_SPYMASTER_RESPONSE = "/user/queue/game/new_spymaster";
+
+  private readonly GAME_START = "/app/game/start";
+  private readonly CLICK = "/app/game/click";
+  private readonly QUESTION = "/app/game/question"
+  private readonly FLAG = "/app/game/flag"
+
   constructor(
     connectionService: ConnectionService,
     gameService: GameService,
@@ -35,28 +47,28 @@ export class GameEventsManager extends EventManager {
   }
 
   public init() {
-    this.subscribe(ConnectionPath.START_RESPONSE, new StartGameEvent(this.playerService, this.state));
-    this.subscribe(ConnectionPath.NEW_SPYMASTER_RESPONSE, new NewSpymasterEvent(this.playerService, this.state, this.dialog));
-    this.subscribe(ConnectionPath.END_GAME_RESPONSE, new EndGameEvent(this.stateEvent));
-    this.subscribe(ConnectionPath.QUESTION_RESPONSE, new QuestionEvent(this.state));
-    this.subscribe(ConnectionPath.ANSWER_RESPONSE, new AnswerEvent(this.state));
-    this.subscribe(ConnectionPath.CLICK_RESPONSE, new ClickEvent(this.state));
+    this.subscribe(this.START_RESPONSE, new StartGameEvent(this.playerService, this.state));
+    this.subscribe(this.NEW_SPYMASTER_RESPONSE, new NewSpymasterEvent(this.playerService, this.state, this.dialog));
+    this.subscribe(this.END_GAME_RESPONSE, new EndGameEvent(this.stateEvent));
+    this.subscribe(this.QUESTION_RESPONSE, new QuestionEvent(this.state));
+    this.subscribe(this.ANSWER_RESPONSE, new AnswerEvent(this.state));
+    this.subscribe(this.CLICK_RESPONSE, new ClickEvent(this.state));
     this.subscribe(ConnectionPath.DISCONNECT_RESPONSE, new GameDisconnectEvent(this.state, this.dialog, this.stateEvent));
     this.subscribeOnClose(()=>this.onCloseEvent());
   }
 
   public sendFlag(cardId: number) {
-    this.sendWithValue(ConnectionPath.FLAG, cardId);
+    this.sendWithValue(this.FLAG, cardId);
   }
 
   public sendSpymasterMessage(word: string, number: number) {
     let param = new QuestionParam(this.gameService.getId(), word, number);
     let json = JSON.stringify(param);
-    this.sendMessage(ConnectionPath.QUESTION, json);
+    this.sendMessage(this.QUESTION, json);
   }
 
   public sendClick(cardId: number) {
-    this.sendWithValue(ConnectionPath.CLICK, cardId);
+    this.sendWithValue(this.CLICK, cardId);
   }
 
   public sendPass() {
@@ -64,7 +76,7 @@ export class GameEventsManager extends EventManager {
   }
 
   public sendStartMessage() {
-    this.sendWithId(ConnectionPath.GAME_START);
+    this.sendWithId(this.GAME_START);
   }
 
   public onCloseEvent(){

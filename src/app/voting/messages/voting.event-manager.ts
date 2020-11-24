@@ -12,18 +12,26 @@ import { DialogService } from 'src/app/widgets/dialog/dialog.service';
 
 export class VotingEventManager extends EventManager{
 
+  private readonly START_VOTING_RESPONSE = "/user/voting/start";
+  private readonly END_VOTING_RESPONSE = "/user/voting/end";
+  private readonly VOTE_RESPONSE = "/user/voting/vote";
+  private readonly VOTING_TIMER_RESPONSE = "/user/voting/timer";
+
+  private readonly START_VOTING = "/app/voting/start";
+  private readonly VOTE = "/app/voting/vote";
+
     constructor( connectionService: ConnectionService, gameService: GameService,
       private model:VotingModel, private dialog: DialogService, private stateEvent: IStateEvent){
       super(connectionService, gameService);
     }
 
     public init(){
-      this.subscribe(ConnectionPath.START_VOTING_RESPONSE, new StartTimerEvent(this.model));
-      this.subscribe(ConnectionPath.END_VOTING_RESPONSE, new EndVotingEvent(this.stateEvent));
-      this.subscribe(ConnectionPath.VOTE_RESPONSE, new VoteEvent(this.model));
-      this.subscribe(ConnectionPath.DISCONNECT_RESPONSE, new VotingDisconnectEvent(this.dialog, this.model, this.stateEvent));
-      this.subscribe(ConnectionPath.VOTING_TIMER_RESPONSE, new TimerEvent(this.model));
+      this.subscribe(this.START_VOTING_RESPONSE, new StartTimerEvent(this.model));
+      this.subscribe(this.END_VOTING_RESPONSE, new EndVotingEvent(this.stateEvent));
+      this.subscribe(this.VOTE_RESPONSE, new VoteEvent(this.model));
+      this.subscribe(this.VOTING_TIMER_RESPONSE, new TimerEvent(this.model));
       this.subscribeOnClose(()=>this.onCloseEvent());
+      this.subscribe(ConnectionPath.DISCONNECT_RESPONSE, new VotingDisconnectEvent(this.dialog, this.model, this.stateEvent));
     }
 
     private onCloseEvent(){
@@ -34,11 +42,11 @@ export class VotingEventManager extends EventManager{
     }
 
     public sendStartMessage(){
-      this.sendWithId(ConnectionPath.START_VOTING);
+      this.sendWithId(this.START_VOTING);
     }
 
     public sendVote(player:VotingPlayer){
-      this.sendWithValue(ConnectionPath.VOTE, player.id);
+      this.sendWithValue(this.VOTE, player.id);
     }
 
     public closeDialog(){
