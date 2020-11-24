@@ -1,5 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
 
+.option-button{
+  border-radius: 12px;
+  border-radius: 12px;
+  padding: 5px 10px 5px 10px;
+  background-image: url(/assets/card2.png);
+  font-weight: 420;
+  font-size: min(1em, 20px);
+  transition: 0.3s;
+  margin:5px;
+  border: 1px solid black;
+}
+
+.option-button:focus{
+  outline: 0;
+  outline-style: none;
+  outline-width: 0;
+}
+
+.option-button:hover{
+  /* background-color: coral; */
+  filter: brightness(0.8);
+}
+
+.option-label{
+  font-size:min(1em, 25px);
+}
+
 .card{
   border: 1px solid black;
   border-radius: 12px;
@@ -105,7 +132,8 @@ body, html {
   height: 100%;
   margin: 0;
 
-  color: white;
+  color: black;
+;
   /* font-size: 23px; */
   font-size: 1.5vw;
 }

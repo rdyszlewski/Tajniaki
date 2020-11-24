@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConnectionService } from 'src/app/connection.service';
 import { GameService } from 'src/app/gameService';
 import { State } from 'src/app/main/state';
+import { ConnectionPath } from 'src/app/shared/connectionPath';
 import { IdParam } from 'src/app/shared/parameters/id.param';
 import { DialogComponent } from '../dialog/dialog.component';
 import { DialogService } from '../dialog/dialog.service';
@@ -65,6 +66,6 @@ export class MenuComponent implements OnInit {
   private sendQuitMessage() {
     let param = new IdParam(this.gameService.getId());
     let json = JSON.stringify(param);
-    this.connectionService.send(json, '/app/game/quit');
+    this.connectionService.send(json, ConnectionPath.QUIT);
   }
 }

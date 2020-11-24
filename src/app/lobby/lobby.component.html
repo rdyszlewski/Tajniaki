@@ -1,59 +1,83 @@
 <h3>Wybór drużyny</h3>
 
 <div class="gamer_information">
-  <div id="gamer">Gracz: {{getNickname()}} </div>
-  <div id="team">Wybrana drużyna: {{getTeam()=="BLUE"?"Zieleni":"Czerwieni"}}</div>
+  <div id="gamer">Gracz: {{ getNickname() }}</div>
 </div>
 
 <div id="lobby">
-  <div id="blue_table" class="table_container">
+  <div id="blue_table"
+  [ngClass]="{
+    'table_container': true,
+    'selected-table': isSelectedTeam(team.BLUE)
+  }">
     <div id="blue_header" class="header_container">
       Zieleni
-      <span [ngClass]='{"not-min-players":countBlue()<model.getMinPlayersInTeam()}'>
-                    ({{countBlue()}}/{{model.getMaxPlayersInTeam()}})
-                </span>
+      <span
+        [ngClass]="{
+          'not-min-players': countBlue() < model.getMinPlayersInTeam(),
+          'players-number':true
+        }"
+      >
+        ({{ countBlue() }}/{{ model.getMaxPlayersInTeam() }})
+      </span>
     </div>
-    <table  class="players_table">
+    <table class="players_table">
       <tr *ngFor="let player of model.getPlayers(team.BLUE)">
-        <td [ngClass]="{
-                'current_player': model.isClientPlayer(player)
-            }">
-          {{player.nickname}}
-          <span *ngIf="player.ready" >V</span>
+        <td
+          [ngClass]="{
+            current_player: model.isClientPlayer(player)
+          }"
+        >
+          {{ player.nickname }}
+          <span *ngIf="player.ready">V</span>
         </td>
       </tr>
     </table>
   </div>
 
-  <div id="observer_table" class="table_container" >
+  <div id="observer_table" class="table_container">
     <div id="observer_header" class="header_container">
-      Nieprzydzieleni ({{countObserver()}})
+      Nieprzydzieleni
+      <span class="players-number">({{countObserver()}})</span>
     </div>
     <table class="players_table">
       <tr *ngFor="let player of model.getPlayers(team.LACK)">
-        <td [ngClass]="{
-                'current_player': model.isClientPlayer(player)
-            }">
-          {{player.nickname}}
+        <td
+          [ngClass]="{
+            current_player: model.isClientPlayer(player)
+          }"
+        >
+          {{ player.nickname }}
           <span *ngIf="player.ready">V</span>
         </td>
       </tr>
     </table>
   </div>
 
-  <div id="red_table" class="table_container">
+  <div id="red_table"
+  [ngClass]="{
+    'table_container': true,
+    'selected-table': isSelectedTeam(team.RED)
+  }">
     <div id="red_header" class="header_container">
       Czerwieni
-      <span [ngClass]='{"not-min-players":countRed()<model.getMinPlayersInTeam()}'>
-                    ({{countRed()}}/{{model.getMaxPlayersInTeam()}})
-                </span>
+      <span
+        [ngClass]="{
+          'not-min-players': countRed() < model.getMinPlayersInTeam(),
+          'players-number': true
+        }"
+      >
+        ({{ countRed() }}/{{ model.getMaxPlayersInTeam() }})
+      </span>
     </div>
     <table class="players_table">
       <tr *ngFor="let player of model.getPlayers(team.RED)">
-        <td [ngClass]="{
-                'current_player': model.isClientPlayer(player)
-            }">
-          {{player.nickname}}
+        <td
+          [ngClass]="{
+            current_player: model.isClientPlayer(player)
+          }"
+        >
+          {{ player.nickname }}
           <span *ngIf="player.ready">V</span>
         </td>
       </tr>
@@ -62,18 +86,46 @@
 </div>
 
 <div class="buttons">
-  <div class="single_button"><button class="button_white" (click)="eventsManager.sendJoinBlue()"  [hidden]="!canJoinToBlue()">Zieleni</button></div>
-  <div class="single_button"><button class="button_white" (click)="eventsManager.sendAutoJoinToTeam()"  [disabled]="!canJoinToBlue() && !canJoinToRed()">Automatycznie</button></div>
-  <div class="single_button"><button class="button_white" (click)="eventsManager.sendJoinRed()"  [hidden]="!canJoinToRed()">Czerwieni</button></div>
+  <div class="single_button">
+    <button
+      class="option-button blue"
+      (click)="eventsManager.sendJoinBlue()"
+      [hidden]="!canJoinToBlue()"
+    >
+      Zieleni
+    </button>
+  </div>
+  <div class="single_button">
+    <button
+      class="option-button neutral"
+      (click)="eventsManager.sendAutoJoinToTeam()"
+      [disabled]="!canJoinToBlue() && !canJoinToRed()"
+    >
+      Automatycznie
+    </button>
+  </div>
+  <div class="single_button">
+    <button
+      class="option-button red"
+      (click)="eventsManager.sendJoinRed()"
+      [hidden]="!canJoinToRed()"
+    >
+      Czerwieni
+    </button>
+  </div>
 </div>
 
 <div class="buttons">
-  <button class="button_white" (click)="eventsManager.sendReady()" id="ready-button"
-          [ngClass]="{
-        'ready': !isPlayerReady(),
-        'unready': isPlayerReady()
+  <button
+    class="option-button"
+    (click)="eventsManager.sendReady()"
+    id="ready-button"
+    [ngClass]="{
+      ready: !isPlayerReady(),
+      unready: isPlayerReady()
     }"
-          [disabled]="!canSetReady()">
-    {{isPlayerReady()?"Nie gotowy": "Gotowy"}}
+    [disabled]="!canSetReady()"
+  >
+    {{ isPlayerReady() ? "Nie gotowy" : "Gotowy" }}
   </button>
 </div>

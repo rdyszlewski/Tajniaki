@@ -111,4 +111,11 @@ export class LobbyComponent extends ViewComponent implements OnInit {
   getTeam() {
     return this.playerService.getTeam();
   }
+
+  isSelectedTeam(team: Team){
+    if(this._model.getClientPlayer()){
+      return this._model.getClientPlayer().team == team;
+    }
+    return false;
+  }
 }

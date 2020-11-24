@@ -29,6 +29,7 @@
   width: 30%;
   margin: auto;
   border-radius: 12px;
+  border: 1px solid black;
 
 }
 
@@ -105,23 +106,20 @@
 
 #ready-button{
   margin: auto;
-    margin-top: 5px;
-
-    /* font-size: 1.3em; */
+  margin-top: 5px;
 }
 
 .unready{
     background-color: red;
-    /*font-size:1.1em;*/
 }
 
 .ready{
     background-color:green;
-    /*font-size:1.3em;*/
 }
 
 .current_player{
-    font-weight: bold;
+  font-weight: 800;
+  text-shadow: -1px 1px 0 #fff, 1px 1px 0 #fff, 1px -1px 0 #fff, -1px -1px 0 #fff;
 }
 
 #dialog-container{
@@ -133,5 +131,17 @@
 }
 
 .not-min-players{
-    color: red;
+  color: red;
+
+}
+
+.players-number{
+  text-shadow: -1px 1px 0 #fff, 1px 1px 0 #fff, 1px -1px 0 #fff, -1px -1px 0 #fff;
+  font-weight: 700;
+  float: right;
+  margin-right: 4px;
+}
+
+.selected-table{
+  border: 2px solid yellow;
 }

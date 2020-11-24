@@ -39,12 +39,12 @@
 </div>
 
 <ng-template #nickname_form>
-  <div class="name_column">{{ "menu.nickname" | translate }}</div>
+  <div class="name_column option-label">{{ "menu.nickname" | translate }}</div>
   <div [hidden]="nickname_editing">
-    <span class="value_column" id="nickname">{{ getNickname() }}</span>
+    <span class="value_column option-label" id="nickname">{{ getNickname() }}</span>
     <div class="button_column">
       <button
-        class="button_white"
+        class="option-button"
         type="submit"
         (click)="setChangeNicknameState()"
       >
@@ -68,9 +68,9 @@
 </ng-template>
 
 <ng-template #connection_form>
-  <div class="name_column">{{ "menu.connection_state" | translate }}</div>
+  <div class="name_column option-label">{{ "menu.connection_state" | translate }}</div>
   <div [hidden]="!isConnected()">
-    <span class="value_column" id="conected">{{
+    <span class="value_column option-label" id="conected">{{
       "menu.connected" | translate
     }}</span>
   </div>
