@@ -38,10 +38,10 @@ export class MainMenuComponent extends ViewComponent implements OnInit {
   }
 
   public init(): void{
-    this._testEventManager.init();
-    this.setPlayerNickname();
     if(!this.isConnected()){
       this.connect();
+    } else {
+      this._testEventManager.init();
     }
   }
 

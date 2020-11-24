@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ConnectionService } from '../connection.service';
 import { GameComponent } from '../game/game.component';
 import { LobbyComponent } from '../lobby/lobby.component';
@@ -13,8 +13,9 @@ import { State } from './state';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewInit {
 
+  public state = State
   @ViewChild(MainMenuComponent)
   private mainMenuComponent: MainMenuComponent;
 
@@ -30,13 +31,44 @@ export class MainComponent implements OnInit {
   @ViewChild(SummaryComponent)
   private summaryComponent: SummaryComponent;
 
-  public state = State
-  private _currentState: State = State.MAIN_MENU;
+  private _currentState: State;
+  private componentsMap: Map<State, ViewComponent>;
+  private statesOrder: State[];
+  private currentStateIndex: number;
 
-  constructor(private connectionService: ConnectionService) { }
+  constructor(private connectionService: ConnectionService) {
+
+  }
+  ngAfterViewInit(): void {
+    this._currentState = State.MAIN_MENU;
+    this.componentsMap = this.initComponentsMap();
+    let component = this.getComponent(this._currentState);
+    console.log(component);
+    component.init();
+  }
 
   ngOnInit(): void {
     this.preventRightClickMenu();
+    this.statesOrder = this.initStatesOrder();
+    this.currentStateIndex = 0;
+
+
+  }
+
+  private initComponentsMap(): Map<State, ViewComponent>{
+    let map = new Map();
+    console.log("Siema bracie");
+    console.log(this.mainMenuComponent);
+    map.set(State.MAIN_MENU, this.mainMenuComponent);
+    map.set(State.LOBBY, this.lobbyComponent);
+    map.set(State.VOTING, this.votingComponent);
+    map.set(State.GAME, this.gameComponent);
+    map.set(State.SUMMARY, this.summaryComponent);
+    return map;
+  }
+
+  private initStatesOrder(){
+    return [State.MAIN_MENU, State.LOBBY, State.VOTING, State.GAME, State.SUMMARY];
   }
 
   private preventRightClickMenu() {
@@ -67,11 +99,11 @@ export class MainComponent implements OnInit {
   }
 
   public goToState(state: State){
+    this.currentStateIndex = this.statesOrder.findIndex(x=>x==state);
     this.runState(state);
   }
 
   private runState(state:State){
-    // TODO: close current state
     let currentComponent = this.getComponent(this._currentState);
     currentComponent.close();
     let nextComponent = this.getComponent(state);
@@ -80,33 +112,15 @@ export class MainComponent implements OnInit {
   }
 
   private getNextState(currentState: State):State{
-    switch(currentState){
-      case State.MAIN_MENU:
-        return State.LOBBY;
-      case State.LOBBY:
-        return State.VOTING;
-      case State.VOTING:
-        return State.GAME;
-      case State.GAME:
-        return State.SUMMARY
-      case State.SUMMARY:
-        return State.MAIN_MENU;
+    this.currentStateIndex++;
+    if(this.currentStateIndex >= this.statesOrder.length){
+      this.currentStateIndex = 0;
     }
+    return this.statesOrder[this.currentStateIndex];
   }
 
   private getComponent(state: State): ViewComponent{
-    switch(state){
-      case State.MAIN_MENU:
-        return this.mainMenuComponent;
-      case State.LOBBY:
-        return this.lobbyComponent;
-      case State.VOTING:
-        return this.votingComponent;
-      case State.GAME:
-        return this.gameComponent;
-      case State.SUMMARY:
-        return this.summaryComponent;
-    }
+    return this.componentsMap.get(state);
   }
 
   @HostListener('window:beforeunload', ['$event'])

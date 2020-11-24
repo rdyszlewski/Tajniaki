@@ -40,6 +40,7 @@ export class BossComponent extends ViewComponent implements OnInit {
   }
 
   public init(): void {
+    console.log("Subskrybcja Voting ");
     this.eventManager.init();
     this.eventManager.sendStartMessage();
   }

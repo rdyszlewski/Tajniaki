@@ -91,6 +91,7 @@ span.gamer_column{
   display: flex;
   flex-direction: column;
   align-self: center;
+  z-index: 1;
 }
 
 .remaining-card{
