@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  Injector,
 } from '@angular/core';
 import { VotingPlayer } from './voting_player';
 import { PlayerService } from '../playerService';
@@ -13,16 +12,15 @@ import { ConnectionService } from '../connection.service';
 import { DialogService } from '../dialog/dialog.service';
 
 @Component({
-  selector: 'app-boss',
+  selector: 'app-voting',
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.css'],
 })
-export class BossComponent extends ViewComponent implements OnInit {
+export class VotingComponent extends ViewComponent implements OnInit {
   model: VotingModel;
   eventManager: VotingEventManager;
 
   constructor(
-    private injector: Injector,
     private gameService: GameService,
     private playerService: PlayerService,
     private connectionService: ConnectionService,

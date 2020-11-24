@@ -5,7 +5,7 @@ import { LobbyComponent } from '../lobby/lobby.component';
 import { MainMenuComponent } from '../main-menu/main-menu.component';
 import { ChangeStateType, ViewComponent } from '../shared/view-component';
 import { SummaryComponent } from '../summary/summary.component';
-import { BossComponent } from '../voting/voting.component';
+import { VotingComponent } from '../voting/voting.component';
 import { State } from './state';
 
 @Component({
@@ -22,8 +22,8 @@ export class MainComponent implements OnInit, AfterViewInit {
   @ViewChild(LobbyComponent)
   private lobbyComponent: LobbyComponent;
 
-  @ViewChild(BossComponent)
-  private votingComponent: BossComponent;
+  @ViewChild(VotingComponent)
+  private votingComponent: VotingComponent;
 
   @ViewChild(GameComponent)
   private gameComponent: GameComponent;

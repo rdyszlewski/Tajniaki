@@ -29,7 +29,6 @@ export class LobbyComponent extends ViewComponent implements OnInit {
     private _model: LobbyModel
   ) {
     super();
-    // this._model = new LobbyModel(playerService);
     this._eventsManager = new LobbyEventsManager(
       connectionService,
       gameService,

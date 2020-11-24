@@ -9,9 +9,5 @@ export class AnswerEvent implements IResponseEvent {
   public execute(data: any) {
     CardAdapter.updateCatrds(data['cardsToUpdate'], this.state);
     StateUpdateAdapter.update(data['gameState'], this.state);
-    // if (!data['active']) {
-    //   this.endMethod();
-    // }
-    // TODO: sprawdzić, jak wygląda koniec gry
   }
 }

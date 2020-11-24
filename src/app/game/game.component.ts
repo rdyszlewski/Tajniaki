@@ -11,7 +11,7 @@ import { LobbyPlayer } from '../lobby/lobby_player';
 import { GamePlayer } from './models/game-player';
 import { ViewComponent } from '../shared/view-component';
 import { GameService } from '../gameService';
-import { BossWord } from './models/boss-word';
+import { SpymasterWord } from './models/spymaster-word';
 import { DialogService } from '../dialog/dialog.service';
 
 @Component({
@@ -27,14 +27,14 @@ export class GameComponent extends ViewComponent implements OnInit  {
   private _eventsManager: GameEventsManager;
   private _bluePlayers: LobbyPlayer[];
   private _redPlayers: LobbyPlayer[];
-  private _bossWord: BossWord = new BossWord();
+  private _spymasterWord: SpymasterWord = new SpymasterWord();
 
   public get state(){return this._state;}
   public get tooltip() {return this._tooltip;}
   public get eventsManager(){return this._eventsManager;}
   public get bluePlayers(){return this._bluePlayers;}
   public get redPlayers(){return this._redPlayers;}
-  public get bossWord():BossWord {return this._bossWord;}
+  public get spymasterWord():SpymasterWord {return this._spymasterWord;}
 
 
   constructor(private gameService: GameService, private playerService: PlayerService,
@@ -56,12 +56,12 @@ export class GameComponent extends ViewComponent implements OnInit  {
 
   }
 
-  isBoss(){
-    return this.playerService.getRole()==Role.BOSS;
+  isSpymaster(){
+    return this.playerService.getRole()==Role.SPYMASTER;
   }
 
-  isPlayerBoss(player:GamePlayer){
-    return player.role == Role.BOSS;
+  isPlayerSpymaster(player:GamePlayer){
+    return player.role == Role.SPYMASTER;
   }
 
   getClientTeam(){
@@ -92,7 +92,7 @@ export class GameComponent extends ViewComponent implements OnInit  {
   }
 
   isWordHidden(card: Card){
-    return card.checked && this.playerService.getRole() == Role.BOSS;
+    return card.checked && this.playerService.getRole() == Role.SPYMASTER;
   }
 
   getNickname(){
@@ -163,12 +163,12 @@ export class GameComponent extends ViewComponent implements OnInit  {
     return team==Team.BLUE ? this._state.remainingBlue: this._state.remainingRed;
   }
 
-  public sendBossMessage(){
-    let word = this.bossWord.word;
-    let number = this.bossWord.number;
-    this.eventsManager.sendBossMessage(word, number);
-    this.bossWord.word = "";
-    this.bossWord.number = 1;
+  public sendSpymasterMessage(){
+    let word = this.spymasterWord.word;
+    let number = this.spymasterWord.number;
+    this.eventsManager.sendSpymasterMessage(word, number);
+    this.spymasterWord.word = "";
+    this.spymasterWord.number = 1;
   }
 
 }

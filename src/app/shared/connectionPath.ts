@@ -7,13 +7,13 @@ export class ConnectionPath{
     public static readonly CLICK_RESPONSE = "/user/queue/game/click";
     public static readonly ANSWER_RESPONSE = "/user/queue/game/answer";
     public static readonly START_RESPONSE = "/user/queue/game/start";
-    public static readonly NEW_BOSS_RESPONSE = "/user/queue/game/new_boss";
+    public static readonly NEW_SPYMASTER_RESPONSE = "/user/queue/game/new_spymaster";
 
-    //      boss voting
-    public static readonly START_VOTING_RESPONSE = "/user/boss/start";
-    public static readonly END_VOTING_RESPONSE = "/user/boss/end";
-    public static readonly VOTE_RESPONSE = "/user/boss/vote";
-    public static readonly VOTING_TIMER_RESPONSE = "/user/boss/timer";
+    //      voting
+    public static readonly START_VOTING_RESPONSE = "/user/voting/start";
+    public static readonly END_VOTING_RESPONSE = "/user/voting/end";
+    public static readonly VOTE_RESPONSE = "/user/voting/vote";
+    public static readonly VOTING_TIMER_RESPONSE = "/user/voting/timer";
 
     //      lobby
     public static readonly PLAYERS_RESPONSE = "/user/lobby/players";
@@ -36,9 +36,9 @@ export class ConnectionPath{
     public static readonly QUESTION = "/app/game/question"
     public static readonly FLAG = "/app/game/flag"
 
-    //      boss voting
-    public static readonly START_VOTING = "/app/boss/start";
-    public static readonly VOTE = "/app/boss/vote";
+    //      voting
+    public static readonly START_VOTING = "/app/voting/start";
+    public static readonly VOTE = "/app/voting/vote";
 
     //      lobby
     public static readonly CONNECT = "/app/lobby/connect";

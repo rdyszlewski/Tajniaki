@@ -21,14 +21,14 @@
     <div class="gamer_column">
       <span class="gamer_column">{{"game.player_name"|translate}}: {{getNickname()}}</span>
       <span class="gamer_column">{{"game.team"|translate}}: {{(getTeam()==team.BLUE?"game.blue_team":"game.red_team")|translate}}</span>
-      <span class="gamer_column">{{"game.role"|translate}}: {{(getRole()==role.BOSS?"game.boss":"game.player")|translate}}</span>
+      <span class="gamer_column">{{"game.role"|translate}}: {{(getRole()==role.SPYMASTER?"game.spymaster":"game.ordinary_player")|translate}}</span>
     </div>
 
     <div class="round_information_column">
       <div class="current_state">
         {{"game.turn"|translate}}
         <span id="current_stage" class="state_element">
-          {{(state.currentStage==role.BOSS ? "game.turn_boss": "game.turn_player")|translate}}
+          {{(state.currentStage==role.SPYMASTER ? "game.turn_spymaster": "game.turn_ordinary_player")|translate}}
         </span>
         <span id="current_team" class="state_element">
           {{(state.currentTeam==team.BLUE ?"game.turn_blue":"game.turn_red")|translate}}
@@ -73,7 +73,7 @@
             'players': true
           }"
         >
-          <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
+          <img [src]="isPlayerSpymaster(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
           <div class="player-name">{{player.nickname}}</div>
           <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
           <span></span>
@@ -109,7 +109,7 @@
           'players': true
         }"
       >
-        <img [src]="isPlayerBoss(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
+        <img [src]="isPlayerSpymaster(player)?'../../assets/boss-icon.png': '../../assets/player-icon.png'" alt="" class="player-role"/>
         <div class="player-name">{{player.nickname}}</div>
         <img src='../../assets/check.png' class="player-answer" [style.visibility]="isPlayerAnswer(player) ? 'visible':'hidden'"/>
       </div>
@@ -147,14 +147,14 @@
       </div>
     </div>
 
-    <div *ngIf="isBoss()" class="board-extra">
-      <input id="wordInput" [ngModel]="bossWord.word" (ngModelChange)="bossWord.word=$event"
-      (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()' (keyup.enter)="sendBossMessage()"/>
-      <input id="numberInput" [ngModel]="bossWord.number" (ngModelChange)="bossWord.number=$event"
-      type="number" value=1 min=1 max="{{getRemainingWordsInPlayerTeam()}}" [disabled]='!isPlayerTurn() ' (keyup.enter)="sendBossMessage()"/>
-      <button (click)="sendBossMessage()" [disabled]='!isPlayerTurn()'>{{"game.send_word"|translate}}</button>
+    <div *ngIf="isSpymaster()" class="board-extra">
+      <input id="wordInput" [ngModel]="spymasterWord.word" (ngModelChange)="spymasterWord.word=$event"
+      (keydown)="preventWhispace($event)" [disabled]='!isPlayerTurn()' (keyup.enter)="sendSpymasterMessage()"/>
+      <input id="numberInput" [ngModel]="spymasterWord.number" (ngModelChange)="spymasterWord.number=$event"
+      type="number" value=1 min=1 max="{{getRemainingWordsInPlayerTeam()}}" [disabled]='!isPlayerTurn() ' (keyup.enter)="sendSpymasterMessage()"/>
+      <button (click)="sendSpymasterMessage()" [disabled]='!isPlayerTurn()'>{{"game.send_word"|translate}}</button>
     </div>
-    <div *ngIf="!isBoss()" class="board-extra">
+    <div *ngIf="!isSpymaster()" class="board-extra">
       <div  *ngIf="state.getPassCard() as card"
           [ngClass]="{
             'my_answer': isAnswerByClient(card),

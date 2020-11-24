@@ -6,7 +6,9 @@ import { IResponseEvent } from 'src/app/shared/messages/response-event';
 import { GameState } from '../../models/game-state';
 import { CreateGameEvent } from './game.create-game-event';
 
-export class NewBossEvent extends CreateGameEvent implements IResponseEvent {
+export class NewSpymasterEvent
+  extends CreateGameEvent
+  implements IResponseEvent {
   constructor(
     playerService: PlayerService,
     state: GameState,
@@ -16,14 +18,14 @@ export class NewBossEvent extends CreateGameEvent implements IResponseEvent {
   }
 
   public execute(data: any) {
-    this.createGame(data); // TODO: sprawdzić, czy to zadziała
-    this.openNewBossMessage();
+    this.createGame(data);
+    this.openNewSpymasterMessage();
   }
 
-  private openNewBossMessage() {
+  private openNewSpymasterMessage() {
     this.dialog
       .setMode(DialogMode.ALERT)
-      .setMessage('dialog.you_are_new_boss')
+      .setMessage('dialog.you_are_new_spymaster')
       .setOnOkClick(() => {
         this.dialog.close();
       })

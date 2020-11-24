@@ -2,7 +2,6 @@ import { ConnectionService } from '../../connection.service';
 import { GameState } from '../models/game-state';
 import { PlayerService } from '../../playerService';
 import { ConnectionPath } from '../../shared/connectionPath';
-import { Router } from '@angular/router';
 import { DialogService } from '../../dialog/dialog.service';
 import { DialogMode } from '../../dialog/dialogMode';
 import { DialogComponent } from '../../dialog/dialog.component';
@@ -12,7 +11,7 @@ import { EventManager } from 'src/app/shared/messages/events-manager';
 import { AnswerEvent } from './events/game.answer-event';
 import { ClickEvent } from './events/game.click-event';
 import { EndGameEvent } from './events/game.end-event';
-import { NewBossEvent } from './events/game.new-boss-event';
+import { NewSpymasterEvent } from './events/game.new-spymaster-event';
 import { QuestionEvent } from './events/game.question-event';
 import { StartGameEvent } from './events/game.start-game-event';
 import { GameDisconnectEvent } from './events/game.disconnect-event';
@@ -37,7 +36,7 @@ export class GameEventsManager extends EventManager {
 
   public init() {
     this.subscribe(ConnectionPath.START_RESPONSE, new StartGameEvent(this.playerService, this.state));
-    this.subscribe(ConnectionPath.NEW_BOSS_RESPONSE, new NewBossEvent(this.playerService, this.state, this.dialog));
+    this.subscribe(ConnectionPath.NEW_SPYMASTER_RESPONSE, new NewSpymasterEvent(this.playerService, this.state, this.dialog));
     this.subscribe(ConnectionPath.END_GAME_RESPONSE, new EndGameEvent(this.stateEvent));
     this.subscribe(ConnectionPath.QUESTION_RESPONSE, new QuestionEvent(this.state));
     this.subscribe(ConnectionPath.ANSWER_RESPONSE, new AnswerEvent(this.state));
@@ -50,7 +49,7 @@ export class GameEventsManager extends EventManager {
     this.sendWithValue(ConnectionPath.FLAG, cardId);
   }
 
-  public sendBossMessage(word: string, number: number) {
+  public sendSpymasterMessage(word: string, number: number) {
     let param = new QuestionParam(this.gameService.getId(), word, number);
     let json = JSON.stringify(param);
     this.sendMessage(ConnectionPath.QUESTION, json);

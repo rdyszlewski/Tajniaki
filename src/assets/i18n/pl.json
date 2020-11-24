@@ -22,16 +22,16 @@
     "game.team": "Drużyna",
     "game.role": "Funkcja",
     "game.turn": "Tura",
-    "game.turn_boss": "Szeffa",
-    "game.turn_player": "Zgadywacza",
+    "game.turn_spymaster": "Szeffa",
+    "game.turn_ordinary_player": "Zgadywacza",
     "game.turn_blue": "Zielenich",
     "game.turn_red": "Czerwienich",
     "game.word": "Hasło",
     "game.blue_team": "Zieleni",
     "game.red_team": "Czerwieni",
     "game.players": "Gracze",
-    "game.boss": "Szeff",
-    "game.player": "Zgadywacz",
+    "game.spymaster": "Szeff",
+    "game.ordinary_player": "Zgadywacz",
     "game.send_word": "Wyślij hasło",
     "game.pass":"Pomiń",
 
@@ -53,6 +53,6 @@
     "dialog.no_game": "Aktualnie nie ma wolnych gier. Poczekaj.",
     "dialog.disconnected": "Nastąpiło rozłączenie z serwerem",
     "dialog.not_enough_players": "Zbyt mała liczba graczy. Powrót do lobby",
-    "dialog.you_are_new_boss": "Straciliśmy kontakt z poprzednim szeffem. Zostajesz nowym szeffem",
+    "dialog.you_are_new_spymaster": "Straciliśmy kontakt z poprzednim szeffem. Zostajesz nowym szeffem",
     "dialog.sure_quit": "Czy na pewno wyjść?"
 }

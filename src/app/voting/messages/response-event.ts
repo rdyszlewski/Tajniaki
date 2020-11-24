@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { DialogComponent } from 'src/app/dialog/dialog.component';
 import { DialogService } from 'src/app/dialog/dialog.service';
 import { DialogMode } from 'src/app/dialog/dialogMode';
@@ -12,7 +11,7 @@ export class TimerEvent implements IResponseEvent {
   constructor(private model: VotingModel) {}
 
   public execute(data: any) {
-    this.model.setTime(data["message"]); // TODO: sprawdzić, czy to będzie tak
+    this.model.setTime(data["message"]);
   }
 }
 
@@ -20,7 +19,6 @@ export class StartTimerEvent implements IResponseEvent {
   constructor(private model: VotingModel) {}
 
   public execute(data: any) {
-    // TODO: chyba powinno być tak
     this.model.setTime(data['time']);
     this.updateList(data['players']);
   }

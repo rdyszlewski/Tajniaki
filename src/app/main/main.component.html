@@ -7,9 +7,9 @@
   (onStateChangeEvent)="onStateChange($event)">
 </app-lobby>
 
-<app-boss [hidden]="!isCurrentState(state.VOTING)"
+<app-voting [hidden]="!isCurrentState(state.VOTING)"
   (onStateChangeEvent)="onStateChange($event)">
-</app-boss>
+</app-voting>
 
 <app-game [hidden]="!isCurrentState(state.GAME)"
   (onStateChangeEvent)="onStateChange($event)"

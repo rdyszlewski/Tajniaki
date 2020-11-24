@@ -7,20 +7,24 @@ import { StringParam } from '../parameters/string.param';
 export class ParamFactory{
 
   public static create(value: any, gameId: string):string{
-    let param;
-    if(typeof(value)=='boolean'){
-      param = new BoolParam(gameId, value as boolean);
-    } else if(typeof(value)=="string"){
-      param = new StringParam(gameId, value as string);
-    } else if(typeof(value)=="number"){
-      param = new NumberParam(gameId, value as number);
-    } else if(value == null){
-      param = new IdParam(gameId);
-    }
-    else {
-      throw new IllegalTypeException(); // TODO: zmienić ten wyjątek
-    }
+    let param = this.getParam(value, gameId);
     let json = JSON.stringify(param);
     return json;
+  }
+
+  private static getParam(value: any, gameId: string):IdParam{
+    if(value==null){
+      return new IdParam(gameId);
+    }
+    switch(typeof(value)){
+      case "boolean":
+        return new BoolParam(gameId, value);
+      case "string":
+        return new StringParam(gameId, value);
+      case "number":
+        return new NumberParam(gameId, value);
+      default:
+        throw new IllegalTypeException();
+    }
   }
 }

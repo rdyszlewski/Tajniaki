@@ -35,7 +35,7 @@ export class AppComponent {
   }
 
   public isMenuHidden(){
-    // only in main menu menu is hidden
+    // only in main menu menu button is hidden
     return this.router.url.includes("mainmenu");
   }
 

@@ -1,4 +1,4 @@
-export enum Role{   
-    BOSS = "BOSS",
-    PLAYER ="PLAYER"
+export enum Role{
+    SPYMASTER = "SPYMASTER",
+    ORDINARY_PLAYER ="ORDINARY_PLAYER"
 }

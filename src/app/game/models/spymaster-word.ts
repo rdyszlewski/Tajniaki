@@ -1,4 +1,4 @@
-export class BossWord{
+export class SpymasterWord{
   public word: string;
   public number: number;
 }

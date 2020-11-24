@@ -1,5 +1,5 @@
 /**
- * Class used to send message to server with word and number choosen by boss player
+ * Class used to send message to server with word and number choosen by spymaster player
  */
 export class QuestionParam{
 
