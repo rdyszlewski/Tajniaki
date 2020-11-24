@@ -10,13 +10,11 @@ import { GameComponent } from '../game/game.component';
 import { GameService } from '../gameService';
 import { LobbyComponent } from '../lobby/lobby.component';
 import { MainMenuComponent } from '../main-menu/main-menu.component';
-import { IdParam } from '../shared/parameters/id.param';
 import { ChangeStateType, ViewComponent } from '../shared/view-component';
 import { SummaryComponent } from '../summary/summary.component';
 import { VotingComponent } from '../voting/voting.component';
-import { DialogComponent } from '../widgets/dialog/dialog.component';
 import { DialogService } from '../widgets/dialog/dialog.service';
-import { DialogMode } from '../widgets/dialog/dialogMode';
+import { IMenuControl, MenuComponent } from '../widgets/menu/menu.component';
 import { State } from './state';
 
 @Component({
@@ -24,7 +22,7 @@ import { State } from './state';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css'],
 })
-export class MainComponent implements OnInit, AfterViewInit {
+export class MainComponent implements OnInit, AfterViewInit, IMenuControl {
 
   public state = State;
 
@@ -43,19 +41,22 @@ export class MainComponent implements OnInit, AfterViewInit {
   @ViewChild(SummaryComponent)
   private summaryComponent: SummaryComponent;
 
+  @ViewChild(MenuComponent)
+  private menuComponent: MenuComponent;
+
   private _currentState: State;
   private componentsMap: Map<State, ViewComponent>;
   private statesOrder: State[];
   private currentStateIndex: number;
 
-  private menuOpen = false;
-
   constructor(private connectionService: ConnectionService, private dialog: DialogService, private gameService: GameService) {}
+
   ngAfterViewInit(): void {
     this._currentState = State.MAIN_MENU;
     this.componentsMap = this.initComponentsMap();
     let component = this.getComponent(this._currentState);
     component.init();
+    this.menuComponent.setControl(this);
   }
 
   ngOnInit(): void {
@@ -111,7 +112,6 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   public goToState(state: State) {
-    this.menuOpen = false;
     this.currentStateIndex = this.statesOrder.findIndex(x => x == state);
     this.runState(state);
   }
@@ -145,30 +145,11 @@ export class MainComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public isMenuOpen():boolean{
-    return this.menuOpen;
-  }
-
-  public isMenuVisible():boolean{
+  isMenuVisible() {
     return this._currentState != State.MAIN_MENU;
   }
 
-  public openMenu(){
-    this.menuOpen = true;
-  }
-
-  public onGoToMainMenuClick(){
-    this.dialog.setMessage("dialog.sure_quit").setMode(DialogMode.ALERT)
-    .setOnOkClick(()=>this.onOkGoToMenuClick())
-    .setOnCancelClick(()=>{this.menuOpen = false;})
-    .open(DialogComponent);
-  }
-
-  private onOkGoToMenuClick(){
-    let param = new IdParam(this.gameService.getId());
-    let json = JSON.stringify(param);
-    this.connectionService.send(json, '/app/game/quit');
-    this.dialog.close();
-    this.goToState(State.MAIN_MENU);
+  changeState(state: State) {
+    this.goToState(state);
   }
 }

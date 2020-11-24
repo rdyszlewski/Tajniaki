@@ -1,0 +1,6 @@
+<div class="game-menu">
+  <button class="menu-button" (click)="openMenu()" [hidden]="!isMenuVisible()"></button>
+  <ul a="menu-active" [hidden]="!isMenuOpen()">
+    <li><a class="menu-item" (click)="onGoToMainMenuClick()">Wyjdź do menu</a></li>
+  </ul>
+</div>

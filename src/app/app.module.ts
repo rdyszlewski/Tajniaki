@@ -18,6 +18,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
 import { MainComponent } from './main/main.component';
 import { DialogComponent } from './widgets/dialog/dialog.component';
+import { MenuComponent } from './widgets/menu/menu.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { DialogComponent } from './widgets/dialog/dialog.component';
     GameComponent,
     DialogComponent,
     SummaryComponent,
-    MainComponent
+    MainComponent,
+    MenuComponent
   ],
   imports: [
     FormsModule,
