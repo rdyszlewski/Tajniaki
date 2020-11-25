@@ -40,33 +40,32 @@
 }
 
 .selected{
-    font-weight: bold;
-  border-radius: 12px;
-  border: red 3px solid;
+  text-shadow: -1px 1px 0 red, 1px 1px 0 red, 1px -1px 0 red, -1px -1px 0 red !important;
+  font-weight: 700;
+}
 
+.client-player{
+  text-shadow: -1px 1px 0 white, 1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white;
+  font-weight: 700;
 }
 
 .selection_button{
-  border-radius: 12px;
-  /*border: none;*/
-  background: none;
-  /*border: white 3px solid;*/
-  color: white;
-  font-size: 23px;
-  text-shadow: 2px 2px 5px black;
+  color: black;
+  font-size: 1em;
   text-align: left;
-  width: 50%;
-  line-height: 1;
-  margin-top: 0.5em;
-  padding: 0.5em 1em;
 }
 
-.selection_button:hover, .selection_button:focus {
-  /*box-shadow: 0 0.5em 0.5em -0.4em grey;*/
-  transform: translateY(-0.25em);
-  /*border: white 3px solid;*/
+.timer{
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+  font-size: 3em;
+  font-weight: 600;
 }
 
+.end-timer{
+  color:red;
+}
 
 .vote_table_header{
   margin: auto;
@@ -78,6 +77,7 @@
 
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+  margin-top: 5%;
 }
 
 .vote_table_row{
@@ -93,17 +93,15 @@
 }
 
 .gamer_column{
-  width: 80%;
-  float:left;
-  padding-right: 10px;
+  width: 75%;
+  float: left;
   padding-left: 10px;
-  padding-top: 5px;
 }
 
 .votes_column{
-  padding-top: 5px;
-  float:right;
+  float: right;
   width: 20%;
+  text-align: center;
 }
 
 #button_container{

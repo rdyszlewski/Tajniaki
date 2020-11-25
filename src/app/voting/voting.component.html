@@ -2,9 +2,10 @@
 
 <h3>{{"voting.title"|translate}}</h3>
 
-{{"voting.player"|translate}}: {{getNickname()}}
-
-<div id="timer">
+<div [ngClass]="{
+  'timer': true,
+  'end-timer': model.isEndTimer()
+}">
   {{model.getTimeFormat()}}
 </div>
 
@@ -15,12 +16,13 @@
 
 <div class="vote_table_row">
   <div *ngFor="let player of model.getPlayers()" class="candidate">
-    <button class="gamer_column" (click)="eventManager.sendVote(player)" type="submit" value='{{player.nickname}}'
+    <span class="gamer_column" (click)="eventManager.sendVote(player)" type="submit"
            [ngClass]="{
-           'selected': isSelected(player),
+             'selected': isSelected(player),
+            'client-player':isClientPlayer(player),
             'inline selection_button': true}">
       {{player.nickname}}
-    </button>
+           </span>
 
     <span class="votes_column" >{{player.votes.length}}</span>
   </div>

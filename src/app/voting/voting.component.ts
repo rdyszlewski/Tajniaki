@@ -61,6 +61,10 @@ export class VotingComponent extends ViewComponent implements OnInit {
     return false;
   }
 
+  isClientPlayer(player: VotingPlayer): boolean{
+    return player.id == this.playerService.getId();
+  }
+
   getNickname() {
     return this.playerService.getNickname();
   }

@@ -1,4 +1,4 @@
 export class SpymasterWord{
   public word: string;
-  public number: number;
+  public number: number = 1;
 }

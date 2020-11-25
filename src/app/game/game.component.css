@@ -1,43 +1,44 @@
-@import '../../styles.css';
+@import "../../styles.css";
 
-.game-container{
+.game-container {
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.gamer_column{
-  width:25%;
-  float:left;
+.gamer_column {
+  float: left;
   text-align: left;
-  font-size: 20px;
+  padding: 5px;
 }
 
-span.gamer_column{
+span.gamer_column {
   width: 100%;
 }
 
-.round_information_column{
+.round_information_column {
   text-align: center;
-  font-size: 30px;
-  width: 75%;
+  font-size: 1.3em;
+  width: 50%;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-#word_sign{
+#word_sign {
   font-size: 25px;
   text-align: center;
   width: 100%;
 }
 
-.game_head_row{
+.game_head_row {
   width: 100%;
   height: 1em;
   display: block;
   align-items: center;
 }
 
-.table-container{
+.table-container {
   transform-style: preserve-3d;
   transform: rotateX(25deg);
   /* background: radial-gradient(at bottom, #ffb77f, #b44c00); */
@@ -46,12 +47,13 @@ span.gamer_column{
   padding: 2vh;
   height: 100%;
   display: flex;
+  justify-content: center;
 }
 
-.table-container::before{
+.table-container::before {
   content: "";
   position: absolute;
-  background-image: url('/assets/table.jpg');
+  background-image: url("/assets/table.jpg");
   background-size: 100% 50%;
   background-repeat-x: no-repeat;
   background-position: center;
@@ -61,31 +63,32 @@ span.gamer_column{
   filter: saturate(2);
 }
 
-#table{
+#table {
   align-items: center;
   text-align: center;
   perspective: 800px;
   height: 100%;
   width: 100%;
   position: center;
-  margin:auto;
+  margin: auto;
 }
 
-.board-extra{
+.board-extra {
   align-self: center;
   margin: 10px;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 5px;
-    transform-style: preserve-3d;
-    height: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 5px;
+  transform-style: preserve-3d;
+  height: 100%;
 }
 
-.board{
+.board {
   width: 100%;
+  max-width: 1000px;
   height: 70%;
   padding: 2vh;
   display: flex;
@@ -94,23 +97,22 @@ span.gamer_column{
   z-index: 1;
 }
 
-.remaining-card{
-  position: absolute;
+.remaining-card {
+  position: fixed;
     display: flex;
-    padding: 0 16px;
     box-sizing: border-box;
     box-shadow: 0 0 10px black;
     border-radius: 6px;
     transition: inherit;
     --offset-multiplier: 3px;
-    width: 1.5em;
-    height: 2em;
+    width: 1em;
+    height: 1.5em;
     align-items: center;
     justify-content: center;
     font-size: 2em;
 }
 
-.remaining-card::after{
+.remaining-card::after {
   content: " ";
   background-image: url(/assets/card2.png);
   width: 100%;
@@ -118,91 +120,90 @@ span.gamer_column{
   position: absolute;
 }
 
-.left-stack{
+.left-stack {
   --translate: calc(var(--offset) * var(--offset-multiplier));
   transform: translate(var(--translate), var(--translate));
 }
 
-.right-stack{
+.right-stack {
   --translate: calc(var(--offset) * var(--offset-multiplier) * (-1));
   transform: translate(var(--translate), var(--translateY));
-  --translateY: calc(-1* var(--offset) * var(--offset-multiplier) * (-1));
+  --translateY: calc(-1 * var(--offset) * var(--offset-multiplier) * (-1));
 }
 
-.points:nth-child(n){
+.points:nth-child(n) {
   --offset: n;
 }
 
-.my_answer{
+.my_answer {
   border: 3px inset gold;
 }
 
-.my_flag{
+.my_flag {
   /* border: 3px inset blue; */
 }
 
-.my_flag::before{
+.my_flag::before {
   border: 3px inset blue;
 }
 
-.click_amount{
-
+.click_amount {
   border-radius: 50%;
   width: 1.3em;
   height: 1.3em;
   position: absolute;
   font-size: 0.7em;
-
 }
 
-.flags{
+.flags {
   background-color: darkorchid;
   right: 5px;
   top: 5px;
 }
 
-.answers{
-  background-color:darkgoldenrod;
+.answers {
+  background-color: darkgoldenrod;
   bottom: 5px;
   left: 5px;
 }
 
-#answers{
-  background-color:darkgoldenrod;
+#answers {
+  background-color: darkgoldenrod;
   width: 1.3em;
   height: 1.3em;
   margin-left: 0.3em;
   float: left;
 }
 
-.word{
+.word {
   margin-left: auto;
   margin-right: auto;
   font-weight: 450;
 }
 
-
-
-.team-info{
+.team-info {
   width: 25%;
   margin-top: 5%;
-  align-items: stretch;
-  font-size: 1vw;
+  font-size: 1em;
   align-self: stretch;
   align-items: center;
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.3);
-  z-index: 2;
+  z-index: 1;
+  max-width: 300px;
 }
 
-.team-players{
+.team-players {
   margin-top: 50%;
   font-size: large;
+  width: 100%;
+  height: 50%;
+  max-height: 400px;
+  padding: 5px;
+  background-image: url(/assets/Sheet.png);
 }
 
-
-.game_container{
+.game_container {
   display: flex;
   transform-style: preserve-3d;
   align-items: center;
@@ -210,13 +211,12 @@ span.gamer_column{
   width: 100%;
 }
 
-.team-name{
-  font-size: x-large;
+.team-name {
+  font-size: 1.3em;
+  font-weight: 700;
 }
 
-.points{
-  width: 5vw;
-  height: 5vw;
+.points {
   margin-top: 50%;
   margin-left: auto;
   margin-right: auto;
@@ -228,46 +228,48 @@ span.gamer_column{
   --offset-multiplier: 4px;
 }
 
-.word_container{
-  font-size: 60px;
+.word_container {
+  font-size: 1.5em;
   font-weight: bold;
 }
 
-.players{
+.players {
   display: flex;
+  padding-left: 4px;
 }
 
-.player-role{
+.player-role {
   width: 15px;
-  height: 15px;
-  display: inline;
-  float: left;
+    height: 15px;
+    display: inline;
+    float: left;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
-.player-name{
+.player-name {
   display: inline;
   text-align: left;
   margin-left: 10px;
-  width: 100% ;
+  width: 100%;
 }
 
-.player-answer{
+.player-answer {
   width: 15px;
   height: 15px;
   display: inline;
   float: right;
 }
 
-.current-player{
+.current-player {
   text-shadow: 0 0 10px green;
-  border: 1px solid green;
 }
 
-.pass-button{
+.pass-button {
   width: 200px;
 }
 
-.table-background{
+.table-background {
   width: 100%;
   height: 100%;
   z-index: -1;

@@ -4,11 +4,9 @@
 
   <div id="table">
     <div class="table-container">
-
       <ng-container [ngTemplateOutlet]="left_team"></ng-container>
       <ng-container [ngTemplateOutlet]="board"></ng-container>
       <ng-container [ngTemplateOutlet]="right_team"></ng-container>
-
       </div>
     </div>
 
@@ -19,9 +17,9 @@
 <ng-template #game_info>
   <div class="game_head_row">
     <div class="gamer_column">
-      <span class="gamer_column">{{"game.player_name"|translate}}: {{getNickname()}}</span>
-      <span class="gamer_column">{{"game.team"|translate}}: {{(getTeam()==team.BLUE?"game.blue_team":"game.red_team")|translate}}</span>
-      <span class="gamer_column">{{"game.role"|translate}}: {{(getRole()==role.SPYMASTER?"game.spymaster":"game.ordinary_player")|translate}}</span>
+      <div>{{"game.player_name"|translate}}: {{getNickname()}}</div>
+      <div>{{"game.team"|translate}}: {{(getTeam()==team.BLUE?"game.blue_team":"game.red_team")|translate}}</div>
+      <div>{{"game.role"|translate}}: {{(getRole()==role.SPYMASTER?"game.spymaster":"game.ordinary_player")|translate}}</div>
     </div>
 
     <div class="round_information_column">
@@ -35,8 +33,7 @@
         </span>
       </div>
 
-      <div id="word_sign">{{"game.word"|translate}}:</div>
-      <div class="word_container">
+      <div class="word_container" [hidden]="state.currentStage==role.SPYMASTER">
         <span id="word" class="word_element">{{state.currentWord}} </span>
         <span id="number" class="word_element">{{state.remainingAnswers}}</span>
       </div>

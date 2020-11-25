@@ -20,6 +20,16 @@ export class GameState {
   public bluePlayers: GamePlayer[] = [];
   public redPlayers: GamePlayer[] = [];
 
+  public clear(){
+    this.cards = [];
+    this.currentWord = null;
+    this.remainingAnswers = -1;
+    this.bluePlayers = [];
+    this.redPlayers = [];
+    this.remainingBlue = -1;
+    this.remainingRed = -1;
+  }
+
   public getCard(word: string): Card {
     let index = this.getCardId(word);
     if (index != null) {

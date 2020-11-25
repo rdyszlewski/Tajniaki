@@ -6,7 +6,9 @@ export class VotingModel{
     private players: VotingPlayer[] = [];
 
   public clear(){
-    this.players == [];
+    console.log("Usuwanie graczy z modelu Voting");
+    this.players = [];
+    this.votingTime = -1;
   }
 
     public addPlayer(player:VotingPlayer):void{
@@ -40,4 +42,7 @@ export class VotingModel{
         return zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2);
     }
 
+    public isEndTimer():boolean{
+      return this.votingTime <= 3;
+    }
 }

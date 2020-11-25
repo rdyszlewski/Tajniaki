@@ -49,6 +49,7 @@ export class GameComponent extends ViewComponent implements OnInit  {
    }
 
    public close(){
+     this._state.clear();
      this._eventsManager.close();
    }
 
