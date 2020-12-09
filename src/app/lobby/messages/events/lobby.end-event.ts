@@ -10,3 +10,4 @@ export class EndLobbyEvent implements IResponseEvent{
     this.stateEvent.nextState();
   }
 }
+

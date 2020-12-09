@@ -16,6 +16,8 @@ After pressing the Game button, the player is taken to the lobby. In this view, 
 
 The players choose which team they want to be. After choosing should press "Ready" button. If all players press "Ready" buttons,  the countdown to the end of the team’s choosing will begin.
 
+![alt text](./lobby.png)
+
 ### Voting
 
 On this screen, players vote for the player to become the spymaster of their team. The player with the most votes becomes the spymaster. In case of a tie, the spymaster is chosen randomly.
@@ -25,8 +27,12 @@ On this screen, players vote for the player to become the spymaster of their tea
 - right mouse button – select a card. Selecting is visible only in ordinary players in the team.
 - left mouse button – answer. The asnwer will be accept, if all players answer the same card
 
+![alt text](./board.png)
+
 #### Spymaster
 - entering the word. The word can’t be empty. A number must be entered.
+
+![alt text](./spymaster.png)
 
 ## Requirements
 
